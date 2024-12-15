@@ -2,6 +2,7 @@ using GigAuth.Application.Mapping;
 using GigAuth.Communication.Requests;
 using GigAuth.Domain.Repositories;
 using GigAuth.Domain.Repositories.Users;
+using GigAuth.Domain.Security.Cryptography;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 
@@ -9,7 +10,7 @@ namespace GigAuth.Application.UseCases.Users.Create;
 
 public class CreateUserUseCase(IWriteOnlyUserRepository writeRepository, 
     IReadOnlyUserRepository readRepository,
-    IUnitOfWork unitOfWork) : ICreateUserUseCase
+    IUnitOfWork unitOfWork, ICryptography cryptography) : ICreateUserUseCase
 {
     public async Task Execute(RequestCreateUser request)
     {
@@ -21,6 +22,8 @@ public class CreateUserUseCase(IWriteOnlyUserRepository writeRepository,
         var emailAlreadyTaken = await readRepository.GetByEmail(request.Email) != null;
         
         if (emailAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.EMAIL_INVALID]); 
+        
+        request.Password = cryptography.Encrypt(request.Password);
         
         await writeRepository.Add(request.ToUserDomain());
         await unitOfWork.Commit();

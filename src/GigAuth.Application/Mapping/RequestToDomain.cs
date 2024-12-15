@@ -12,7 +12,7 @@ public static class RequestToDomain
             Id = Guid.NewGuid(),
             Email = request.Email,
             UserName = request.UserName,
-            PasswordHash = request.Password, // TODO: add hashing
+            PasswordHash = request.Password,
             IsActive = true,
         };
     }

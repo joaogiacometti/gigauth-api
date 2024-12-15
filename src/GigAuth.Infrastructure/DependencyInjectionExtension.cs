@@ -1,7 +1,9 @@
 using GigAuth.Domain.Repositories;
 using GigAuth.Domain.Repositories.Users;
+using GigAuth.Domain.Security.Cryptography;
 using GigAuth.Infrastructure.DataAccess;
 using GigAuth.Infrastructure.DataAccess.Repositories;
+using GigAuth.Infrastructure.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,7 @@ public static class DependencyInjectionExtension
             options.UseNpgsql(connectionString); 
         });
 
+        services.AddScoped<ICryptography, Cryptography>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         services.AddScoped<IWriteOnlyUserRepository, UserRepository>();
