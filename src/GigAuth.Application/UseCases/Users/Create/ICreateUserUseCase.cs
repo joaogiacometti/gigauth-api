@@ -1,6 +1,6 @@
 using GigAuth.Communication.Requests;
 
-namespace GigAuth.Application.UseCases.Users;
+namespace GigAuth.Application.UseCases.Users.Create;
 
 public interface ICreateUserUseCase
 {

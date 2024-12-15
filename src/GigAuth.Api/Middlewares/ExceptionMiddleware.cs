@@ -1,7 +1,7 @@
 using System.Text.Json;
 using GigAuth.Communication.Responses;
 using GigAuth.Exception.ExceptionBase;
-using GigAuth.Exception.ExceptionBase.Resources;
+using GigAuth.Exception.Resources;
 
 namespace GigAuth.Api.Middlewares;
 

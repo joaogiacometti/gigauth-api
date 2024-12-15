@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GigAuth.Exception.ExceptionBase.Resources {
+namespace GigAuth.Exception.Resources {
     using System;
     
     
@@ -28,7 +28,7 @@ namespace GigAuth.Exception.ExceptionBase.Resources {
         public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("GigAuth.Exception.ExceptionBase.Resources.ResourceErrorMessages", typeof(ResourceErrorMessages).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("GigAuth.Exception.Resources.ResourceErrorMessages", typeof(ResourceErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -42,6 +42,54 @@ namespace GigAuth.Exception.ExceptionBase.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        public static string INVALID_PASSWORD {
+            get {
+                return ResourceManager.GetString("INVALID_PASSWORD", resourceCulture);
+            }
+        }
+        
+        public static string USER_NAME_EMPTY {
+            get {
+                return ResourceManager.GetString("USER_NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        public static string USER_NAME_TOO_SHORT {
+            get {
+                return ResourceManager.GetString("USER_NAME_TOO_SHORT", resourceCulture);
+            }
+        }
+        
+        public static string USER_NAME_TOO_LONG {
+            get {
+                return ResourceManager.GetString("USER_NAME_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        public static string EMAIL_EMPTY {
+            get {
+                return ResourceManager.GetString("EMAIL_EMPTY", resourceCulture);
+            }
+        }
+        
+        public static string EMAIL_INVALID {
+            get {
+                return ResourceManager.GetString("EMAIL_INVALID", resourceCulture);
+            }
+        }
+        
+        public static string EMAIL_TOO_LONG {
+            get {
+                return ResourceManager.GetString("EMAIL_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        public static string USER_ALREADY_USED {
+            get {
+                return ResourceManager.GetString("USER_ALREADY_USED", resourceCulture);
             }
         }
         

@@ -9,9 +9,11 @@
     <ItemGroup>
       <ProjectReference Include="..\GigAuth.Communication\GigAuth.Communication.csproj" />
       <ProjectReference Include="..\GigAuth.Domain\GigAuth.Domain.csproj" />
+      <ProjectReference Include="..\GigAuth.Exception\GigAuth.Exception.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="11.11.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
     </ItemGroup>
 

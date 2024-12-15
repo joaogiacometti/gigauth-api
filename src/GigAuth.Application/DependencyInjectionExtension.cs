@@ -1,4 +1,5 @@
 using GigAuth.Application.UseCases.Users;
+using GigAuth.Application.UseCases.Users.Create;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GigAuth.Application;

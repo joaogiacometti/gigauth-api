@@ -20,6 +20,8 @@ public static class DependencyInjectionExtension
         });
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         services.AddScoped<IWriteOnlyUserRepository, UserRepository>();
+        services.AddScoped<IReadOnlyUserRepository, UserRepository>();
     }
 }
