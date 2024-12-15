@@ -17,6 +17,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GigAuth.Application\GigAuth.Application.csproj" />
+      <ProjectReference Include="..\GigAuth.Communication\GigAuth.Communication.csproj" />
+      <ProjectReference Include="..\GigAuth.Exception\GigAuth.Exception.csproj" />
       <ProjectReference Include="..\GigAuth.Infrastructure\GigAuth.Infrastructure.csproj" />
     </ItemGroup>
 

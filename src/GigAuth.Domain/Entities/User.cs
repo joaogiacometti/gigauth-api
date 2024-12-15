@@ -1,6 +1,6 @@
 namespace GigAuth.Domain.Entities;
 
-public class User
+public sealed class User
 {
     public Guid Id { get; set; }
     public required string Email { get; set; }
@@ -10,5 +10,5 @@ public class User
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedDate { get; set; }
     
-    public virtual required Role Role { get; set; }
+    public Role? Role { get; set; }
 }

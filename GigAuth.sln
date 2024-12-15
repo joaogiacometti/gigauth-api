@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigAuth.Domain", "src\GigAu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigAuth.Infrastructure", "src\GigAuth.Infrastructure\GigAuth.Infrastructure.csproj", "{9B87FB43-8CD2-468F-A42B-8F112637B103}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigAuth.Communication", "src\GigAuth.Communication\GigAuth.Communication.csproj", "{8A55F9C2-D0F8-492C-912C-79DF72CE3AE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigAuth.Application", "src\GigAuth.Application\GigAuth.Application.csproj", "{B4B41A04-8393-4295-B121-C453D905C355}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigAuth.Exception", "src\GigAuth.Exception\GigAuth.Exception.csproj", "{DA91B00B-7259-4434-928D-657960846ACC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,17 @@ Global
 		{9B87FB43-8CD2-468F-A42B-8F112637B103}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B87FB43-8CD2-468F-A42B-8F112637B103}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B87FB43-8CD2-468F-A42B-8F112637B103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A55F9C2-D0F8-492C-912C-79DF72CE3AE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A55F9C2-D0F8-492C-912C-79DF72CE3AE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A55F9C2-D0F8-492C-912C-79DF72CE3AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A55F9C2-D0F8-492C-912C-79DF72CE3AE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B41A04-8393-4295-B121-C453D905C355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B41A04-8393-4295-B121-C453D905C355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B41A04-8393-4295-B121-C453D905C355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B41A04-8393-4295-B121-C453D905C355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA91B00B-7259-4434-928D-657960846ACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA91B00B-7259-4434-928D-657960846ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA91B00B-7259-4434-928D-657960846ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA91B00B-7259-4434-928D-657960846ACC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
