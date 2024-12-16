@@ -16,10 +16,12 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-if(builder.Configuration.IsTestEnvironment() == false)
+if(!builder.Configuration.IsTestEnvironment())
     await app.DatabaseMigrate();
 
 app.ConfigureMiddlewares();
 app.ConfigureEndpoints();
 
 app.Run();
+
+public abstract partial class Program { }

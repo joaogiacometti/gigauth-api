@@ -26,7 +26,7 @@
     <data name="UNKNOWN_ERROR" xml:space="preserve">
         <value>Ha ocurrido un error desconocido.</value>
     </data>
-    <data name="USER_ALREADY_USED" xml:space="preserve">
+    <data name="USER_NAME_ALREADY_USED" xml:space="preserve">
         <value>El nombre de usuario ya está en uso.
 </value>
     </data>

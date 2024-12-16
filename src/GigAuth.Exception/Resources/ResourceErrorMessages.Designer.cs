@@ -87,9 +87,9 @@ namespace GigAuth.Exception.Resources {
             }
         }
         
-        public static string USER_ALREADY_USED {
+        public static string USER_NAME_ALREADY_USED {
             get {
-                return ResourceManager.GetString("USER_ALREADY_USED", resourceCulture);
+                return ResourceManager.GetString("USER_NAME_ALREADY_USED", resourceCulture);
             }
         }
         

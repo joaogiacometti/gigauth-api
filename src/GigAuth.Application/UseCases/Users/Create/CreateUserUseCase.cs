@@ -17,7 +17,7 @@ public class CreateUserUseCase(IWriteOnlyUserRepository writeRepository,
         Validate(request);
         var userNameAlreadyTaken = await readRepository.GetByUserName(request.UserName) != null; 
         
-        if (userNameAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.USER_ALREADY_USED]); 
+        if (userNameAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.USER_NAME_ALREADY_USED]); 
         
         var emailAlreadyTaken = await readRepository.GetByEmail(request.Email) != null;
         

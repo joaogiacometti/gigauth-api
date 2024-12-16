@@ -39,7 +39,7 @@
     <data name="EMAIL_TOO_LONG" xml:space="preserve">
         <value>Email cannot exceed 256 characters.</value>
     </data>
-    <data name="USER_ALREADY_USED" xml:space="preserve">
+    <data name="USER_NAME_ALREADY_USED" xml:space="preserve">
         <value>The username is already used.</value>
     </data>
     <data name="UNKNOWN_ERROR" xml:space="preserve">
