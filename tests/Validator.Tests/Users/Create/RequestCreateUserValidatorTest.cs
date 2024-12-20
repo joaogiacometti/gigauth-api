@@ -11,7 +11,7 @@ public class RequestCreateUserValidatorTest
 {
     private readonly RequestCreateUserValidator _validator = new();
     private readonly Faker _faker = new();
-
+    
     [Fact]
     public void Success()
     {

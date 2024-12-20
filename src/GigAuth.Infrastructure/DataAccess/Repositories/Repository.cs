@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GigAuth.Infrastructure.DataAccess.Repositories;
 
-public class UserRepository(GigAuthContext dbContext) : IWriteOnlyUserRepository, IReadOnlyUserRepository
+public class Repository(GigAuthContext dbContext) : IUserWriteOnlyRepository, IUserReadOnlyRepository
 {
     public async Task Add(User user)
     {

@@ -1,4 +1,3 @@
-using GigAuth.Application.UseCases.Users;
 using GigAuth.Application.UseCases.Users.Create;
 using GigAuth.Communication.Requests;
 using Microsoft.AspNetCore.Mvc;

@@ -21,5 +21,6 @@ public static class CoreExtensions
     public static void ConfigureEndpoints(this WebApplication app)
     {
         app.AddUserEndpoints();
+        app.AddAuthEndpoints();
     }
 }

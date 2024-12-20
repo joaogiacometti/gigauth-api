@@ -45,4 +45,7 @@
     <data name="UNKNOWN_ERROR" xml:space="preserve">
         <value>An unknown error has occurred.</value>
     </data>
+    <data name="INVALID_CREDENTIALS" xml:space="preserve">
+        <value>Invalid credentials. Email or password is incorrect.</value>
+    </data>
 </root>

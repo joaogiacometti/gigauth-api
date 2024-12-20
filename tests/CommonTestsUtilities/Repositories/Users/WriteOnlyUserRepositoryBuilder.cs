@@ -5,7 +5,7 @@ namespace CommonTestsUtilities.Repositories.Users;
 
 public class WriteOnlyUserRepositoryBuilder
 {
-    private readonly Mock<IWriteOnlyUserRepository> _repository = new ();
+    private readonly Mock<IUserWriteOnlyRepository> _repository = new ();
     
-    public IWriteOnlyUserRepository Build() => _repository.Object;
+    public IUserWriteOnlyRepository Build() => _repository.Object;
 }

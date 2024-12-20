@@ -6,7 +6,7 @@ namespace CommonTestsUtilities.Repositories.Users;
 
 public class ReadOnlyUserRepositoryBuilder
 {
-    private readonly Mock<IReadOnlyUserRepository> _repository = new();
+    private readonly Mock<IUserReadOnlyRepository> _repository = new();
 
     public ReadOnlyUserRepositoryBuilder GetByUserName(User? user)
     {
@@ -24,5 +24,5 @@ public class ReadOnlyUserRepositoryBuilder
         return this;
     }
     
-    public IReadOnlyUserRepository Build() => _repository.Object;
+    public IUserReadOnlyRepository Build() => _repository.Object;
 }

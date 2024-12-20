@@ -16,7 +16,8 @@ public class PasswordValidator<T> : PropertyValidator<T, string>
         return $"{{{ErrorMessageKey}}}";
     }
 
-    private readonly Regex _passwordRegex = new(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z\d]).{8,16}$");
+    private readonly Regex _passwordRegex = 
+        new(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,128}$");
 
     public override bool IsValid(ValidationContext<T> context, string password)
     {

@@ -2,7 +2,7 @@ using GigAuth.Domain.Entities;
 
 namespace GigAuth.Domain.Repositories.Users;
 
-public interface IReadOnlyUserRepository
+public interface IUserReadOnlyRepository
 {
     Task<User?> GetByEmail(string email);
     

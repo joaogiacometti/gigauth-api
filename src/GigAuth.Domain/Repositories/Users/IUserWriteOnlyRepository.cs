@@ -2,7 +2,7 @@ using GigAuth.Domain.Entities;
 
 namespace GigAuth.Domain.Repositories.Users;
 
-public interface IWriteOnlyUserRepository
+public interface IUserWriteOnlyRepository
 {
     Task Add(User user);
 }

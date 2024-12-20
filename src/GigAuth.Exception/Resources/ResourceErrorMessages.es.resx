@@ -39,4 +39,7 @@
     <data name="USER_NAME_TOO_SHORT" xml:space="preserve">
         <value>El nombre de usuario debe tener al menos 8 caracteres.</value>
     </data>
+    <data name="INVALID_CREDENTIALS" xml:space="preserve">
+        <value>Credenciales inválidas. El correo electrónico o la contraseña son incorrectos.</value>
+    </data>
 </root>

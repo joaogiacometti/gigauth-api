@@ -8,24 +8,24 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Users.Create;
 
-public class CreateUserUseCase(IWriteOnlyUserRepository writeRepository, 
-    IReadOnlyUserRepository readRepository,
+public class CreateUserUseCase(IUserWriteOnlyRepository userWriteRepository, 
+    IUserReadOnlyRepository userReadRepository,
     IUnitOfWork unitOfWork, ICryptography cryptography) : ICreateUserUseCase
 {
     public async Task Execute(RequestCreateUser request)
     {
         Validate(request);
-        var userNameAlreadyTaken = await readRepository.GetByUserName(request.UserName) != null; 
+        var userNameAlreadyTaken = await userReadRepository.GetByUserName(request.UserName) != null; 
         
         if (userNameAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.USER_NAME_ALREADY_USED]); 
         
-        var emailAlreadyTaken = await readRepository.GetByEmail(request.Email) != null;
+        var emailAlreadyTaken = await userReadRepository.GetByEmail(request.Email) != null;
         
         if (emailAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.EMAIL_INVALID]); 
         
         request.Password = cryptography.Encrypt(request.Password);
         
-        await writeRepository.Add(request.ToUserDomain());
+        await userWriteRepository.Add(request.ToUserDomain());
         await unitOfWork.Commit();
     }
 
