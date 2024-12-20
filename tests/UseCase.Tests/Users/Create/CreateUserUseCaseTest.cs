@@ -76,7 +76,7 @@ public class CreateUserUseCaseTest
             ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NAME_TOO_SHORT));
     }
 
-private static CreateUserUseCase CreateUseCase(User? userForUserName = null, User? userForEmail = null)
+    private static CreateUserUseCase CreateUseCase(User? userForUserName = null, User? userForEmail = null)
     {
         var readRepository = new ReadOnlyUserRepositoryBuilder()
             .GetByUserName(userForUserName)

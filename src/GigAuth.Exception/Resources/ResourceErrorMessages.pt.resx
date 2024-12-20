@@ -41,4 +41,7 @@
     <data name="INVALID_CREDENTIALS" xml:space="preserve">
         <value>Credenciais inválidas. O e-mail ou a senha estão incorretos.</value>
     </data>
+    <data name="USER_NOT_FOUND" xml:space="preserve">
+        <value>O usuário não pôde ser encontrado.</value>
+    </data>
 </root>

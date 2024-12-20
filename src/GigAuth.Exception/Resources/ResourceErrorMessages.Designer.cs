@@ -104,5 +104,11 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("INVALID_CREDENTIALS", resourceCulture);
             }
         }
+        
+        public static string USER_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
+            }
+        }
     }
 }
