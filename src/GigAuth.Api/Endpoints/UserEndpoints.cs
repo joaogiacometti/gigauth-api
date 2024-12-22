@@ -1,7 +1,9 @@
 using GigAuth.Application.UseCases.Users.Create;
 using GigAuth.Application.UseCases.Users.Delete;
+using GigAuth.Application.UseCases.Users.Get;
 using GigAuth.Application.UseCases.Users.Update;
 using GigAuth.Communication.Requests;
+using GigAuth.Communication.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GigAuth.Api.Endpoints;
@@ -22,6 +24,16 @@ public static class UserEndpoints
                 })
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
+
+        // TODO: Implement get all with filters
+        // TODO: Implement auth
+        
+        // TODO: Implement auth
+        group.MapGet("/get/{id:guid}",
+                async ([FromServices] IGetUserUseCase useCase, [FromRoute] Guid id) =>
+                Results.Ok(await useCase.Execute(id)))
+            .Produces<ResponseUserShort>()
+            .Produces(StatusCodes.Status404NotFound);
 
         // TODO: Implement auth
         group.MapPut("/update/{id:guid}",

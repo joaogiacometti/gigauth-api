@@ -12,9 +12,17 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
             .AddAsync(user);
     }
 
-    public async Task<User?> GetById(Guid id)
+    async Task<User?> IUserReadOnlyRepository.GetById(Guid id)
     {
         return await dbContext.Users
+            .SingleOrDefaultAsync(u => u.Id.Equals(id));
+    }
+    
+    async Task<User?> IUserWriteOnlyRepository.GetById(Guid id)
+    {
+        return await dbContext.Users
+            .AsNoTracking()
+            .Include(u => u.Role)
             .SingleOrDefaultAsync(u => u.Id.Equals(id));
     }
 
