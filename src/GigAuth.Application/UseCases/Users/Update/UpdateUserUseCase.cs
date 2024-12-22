@@ -29,8 +29,6 @@ public class UpdateUserUseCase(IUserWriteOnlyRepository writeRepository,
         userToUpdate.Email = request.Email;
         userToUpdate.UserName = request.UserName;
         
-        writeRepository.Update(userToUpdate);
-        
         await unitOfWork.Commit();
     }
 

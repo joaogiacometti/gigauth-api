@@ -18,11 +18,6 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
             .SingleOrDefaultAsync(u => u.Id.Equals(id));
     }
 
-    public void Update(User user)
-    {
-        dbContext.Users.Update(user);
-    }
-
     public void Delete(User user)
     {
         dbContext.Users.Remove(user);
