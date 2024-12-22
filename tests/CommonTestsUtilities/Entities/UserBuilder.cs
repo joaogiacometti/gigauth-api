@@ -13,7 +13,7 @@ public static class UserBuilder
         return new User()
         {
             Id = Guid.NewGuid(),
-            UserName = faker.Internet.UserName(),
+            UserName = faker.Internet.UserName().PadLeft(8),
             Email = faker.Internet.Email(),
             PasswordHash = PasswordBuilder.Build,
             IsActive = true,

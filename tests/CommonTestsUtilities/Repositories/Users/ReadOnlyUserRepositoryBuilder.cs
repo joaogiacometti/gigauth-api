@@ -8,7 +8,7 @@ public class ReadOnlyUserRepositoryBuilder
 {
     private readonly Mock<IUserReadOnlyRepository> _repository = new();
 
-    public ReadOnlyUserRepositoryBuilder GetByUserName(User? user)
+    public ReadOnlyUserRepositoryBuilder GetByUserName(User? user = null)
     {
         if (user is not null)
             _repository.Setup(r => r.GetByUserName(user.UserName)).ReturnsAsync(user);
@@ -16,7 +16,7 @@ public class ReadOnlyUserRepositoryBuilder
         return this;
     }
     
-    public ReadOnlyUserRepositoryBuilder GetByEmail(User? user)
+    public ReadOnlyUserRepositoryBuilder GetByEmail(User? user = null)
     {
         if (user is not null)
             _repository.Setup(r => r.GetByEmail(user.Email)).ReturnsAsync(user);
