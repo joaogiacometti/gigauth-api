@@ -1,3 +1,4 @@
+using GigAuth.Application.UseCases.Auth.ChangePassword;
 using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Communication.Requests;
@@ -29,8 +30,19 @@ public static class AuthEndpoints
 
                     return Results.NoContent();
                 })
+            .WithName("Forgot Password")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound);
+
+        group.MapPut("", async ([FromServices] IChangePasswordUseCase useCase, [FromBody] RequestChangePassword request) =>
+            {
+                await useCase.Execute(request);
+
+                return Results.NoContent();
+            })
             .WithName("Change Password")
             .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);
     }
 }

@@ -5,7 +5,7 @@ using FluentAssertions;
 using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Exception.Resources;
 
-namespace Validator.Tests.Auth.Login;
+namespace Validator.Tests.Auth;
 
 public class RequestLoginValidatorTest
 {

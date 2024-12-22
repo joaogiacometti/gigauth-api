@@ -110,5 +110,23 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
             }
         }
+        
+        public static string TOKEN_EMPTY {
+            get {
+                return ResourceManager.GetString("TOKEN_EMPTY", resourceCulture);
+            }
+        }
+        
+        public static string TOKEN_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("TOKEN_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        public static string TOKEN_EXPIRED {
+            get {
+                return ResourceManager.GetString("TOKEN_EXPIRED", resourceCulture);
+            }
+        }
     }
 }

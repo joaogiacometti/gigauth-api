@@ -10,6 +10,12 @@ public class ForgotPasswordTokenRepository(GigAuthContext dbContext) : IForgotPa
     {
         await dbContext.ForgotPasswordTokens.AddAsync(token);
     }
+    
+    public async Task<ForgotPasswordToken?> GetByToken(string token)
+    {
+        return await dbContext.ForgotPasswordTokens
+            .SingleOrDefaultAsync(fpt => fpt.Token.Equals(token));
+    }
 
     public async Task<ForgotPasswordToken?> GetByUserId(Guid userId)
     {
@@ -21,5 +27,10 @@ public class ForgotPasswordTokenRepository(GigAuthContext dbContext) : IForgotPa
     public void Update(ForgotPasswordToken token)
     {
         dbContext.ForgotPasswordTokens.Update(token);
+    }
+
+    public void Delete(ForgotPasswordToken token)
+    {
+        dbContext.Remove(token);
     }
 }

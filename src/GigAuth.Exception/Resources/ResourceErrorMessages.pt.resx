@@ -44,4 +44,13 @@
     <data name="USER_NOT_FOUND" xml:space="preserve">
         <value>O usuário não pôde ser encontrado.</value>
     </data>
+    <data name="TOKEN_EMPTY" xml:space="preserve">
+        <value>O token é obrigatório.</value>
+    </data>
+    <data name="TOKEN_NOT_FOUND" xml:space="preserve">
+        <value>O token não pôde ser encontrado.</value>
+    </data>
+    <data name="TOKEN_EXPIRED" xml:space="preserve">
+        <value>O token expirou.</value>
+    </data>
 </root>

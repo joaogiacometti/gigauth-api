@@ -5,7 +5,7 @@ using FluentValidation;
 using GigAuth.Application.UseCases.Users;
 using GigAuth.Communication.Requests;
 
-namespace Validator.Tests.Users;
+namespace Validator.Tests.Common;
 
 public class PasswordValidatorTest
 {
@@ -35,6 +35,21 @@ public class PasswordValidatorTest
 
         var result = validator
             .IsValid(new ValidationContext<RequestLogin>(request), password);
+
+        result.Should().BeFalse();
+    }
+    
+    [Theory]
+    [ClassData(typeof(PasswordInlineDataTest))]
+    public void Error_Password_Invalid_Change_Password(string newPassword)
+    {
+        var request = RequestChangePasswordBuilder.Build();
+        request.NewPassword= newPassword;
+
+        var validator = new PasswordValidator<RequestChangePassword>();
+
+        var result = validator
+            .IsValid(new ValidationContext<RequestChangePassword>(request), newPassword);
 
         result.Should().BeFalse();
     }
