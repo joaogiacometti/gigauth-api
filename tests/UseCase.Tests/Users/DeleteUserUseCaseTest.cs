@@ -7,7 +7,7 @@ using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 
-namespace UseCase.Tests.Users.Delete;
+namespace UseCase.Tests.Users;
 
 public class DeleteUserUseCaseTest
 {

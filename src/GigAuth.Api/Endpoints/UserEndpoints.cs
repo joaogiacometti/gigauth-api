@@ -1,5 +1,6 @@
 using GigAuth.Application.UseCases.Users.Create;
 using GigAuth.Application.UseCases.Users.Delete;
+using GigAuth.Application.UseCases.Users.Update;
 using GigAuth.Communication.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ public static class UserEndpoints
 
                 return Results.Created();
             })
+            .WithName("Create")
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
 
@@ -29,7 +31,21 @@ public static class UserEndpoints
 
                 return Results.NoContent();
             })
+            .WithName("Delete")
             .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound);
+
+        group.MapPut("{id:guid}",
+                async ([FromServices] IUpdateUserUseCase useCase, [FromBody] RequestUpdateUser request,
+                    [FromRoute] Guid id) =>
+                {
+                    await useCase.Execute(id, request);
+
+                    return Results.NoContent();
+                })
+            .WithName("Update")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);
     }
 }

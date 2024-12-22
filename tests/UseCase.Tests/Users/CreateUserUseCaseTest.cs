@@ -9,7 +9,7 @@ using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 
-namespace UseCase.Tests.Users.Create;
+namespace UseCase.Tests.Users;
 
 public class CreateUserUseCaseTest
 {
@@ -32,7 +32,7 @@ public class CreateUserUseCaseTest
         var request = RequestCreateUserBuilder.Build();
         request.UserName = user.UserName;
 
-        var useCase = CreateUseCase(userForUserName: user);
+        var useCase = CreateUseCase(userWithUserName: user);
 
         var act = async () => await useCase.Execute(request);
 
@@ -50,7 +50,7 @@ public class CreateUserUseCaseTest
         var request = RequestCreateUserBuilder.Build();
         request.Email = user.Email;
 
-        var useCase = CreateUseCase(userForEmail: user);
+        var useCase = CreateUseCase(userWithEmail: user);
 
         var act = async () => await useCase.Execute(request);
 
@@ -76,11 +76,11 @@ public class CreateUserUseCaseTest
             ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NAME_TOO_SHORT));
     }
 
-    private static CreateUserUseCase CreateUseCase(User? userForUserName = null, User? userForEmail = null)
+    private static CreateUserUseCase CreateUseCase(User? userWithUserName = null, User? userWithEmail = null)
     {
         var readRepository = new ReadOnlyUserRepositoryBuilder()
-            .GetByUserName(userForUserName)
-            .GetByEmail(userForEmail)
+            .GetByUserName(userWithUserName)
+            .GetByEmail(userWithEmail)
             .Build();
         var writeRepository = new WriteOnlyUserRepositoryBuilder().Build();
         var unitOfWork = new UnitOfWorkBuilder().Build();

@@ -2,20 +2,20 @@ using Bogus;
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Users;
 using FluentAssertions;
-using GigAuth.Application.UseCases.Users.Create;
+using GigAuth.Application.UseCases.Users.Update;
 using GigAuth.Exception.Resources;
 
-namespace Validator.Tests.Users.Create;
+namespace Validator.Tests.Users;
 
-public class RequestCreateUserValidatorTest
+public class RequestUpdateUserValidatorTest
 {
-    private readonly RequestCreateUserValidator _validator = new();
+    private readonly RequestUpdateUserValidator _validator = new();
     private readonly Faker _faker = new();
     
     [Fact]
     public void Success()
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestUpdateUserBuilder.Build();
 
         var result = _validator.Validate(request);
 
@@ -26,7 +26,7 @@ public class RequestCreateUserValidatorTest
     [ClassData(typeof(NullOrWhiteSpaceInlineDataTest))]
     public void Error_UserName_Empty(string userName)
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestUpdateUserBuilder.Build();
         request.UserName = userName;
 
         var result = _validator.Validate(request);
@@ -38,7 +38,7 @@ public class RequestCreateUserValidatorTest
     [Fact]
     public void Error_UserName_TooShort()
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestUpdateUserBuilder.Build();
         request.UserName = "short";
 
         var result = _validator.Validate(request);
@@ -50,7 +50,7 @@ public class RequestCreateUserValidatorTest
     [Fact]
     public void Error_UserName_TooLong()
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestUpdateUserBuilder.Build();
         request.UserName = _faker.Random.String(length: 101);
 
         var result = _validator.Validate(request);
@@ -63,7 +63,7 @@ public class RequestCreateUserValidatorTest
     [ClassData(typeof(NullOrWhiteSpaceInlineDataTest))]
     public void Error_Email_Empty(string email)
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestUpdateUserBuilder.Build();
         request.Email = email;
 
         var result = _validator.Validate(request);
@@ -75,7 +75,7 @@ public class RequestCreateUserValidatorTest
     [Fact]
     public void Error_Email_Invalid()
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestUpdateUserBuilder.Build();
         request.Email = "invalid";
 
         var result = _validator.Validate(request);
@@ -87,7 +87,7 @@ public class RequestCreateUserValidatorTest
     [Fact]
     public void Error_Email_TooLong()
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestUpdateUserBuilder.Build();
         request.Email = _faker.Random.String(length: 257);
 
         var result = _validator.Validate(request);
