@@ -35,6 +35,7 @@ public static class UserEndpoints
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound);
 
+        // TODO: Implement auth
         group.MapPut("{id:guid}",
                 async ([FromServices] IUpdateUserUseCase useCase, [FromBody] RequestUpdateUser request,
                     [FromRoute] Guid id) =>

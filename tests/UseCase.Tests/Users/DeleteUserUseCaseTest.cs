@@ -40,7 +40,7 @@ public class DeleteUserUseCaseTest
     
     private static DeleteUserUseCase CreateUseCase(User? userToDelete = null)
     {
-        var writeRepository = new WriteOnlyUserRepositoryBuilder().GetById(userToDelete).Build();
+        var writeRepository = new UserWriteOnlyRepositoryBuilder().GetById(userToDelete).Build();
         var unitOfWork = new UnitOfWorkBuilder().Build();
 
         return new DeleteUserUseCase(writeRepository, unitOfWork);

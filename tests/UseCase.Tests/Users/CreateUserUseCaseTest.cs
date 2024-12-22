@@ -78,11 +78,11 @@ public class CreateUserUseCaseTest
 
     private static CreateUserUseCase CreateUseCase(User? userWithUserName = null, User? userWithEmail = null)
     {
-        var readRepository = new ReadOnlyUserRepositoryBuilder()
+        var readRepository = new UserReadOnlyRepositoryBuilder()
             .GetByUserName(userWithUserName)
             .GetByEmail(userWithEmail)
             .Build();
-        var writeRepository = new WriteOnlyUserRepositoryBuilder().Build();
+        var writeRepository = new UserWriteOnlyRepositoryBuilder().Build();
         var unitOfWork = new UnitOfWorkBuilder().Build();
         var cryptography = new CryptographyBuilder().Build();
 

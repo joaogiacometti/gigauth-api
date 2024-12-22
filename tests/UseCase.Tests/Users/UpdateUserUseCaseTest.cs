@@ -98,11 +98,11 @@ public class UpdateUserUseCaseTest
 
     private static UpdateUserUseCase CreateUseCase(User? userToUpdate = null, User? userWithUserName = null, User? userWithEmail = null)
     {
-        var readRepository = new ReadOnlyUserRepositoryBuilder()
+        var readRepository = new UserReadOnlyRepositoryBuilder()
             .GetByUserName(userWithUserName)
             .GetByEmail(userWithEmail)
             .Build();
-        var writeRepository = new WriteOnlyUserRepositoryBuilder()
+        var writeRepository = new UserWriteOnlyRepositoryBuilder()
             .GetById(userToUpdate)
             .Build();
         var unitOfWork = new UnitOfWorkBuilder().Build();

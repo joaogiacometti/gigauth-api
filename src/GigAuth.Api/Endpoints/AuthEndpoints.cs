@@ -1,3 +1,4 @@
+using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
@@ -13,9 +14,23 @@ public static class AuthEndpoints
             .WithName("auth")
             .WithTags("auth");
 
-        group.MapPost("/login", async ([FromServices] ILoginUseCase useCase, [FromBody] RequestLogin request) => await useCase.Execute(request))
-        .Produces<ResponseToken>()
-        .Produces(StatusCodes.Status401Unauthorized)
-        .Produces(StatusCodes.Status400BadRequest);
+        group.MapPost("/login",
+                async ([FromServices] ILoginUseCase useCase, [FromBody] RequestLogin request) =>
+                await useCase.Execute(request))
+            .WithName("Login")
+            .Produces<ResponseToken>()
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status400BadRequest);
+
+        group.MapPost("{username}",
+                async ([FromServices] IForgotPasswordUseCase useCase, [FromRoute] string userName) =>
+                {
+                    await useCase.Execute(userName);
+
+                    return Results.NoContent();
+                })
+            .WithName("Change Password")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound);
     }
 }

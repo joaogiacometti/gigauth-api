@@ -4,11 +4,11 @@ using Moq;
 
 namespace CommonTestsUtilities.Repositories.Users;
 
-public class ReadOnlyUserRepositoryBuilder
+public class UserReadOnlyRepositoryBuilder
 {
     private readonly Mock<IUserReadOnlyRepository> _repository = new();
 
-    public ReadOnlyUserRepositoryBuilder GetByUserName(User? user = null)
+    public UserReadOnlyRepositoryBuilder GetByUserName(User? user = null)
     {
         if (user is not null)
             _repository.Setup(r => r.GetByUserName(user.UserName)).ReturnsAsync(user);
@@ -16,7 +16,7 @@ public class ReadOnlyUserRepositoryBuilder
         return this;
     }
     
-    public ReadOnlyUserRepositoryBuilder GetByEmail(User? user = null)
+    public UserReadOnlyRepositoryBuilder GetByEmail(User? user = null)
     {
         if (user is not null)
             _repository.Setup(r => r.GetByEmail(user.Email)).ReturnsAsync(user);

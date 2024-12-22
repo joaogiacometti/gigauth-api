@@ -4,11 +4,11 @@ using Moq;
 
 namespace CommonTestsUtilities.Repositories.Users;
 
-public class WriteOnlyUserRepositoryBuilder
+public class UserWriteOnlyRepositoryBuilder
 {
     private readonly Mock<IUserWriteOnlyRepository> _repository = new ();
     
-    public WriteOnlyUserRepositoryBuilder GetById(User? user)
+    public UserWriteOnlyRepositoryBuilder GetById(User? user)
     {
         if (user is not null)
             _repository.Setup(r => r.GetById(user.Id)).ReturnsAsync(user);

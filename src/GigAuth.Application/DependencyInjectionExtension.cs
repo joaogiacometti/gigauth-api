@@ -1,3 +1,4 @@
+using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Application.UseCases.Users.Create;
 using GigAuth.Application.UseCases.Users.Delete;
@@ -13,6 +14,8 @@ public static class DependencyInjectionExtension
         services.AddScoped<ICreateUserUseCase, CreateUserUseCase>();
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
+        
         services.AddScoped<ILoginUseCase, LoginUseCase>();
+        services.AddScoped<IForgotPasswordUseCase, ForgotPasswordUseCase>();
     }
 }

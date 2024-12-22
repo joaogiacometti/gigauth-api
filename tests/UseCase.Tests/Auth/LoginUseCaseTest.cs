@@ -8,7 +8,7 @@ using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 
-namespace UseCase.Tests.Auth.Login;
+namespace UseCase.Tests.Auth;
 
 public class LoginUseCaseTest
 {
@@ -76,7 +76,7 @@ public class LoginUseCaseTest
     
     private static LoginUseCase CreateUseCase(User? user = null, string? password = null)
     {
-        var readRepository = new ReadOnlyUserRepositoryBuilder()
+        var readRepository = new UserReadOnlyRepositoryBuilder()
             .GetByEmail(user)
             .Build();
         var cryptography = new CryptographyBuilder().Verify(password).Build();
