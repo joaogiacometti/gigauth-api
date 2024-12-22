@@ -12,35 +12,32 @@ public static class AuthEndpoints
     public static void AddAuthEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/auth")
-            .WithName("auth")
-            .WithTags("auth");
+            .WithTags("Auth");
 
         group.MapPost("/login",
                 async ([FromServices] ILoginUseCase useCase, [FromBody] RequestLogin request) =>
                 await useCase.Execute(request))
-            .WithName("Login")
             .Produces<ResponseToken>()
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status400BadRequest);
 
-        group.MapPost("{username}",
+        group.MapPost("/forgot-password/{username}",
                 async ([FromServices] IForgotPasswordUseCase useCase, [FromRoute] string userName) =>
                 {
                     await useCase.Execute(userName);
 
                     return Results.NoContent();
                 })
-            .WithName("Forgot Password")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound);
 
-        group.MapPut("", async ([FromServices] IChangePasswordUseCase useCase, [FromBody] RequestChangePassword request) =>
-            {
-                await useCase.Execute(request);
+        group.MapPut("/change-password",
+                async ([FromServices] IChangePasswordUseCase useCase, [FromBody] RequestChangePassword request) =>
+                {
+                    await useCase.Execute(request);
 
-                return Results.NoContent();
-            })
-            .WithName("Change Password")
+                    return Results.NoContent();
+                })
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);

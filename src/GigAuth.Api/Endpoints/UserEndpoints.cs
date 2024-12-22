@@ -10,33 +10,21 @@ public static class UserEndpoints
 {
     public static void AddUserEndpoints(this WebApplication app)
     {
-        var group = app.MapGroup("/users")
-            .WithName("Users")
-            .WithTags("Users");
+        var group = app.MapGroup("/user")
+            .WithTags("User");
 
-        group.MapPost("", async ([FromServices] ICreateUserUseCase useCase, [FromBody] RequestCreateUser request) =>
-            {
-                await useCase.Execute(request);
+        group.MapPost("/create",
+                async ([FromServices] ICreateUserUseCase useCase, [FromBody] RequestCreateUser request) =>
+                {
+                    await useCase.Execute(request);
 
-                return Results.Created();
-            })
-            .WithName("Create")
+                    return Results.Created();
+                })
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
 
         // TODO: Implement auth
-        group.MapDelete("{id:guid}", async ([FromServices] IDeleteUserUseCase useCase, [FromRoute] Guid id) =>
-            {
-                await useCase.Execute(id);
-
-                return Results.NoContent();
-            })
-            .WithName("Delete")
-            .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status404NotFound);
-
-        // TODO: Implement auth
-        group.MapPut("{id:guid}",
+        group.MapPut("/update/{id:guid}",
                 async ([FromServices] IUpdateUserUseCase useCase, [FromBody] RequestUpdateUser request,
                     [FromRoute] Guid id) =>
                 {
@@ -44,9 +32,18 @@ public static class UserEndpoints
 
                     return Results.NoContent();
                 })
-            .WithName("Update")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound);
+
+        // TODO: Implement auth
+        group.MapDelete("/delete/{id:guid}", async ([FromServices] IDeleteUserUseCase useCase, [FromRoute] Guid id) =>
+            {
+                await useCase.Execute(id);
+
+                return Results.NoContent();
+            })
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound);
     }
 }
