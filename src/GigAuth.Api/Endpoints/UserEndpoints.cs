@@ -1,9 +1,11 @@
 using GigAuth.Application.UseCases.Users.Create;
 using GigAuth.Application.UseCases.Users.Delete;
 using GigAuth.Application.UseCases.Users.Get;
+using GigAuth.Application.UseCases.Users.GetFiltered;
 using GigAuth.Application.UseCases.Users.Update;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
+using GigAuth.Domain.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GigAuth.Api.Endpoints;
@@ -25,8 +27,17 @@ public static class UserEndpoints
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
 
-        // TODO: Implement get all with filters
         // TODO: Implement auth
+        group.MapPost("/get-filtered",
+            async ([FromServices] IGetFilteredUsersUseCase useCase, [FromBody] RequestUserFilter filter) =>
+            {
+                var result = await useCase.Execute(filter);
+                
+                return result is null ? Results.NoContent() : Results.Ok(result);
+            })
+            .Produces<List<ResponseUserShort>>()
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest);
         
         // TODO: Implement auth
         group.MapGet("/get/{id:guid}",

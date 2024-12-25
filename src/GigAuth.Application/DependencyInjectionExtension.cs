@@ -4,6 +4,7 @@ using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Application.UseCases.Users.Create;
 using GigAuth.Application.UseCases.Users.Delete;
 using GigAuth.Application.UseCases.Users.Get;
+using GigAuth.Application.UseCases.Users.GetFiltered;
 using GigAuth.Application.UseCases.Users.Update;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,7 @@ public static class DependencyInjectionExtension
     {
         services.AddScoped<ICreateUserUseCase, CreateUserUseCase>();
         services.AddScoped<IGetUserUseCase, GetUserUseCase>();
+        services.AddScoped<IGetFilteredUsersUseCase, GetFilteredUsersUseCase>();
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
         

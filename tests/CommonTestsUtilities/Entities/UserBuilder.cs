@@ -12,4 +12,6 @@ public static class UserBuilder
         .RuleFor(u => u.Email, faker => faker.Internet.Email())
         .RuleFor(u => u.PasswordHash, _ => PasswordBuilder.Build)
         .RuleFor(u => u.IsActive, _ => true).Generate();
+    
+    public static List<User> BuildList(int qtd = 5) => Enumerable.Range(0, qtd).Select(_ => Build()).ToList();
 }

@@ -1,4 +1,5 @@
 using GigAuth.Domain.Entities;
+using GigAuth.Domain.Filters;
 using GigAuth.Domain.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,25 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
         return await dbContext.Users
             .SingleOrDefaultAsync(u => u.Id.Equals(id));
     }
-    
+
+    public Task<List<User>> GetFiltered(RequestUserFilter filter)
+    {
+        var query = dbContext.Users
+            .AsQueryable()
+            .AsNoTracking();
+        
+        if (!string.IsNullOrEmpty(filter.UserName))
+            query = query.Where(u => u.UserName.Contains(filter.UserName));
+
+        if (!string.IsNullOrEmpty(filter.Email))
+            query = query.Where(u => u.Email.Contains(filter.Email));
+
+        if (filter.IsActive.HasValue)
+            query = query.Where(u => u.IsActive == filter.IsActive.Value);
+        
+        return query.ToListAsync();
+    }
+
     async Task<User?> IUserWriteOnlyRepository.GetById(Guid id)
     {
         return await dbContext.Users

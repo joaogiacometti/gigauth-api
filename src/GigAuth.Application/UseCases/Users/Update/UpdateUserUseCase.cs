@@ -9,6 +9,7 @@ namespace GigAuth.Application.UseCases.Users.Update;
 public class UpdateUserUseCase(IUserWriteOnlyRepository writeRepository, 
     IUserReadOnlyRepository readRepository, IUnitOfWork unitOfWork) : IUpdateUserUseCase
 {
+    // TODO: Implement update status
     public async Task Execute(Guid id, RequestUpdateUser request)
     {
         Validate(request);

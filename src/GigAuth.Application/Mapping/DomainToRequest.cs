@@ -15,6 +15,8 @@ public static class DomainToRequest
         UpdatedDate = user.UpdatedDate,
         IsActive = user.IsActive,
     };
+    
+    public static List<ResponseUserShort> ToUserResponse(this IEnumerable<User> users) => users.Select(u => u.ToUserResponse()).ToList();
 
     public static ResponseRole? ToRoleResponse(this Role? role)
     {
