@@ -14,14 +14,14 @@ RUN dotnet restore "GigAuth.Api/GigAuth.Api.csproj"
 COPY src/ ./src/
 
 WORKDIR "/src/GigAuth.Api"
-RUN dotnet build "GigAuth.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "GigAuth.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
 
-FROM build as publish
+FROM build AS publish
 
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "GigAuth.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "GigAuth.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
 
-FROM base as final
+FROM base AS final
 
 WORKDIR /app
 COPY --from=publish /app/publish .

@@ -1,14 +1,15 @@
 services:
-  db:
+  api_db:
     image: bitnami/postgresql
     ports:
       - "5432:5432"
-    volumes:
-      - db:/bitnami/postgresql
     environment:
       - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME}
       - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
-      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE}
+      - POSTGRESQL_DATABASE=${POSTGRESQL_API_DATABASE}
+    volumes:
+      - api_db:/bitnami/postgresql
+
     networks:
       - app
 
@@ -24,11 +25,11 @@ services:
     networks:
       - app
     depends_on:
-      - db
+      - api_db
 
 networks:
   app:
     driver: bridge
 
 volumes:
-  db:
+  api_db:
