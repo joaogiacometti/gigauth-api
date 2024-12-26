@@ -1,6 +1,6 @@
 namespace GigAuth.Domain.Entities;
 
-public class Role
+public class Permission
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }
@@ -8,6 +8,5 @@ public class Role
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedDate { get; set; }
 
-    public ICollection<UserRole>? UserRoles { get; set; } = [];
-    public ICollection<RolePermission>? RolePermissions { get; set; } = [];
+    public ICollection<RolePermission> RolePermissions { get; set; } = [];
 }

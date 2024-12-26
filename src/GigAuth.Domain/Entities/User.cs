@@ -9,6 +9,6 @@ public sealed class User
     public bool IsActive { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedDate { get; set; }
-    
-    public Role? Role { get; set; }
+
+    public ICollection<UserRole> UserRoles { get; set; } = [];
 }

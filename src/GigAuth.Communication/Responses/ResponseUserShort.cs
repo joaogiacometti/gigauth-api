@@ -8,5 +8,5 @@ public sealed class ResponseUserShort
     public bool IsActive { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedDate { get; set; }
-    public ResponseRole? Role { get; set; }
+    public List<ResponseRole> Roles { get; set; } = [];
 }

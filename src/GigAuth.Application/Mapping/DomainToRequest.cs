@@ -9,7 +9,7 @@ public static class DomainToRequest
     {
         Id = user.Id,
         Email = user.Email,
-        Role = user.Role.ToRoleResponse(),
+        Roles = user.UserRoles.Select(ur => ur.Role).ToRoleResponse(),
         UserName = user.UserName,
         CreatedDate = user.CreatedDate,
         UpdatedDate = user.UpdatedDate,
@@ -18,10 +18,8 @@ public static class DomainToRequest
     
     public static List<ResponseUserShort> ToUserResponse(this IEnumerable<User> users) => users.Select(u => u.ToUserResponse()).ToList();
 
-    public static ResponseRole? ToRoleResponse(this Role? role)
+    public static ResponseRole ToRoleResponse(this Role role)
     {
-        if (role == null) return null;
-        
         return new ResponseRole()
         {
             Id = role.Id,
@@ -31,4 +29,6 @@ public static class DomainToRequest
             UpdatedDate = role.UpdatedDate,
         };
     }
+    
+    public static List<ResponseRole> ToRoleResponse(this IEnumerable<Role> roles) => roles.Select(r => r.ToRoleResponse()).ToList();
 }

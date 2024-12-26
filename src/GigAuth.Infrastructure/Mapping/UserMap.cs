@@ -43,10 +43,10 @@ public class UserMap : IEntityTypeConfiguration<User>
         builder.Property(u => u.UpdatedDate)
             .HasColumnType("timestamp with time zone")
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-        builder.HasOne(u => u.Role)
-            .WithOne()
-            .HasForeignKey<User>("RoleId")
-            .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.HasMany(u => u.UserRoles)
+            .WithOne(rp => rp.User)
+            .HasForeignKey(rp => rp.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

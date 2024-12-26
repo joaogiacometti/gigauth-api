@@ -23,6 +23,8 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
     {
         var query = dbContext.Users
             .AsQueryable()
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
             .AsNoTracking();
         
         if (!string.IsNullOrEmpty(filter.UserName))
@@ -41,7 +43,8 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
     {
         return await dbContext.Users
             .AsNoTracking()
-            .Include(u => u.Role)
+            .Include(u => u.UserRoles)
+                .ThenInclude(u => u.Role)
             .SingleOrDefaultAsync(u => u.Id.Equals(id));
     }
 
