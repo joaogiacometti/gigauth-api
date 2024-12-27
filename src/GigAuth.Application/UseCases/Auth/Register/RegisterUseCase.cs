@@ -6,13 +6,13 @@ using GigAuth.Domain.Security.Cryptography;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 
-namespace GigAuth.Application.UseCases.Users.Create;
+namespace GigAuth.Application.UseCases.Auth.Register;
 
-public class CreateUserUseCase(IUserWriteOnlyRepository writeRepository, 
+public class RegisterUseCase(IUserWriteOnlyRepository writeRepository, 
     IUserReadOnlyRepository readRepository,
-    IUnitOfWork unitOfWork, ICryptography cryptography) : ICreateUserUseCase
+    IUnitOfWork unitOfWork, ICryptography cryptography) : IRegisterUseCase
 {
-    public async Task Execute(RequestCreateUser request)
+    public async Task Execute(RequestRegister request)
     {
         Validate(request);
         var userNameAlreadyUsed = await readRepository.GetByUserName(request.UserName) != null; 
@@ -29,9 +29,9 @@ public class CreateUserUseCase(IUserWriteOnlyRepository writeRepository,
         await unitOfWork.Commit();
     }
 
-    private static void Validate(RequestCreateUser request)
+    private static void Validate(RequestRegister request)
     {
-        var validator = new RequestCreateUserValidator();
+        var validator = new RequestRegisterValidator();
         
         var result = validator.Validate(request);
 

@@ -2,6 +2,7 @@ namespace GigAuth.Domain.Entities;
 
 public class RefreshToken
 {
+    // TODO: Implement logic
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public required string Token { get; set; }

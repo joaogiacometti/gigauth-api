@@ -1,6 +1,6 @@
 namespace GigAuth.Communication.Requests;
 
-public class RequestCreateUser
+public class RequestRegister
 {
     public required string UserName { get; set; }
     public required string Email { get; set; }

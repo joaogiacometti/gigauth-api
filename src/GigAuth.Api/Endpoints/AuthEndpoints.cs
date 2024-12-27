@@ -1,6 +1,7 @@
 using GigAuth.Application.UseCases.Auth.ChangePassword;
 using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Application.UseCases.Auth.Login;
+using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,16 @@ public static class AuthEndpoints
         var group = app.MapGroup("/auth")
             .WithTags("Auth");
 
+        group.MapPost("/register",
+                async ([FromServices] IRegisterUseCase useCase, [FromBody] RequestRegister request) =>
+                {
+                    await useCase.Execute(request);
+
+                    return Results.Created();
+                })
+            .Produces(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest);
+        
         group.MapPost("/login",
                 async ([FromServices] ILoginUseCase useCase, [FromBody] RequestLogin request) =>
                 await useCase.Execute(request))

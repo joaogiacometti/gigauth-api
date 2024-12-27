@@ -1,7 +1,9 @@
+using GigAuth.Api.Auth;
 using GigAuth.Api.Endpoints;
 using GigAuth.Api.Middlewares;
 using GigAuth.Application;
 using GigAuth.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GigAuth.Api.Extensions;
 
@@ -11,6 +13,7 @@ public static class CoreExtensions
     {
         services.AddInfrastructure(configuration);
         services.AddApplication();
+        services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
     }
     public static void ConfigureMiddlewares(this WebApplication app)
     {

@@ -1,12 +1,13 @@
 using FluentValidation;
+using GigAuth.Application.UseCases.Users;
 using GigAuth.Communication.Requests;
 using GigAuth.Exception.Resources;
 
-namespace GigAuth.Application.UseCases.Users.Create;
+namespace GigAuth.Application.UseCases.Auth.Register;
 
-public class RequestCreateUserValidator: AbstractValidator<RequestCreateUser>
+public class RequestRegisterValidator: AbstractValidator<RequestRegister>
 {
-    public RequestCreateUserValidator()
+    public RequestRegisterValidator()
     {
         RuleFor(u => u.UserName)
             .NotEmpty().WithMessage(ResourceErrorMessages.USER_NAME_EMPTY)
@@ -17,6 +18,6 @@ public class RequestCreateUserValidator: AbstractValidator<RequestCreateUser>
             .EmailAddress().WithMessage(ResourceErrorMessages.EMAIL_INVALID)
             .MaximumLength(256).WithMessage(ResourceErrorMessages.EMAIL_TOO_LONG);
         RuleFor(u => u.Password)
-            .SetValidator(new PasswordValidator<RequestCreateUser>());
+            .SetValidator(new PasswordValidator<RequestRegister>());
     }
 }

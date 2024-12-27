@@ -5,7 +5,7 @@ namespace GigAuth.Application.Mapping;
 
 public static class RequestToDomain
 {
-    public static User ToUserDomain(this RequestCreateUser request)
+    public static User ToUserDomain(this RequestRegister request)
     {
         return new User
         {

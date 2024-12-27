@@ -9,5 +9,5 @@ public class Role
     public DateTime? UpdatedDate { get; set; }
 
     public ICollection<UserRole>? UserRoles { get; set; } = [];
-    public ICollection<RolePermission>? RolePermissions { get; set; } = [];
+    public ICollection<RolePermission> RolePermissions { get; set; } = [];
 }

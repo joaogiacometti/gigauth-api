@@ -4,19 +4,19 @@ using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Users;
 using CommonTestsUtilities.Security;
 using FluentAssertions;
-using GigAuth.Application.UseCases.Users.Create;
+using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 
-namespace UseCase.Tests.Users;
+namespace UseCase.Tests.Auth;
 
-public class CreateUserUseCaseTest
+public class RegisterUseCaseTest
 {
     [Fact]
     public async Task Success()
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestRegisterBuilder.Build();
         var useCase = CreateUseCase();
 
         var act = async () => await useCase.Execute(request);
@@ -29,7 +29,7 @@ public class CreateUserUseCaseTest
     {
         var user = UserBuilder.Build();
 
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestRegisterBuilder.Build();
         request.UserName = user.UserName;
 
         var useCase = CreateUseCase(userWithUserName: user);
@@ -47,7 +47,7 @@ public class CreateUserUseCaseTest
     {
         var user = UserBuilder.Build();
 
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestRegisterBuilder.Build();
         request.Email = user.Email;
 
         var useCase = CreateUseCase(userWithEmail: user);
@@ -63,7 +63,7 @@ public class CreateUserUseCaseTest
     [Fact]
     public async Task Error_Validation()
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestRegisterBuilder.Build();
         request.UserName = "invalid";
 
         var useCase = CreateUseCase();
@@ -76,7 +76,7 @@ public class CreateUserUseCaseTest
             ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NAME_TOO_SHORT));
     }
 
-    private static CreateUserUseCase CreateUseCase(User? userWithUserName = null, User? userWithEmail = null)
+    private static RegisterUseCase CreateUseCase(User? userWithUserName = null, User? userWithEmail = null)
     {
         var readRepository = new UserReadOnlyRepositoryBuilder()
             .GetByUserName(userWithUserName)
@@ -86,6 +86,6 @@ public class CreateUserUseCaseTest
         var unitOfWork = new UnitOfWorkBuilder().Build();
         var cryptography = new CryptographyBuilder().Build();
 
-        return new CreateUserUseCase(writeRepository, readRepository, unitOfWork, cryptography);
+        return new RegisterUseCase(writeRepository, readRepository, unitOfWork, cryptography);
     }
 }

@@ -13,13 +13,13 @@ public class PasswordValidatorTest
     [ClassData(typeof(PasswordInlineDataTest))]
     public void Error_Password_Invalid_Create(string password)
     {
-        var request = RequestCreateUserBuilder.Build();
+        var request = RequestRegisterBuilder.Build();
         request.Password = password;
 
-        var validator = new PasswordValidator<RequestCreateUser>();
+        var validator = new PasswordValidator<RequestRegister>();
 
         var result = validator
-            .IsValid(new ValidationContext<RequestCreateUser>(request), password);
+            .IsValid(new ValidationContext<RequestRegister>(request), password);
 
         result.Should().BeFalse();
     }
