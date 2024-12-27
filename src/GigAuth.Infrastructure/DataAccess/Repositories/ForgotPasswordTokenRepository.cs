@@ -31,6 +31,6 @@ public class ForgotPasswordTokenRepository(GigAuthContext dbContext) : IForgotPa
 
     public void Delete(ForgotPasswordToken token)
     {
-        dbContext.Remove(token);
+        dbContext.ForgotPasswordTokens.Remove(token);
     }
 }

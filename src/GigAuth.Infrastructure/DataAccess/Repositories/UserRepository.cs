@@ -13,7 +13,7 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
             .AddAsync(user);
     }
 
-    async Task<User?> IUserReadOnlyRepository.GetById(Guid id)
+    async Task<User?> IUserWriteOnlyRepository.GetById(Guid id)
     {
         return await dbContext.Users
             .SingleOrDefaultAsync(u => u.Id.Equals(id));
@@ -24,9 +24,9 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
         var query = dbContext.Users
             .AsQueryable()
             .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
+            .ThenInclude(ur => ur.Role)
             .AsNoTracking();
-        
+
         if (!string.IsNullOrEmpty(filter.UserName))
             query = query.Where(u => u.UserName.Contains(filter.UserName));
 
@@ -35,16 +35,16 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
 
         if (filter.IsActive.HasValue)
             query = query.Where(u => u.IsActive == filter.IsActive.Value);
-        
+
         return query.ToListAsync();
     }
 
-    async Task<User?> IUserWriteOnlyRepository.GetById(Guid id)
+    async Task<User?> IUserReadOnlyRepository.GetById(Guid id)
     {
         return await dbContext.Users
             .AsNoTracking()
             .Include(u => u.UserRoles)
-                .ThenInclude(u => u.Role)
+            .ThenInclude(u => u.Role)
             .SingleOrDefaultAsync(u => u.Id.Equals(id));
     }
 
@@ -57,6 +57,10 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
     {
         return await dbContext.Users
             .AsNoTracking()
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .ThenInclude(ur => ur.RolePermissions)
+            .ThenInclude(urp => urp.Permission)
             .SingleOrDefaultAsync(u => u.Email.Equals(email));
     }
 
