@@ -4,8 +4,5 @@ namespace GigAuth.Infrastructure.Extensions;
 
 public static class ConfigurationExtensions
 {
-    public static bool IsTestEnvironment(this IConfiguration configuration)
-    {
-        return configuration.GetValue<bool>("InMemoryTest");;
-    }
+    public static bool IsTestEnvironment(this IConfiguration configuration) => configuration.GetValue<bool>("InMemoryTest");
 }

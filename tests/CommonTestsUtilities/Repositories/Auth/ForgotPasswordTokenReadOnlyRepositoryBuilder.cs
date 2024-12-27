@@ -12,7 +12,7 @@ public class ForgotPasswordTokenReadOnlyRepositoryBuilder
     {
         if (token is not null)
             _repository.Setup(r => r.GetByUserId(It.IsAny<Guid>())).ReturnsAsync(token);
-;
+        
         return this;
     }
     

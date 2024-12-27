@@ -5,7 +5,7 @@ namespace GigAuth.Infrastructure.Security.Cryptography;
 
 public class Cryptography : ICryptography
 {
-    public string Encrypt(string password) => BC.HashPassword(password);
+    public string Encrypt(string value) => BC.HashPassword(value);
 
-    public bool Verify(string password, string encryptedPassword) => BC.Verify(password, encryptedPassword);
+    public bool Verify(string value, string hashedValue) => BC.Verify(value, hashedValue);
 }

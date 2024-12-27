@@ -7,17 +7,10 @@ namespace GigAuth.Infrastructure.DataAccess.Repositories;
 
 public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository, IUserReadOnlyRepository
 {
-    public async Task Add(User user)
-    {
-        await dbContext.Users
-            .AddAsync(user);
-    }
+    public async Task Add(User user) => await dbContext.Users.AddAsync(user);
 
-    async Task<User?> IUserWriteOnlyRepository.GetById(Guid id)
-    {
-        return await dbContext.Users
-            .SingleOrDefaultAsync(u => u.Id.Equals(id));
-    }
+    async Task<User?> IUserWriteOnlyRepository.GetById(Guid id) => await dbContext.Users
+        .SingleOrDefaultAsync(u => u.Id.Equals(id));
 
     public Task<List<User>> GetFiltered(RequestUserFilter filter)
     {
@@ -39,35 +32,23 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
         return query.ToListAsync();
     }
 
-    async Task<User?> IUserReadOnlyRepository.GetById(Guid id)
-    {
-        return await dbContext.Users
-            .AsNoTracking()
-            .Include(u => u.UserRoles)
-            .ThenInclude(u => u.Role)
-            .SingleOrDefaultAsync(u => u.Id.Equals(id));
-    }
+    async Task<User?> IUserReadOnlyRepository.GetById(Guid id) => await dbContext.Users
+        .AsNoTracking()
+        .Include(u => u.UserRoles)
+        .ThenInclude(u => u.Role)
+        .SingleOrDefaultAsync(u => u.Id.Equals(id));
 
-    public void Delete(User user)
-    {
-        dbContext.Users.Remove(user);
-    }
+    public void Delete(User user) => dbContext.Users.Remove(user);
 
-    public async Task<User?> GetByEmail(string email)
-    {
-        return await dbContext.Users
-            .AsNoTracking()
-            .Include(u => u.UserRoles)
-            .ThenInclude(ur => ur.Role)
-            .ThenInclude(ur => ur.RolePermissions)
-            .ThenInclude(urp => urp.Permission)
-            .SingleOrDefaultAsync(u => u.Email.Equals(email));
-    }
+    public async Task<User?> GetByEmail(string email) => await dbContext.Users
+        .AsNoTracking()
+        .Include(u => u.UserRoles)
+        .ThenInclude(ur => ur.Role)
+        .ThenInclude(ur => ur.RolePermissions)
+        .ThenInclude(urp => urp.Permission)
+        .SingleOrDefaultAsync(u => u.Email.Equals(email));
 
-    public async Task<User?> GetByUserName(string userName)
-    {
-        return await dbContext.Users
-            .AsNoTracking()
-            .SingleOrDefaultAsync(u => u.UserName.Equals(userName));
-    }
+    public async Task<User?> GetByUserName(string userName) => await dbContext.Users
+        .AsNoTracking()
+        .SingleOrDefaultAsync(u => u.UserName.Equals(userName));
 }
