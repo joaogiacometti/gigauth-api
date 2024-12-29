@@ -10,7 +10,7 @@ namespace GigAuth.Infrastructure.Security.Tokens;
 
 public class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
-    public string Generate(User user)
+    public string GenerateToken(User user)
     {
         var secretKey = configuration["Jwt:SecretKey"];
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
@@ -29,6 +29,19 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
         var handler = new JsonWebTokenHandler();
 
         return handler.CreateToken(tokenDescriptor);
+    }
+
+    public RefreshToken GenerateRefreshToken(Guid userId)
+    {
+        var token = Guid.NewGuid().ToString("N");
+
+        return new RefreshToken
+        {
+            Id = Guid.NewGuid(),
+            Token = token,
+            UserId = userId,
+            ExpirationDate = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("RefreshToken:ExpirationInSeconds"))
+        };
     }
 
     private static List<Claim> GenerateClaims(User user)

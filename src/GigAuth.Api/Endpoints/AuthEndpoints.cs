@@ -31,7 +31,7 @@ public static class AuthEndpoints
             .Produces<ResponseToken>()
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status400BadRequest);
-
+        
         group.MapPost("/forgot-password/{username}",
                 async ([FromServices] IForgotPasswordUseCase useCase, [FromRoute] string userName) =>
                 {

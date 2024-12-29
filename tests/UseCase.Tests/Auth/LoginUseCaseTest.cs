@@ -1,4 +1,6 @@
 using CommonTestsUtilities.Entities;
+using CommonTestsUtilities.Repositories;
+using CommonTestsUtilities.Repositories.RefreshTokens;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Users;
 using CommonTestsUtilities.Security;
@@ -13,19 +15,34 @@ namespace UseCase.Tests.Auth;
 public class LoginUseCaseTest
 {
     [Fact]
-    public async Task Success()
+    public async Task Success_Create()
     {
         var user = UserBuilder.Build();
         var request = RequestLoginBuilder.Build();
         request.Email = user.Email;
-        
-        var useCase = CreateUseCase(user, request.Password);
-        
+
+        var useCase = CreateUseCase(user, password: request.Password);
+
         var act = async () => await useCase.Execute(request);
 
         await act.Should().NotThrowAsync();
     }
     
+    [Fact]
+    public async Task Success_Update()
+    {
+        var user = UserBuilder.Build();
+        var refreshToken = RefreshTokenBuilder.Build(user.Id);
+        var request = RequestLoginBuilder.Build();
+        request.Email = user.Email;
+
+        var useCase = CreateUseCase(user, refreshToken, request.Password);
+
+        var act = async () => await useCase.Execute(request);
+
+        await act.Should().NotThrowAsync();
+    }
+
     [Fact]
     public async Task Error_User_Not_Found()
     {
@@ -40,7 +57,7 @@ public class LoginUseCaseTest
         result.Where(ex =>
             ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.INVALID_CREDENTIALS));
     }
-    
+
     [Fact]
     public async Task Error_User_Password_Not_Match()
     {
@@ -57,7 +74,7 @@ public class LoginUseCaseTest
         result.Where(ex =>
             ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.INVALID_CREDENTIALS));
     }
-    
+
     [Fact]
     public async Task Error_Validation()
     {
@@ -73,15 +90,23 @@ public class LoginUseCaseTest
         result.Where(ex =>
             ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.INVALID_CREDENTIALS));
     }
-    
-    private static LoginUseCase CreateUseCase(User? user = null, string? password = null)
+
+    private static LoginUseCase CreateUseCase(User? user = null, RefreshToken? refreshToken = null, string? password = null)
     {
         var readRepository = new UserReadOnlyRepositoryBuilder()
             .GetByEmail(user)
             .Build();
+        var refreshTokenWriteRepository = new RefreshTokenWriteOnlyRepositoryBuilder().Build();
+        var refreshTokenReadRepository = new RefreshTokenReadOnlyRepositoryBuilder()
+            .GetByUserId(refreshToken)
+            .Build();
+        var unitOfWork = new UnitOfWorkBuilder().Build();
         var cryptography = new CryptographyBuilder().Verify(password).Build();
-        var tokenProvider = new TokenProviderBuilder().Build();
+        var tokenProvider = new TokenProviderBuilder()
+            .GenerateToken(Guid.NewGuid().ToString())
+            .Build();
 
-        return new LoginUseCase(readRepository, cryptography, tokenProvider);
+        return new LoginUseCase(readRepository, refreshTokenReadRepository, refreshTokenWriteRepository, 
+            unitOfWork, cryptography, tokenProvider);
     }
 }

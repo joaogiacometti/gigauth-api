@@ -1,5 +1,7 @@
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
+using GigAuth.Domain.Repositories;
+using GigAuth.Domain.Repositories.RefreshTokens;
 using GigAuth.Domain.Repositories.Users;
 using GigAuth.Domain.Security.Cryptography;
 using GigAuth.Domain.Security.Tokens;
@@ -8,32 +10,49 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Auth.Login;
 
-public class LoginUseCase(IUserReadOnlyRepository repository, ICryptography cryptography, ITokenProvider tokenProvider) : ILoginUseCase
+public class LoginUseCase(
+    IUserReadOnlyRepository repository,
+    IRefreshTokenReadOnlyRepository refreshTokenReadRepository,
+    IRefreshTokenWriteOnlyRepository refreshTokenWriteRepository,
+    IUnitOfWork unitOfWork,
+    ICryptography cryptography,
+    ITokenProvider tokenProvider) : ILoginUseCase
 {
     public async Task<ResponseToken> Execute(RequestLogin request)
     {
         Validate(request);
-        
+
         var user = await repository.GetByEmail(request.Email);
 
         if (user is null)
             throw new InvalidCredentialsException(ResourceErrorMessages.INVALID_CREDENTIALS);
 
         var passwordMatch = cryptography.Verify(request.Password, user.PasswordHash);
-        
-        if(!passwordMatch)
+
+        if (!passwordMatch)
             throw new InvalidCredentialsException(ResourceErrorMessages.INVALID_CREDENTIALS);
+
+        var existingRefreshToken = await refreshTokenReadRepository.GetByUserId(user.Id);
+
+        if (existingRefreshToken is not null)
+            refreshTokenWriteRepository.Delete(existingRefreshToken);
+
+        var refreshToken = tokenProvider.GenerateRefreshToken(user.Id);
+        
+        await refreshTokenWriteRepository.Create(refreshToken);
+        await unitOfWork.Commit();
 
         return new ResponseToken()
         {
-            Token = tokenProvider.Generate(user)
+            Token = tokenProvider.GenerateToken(user),
+            RefreshToken = refreshToken.Token
         };
     }
 
     private static void Validate(RequestLogin request)
     {
         var validator = new RequestLoginValidator();
-        
+
         var result = validator.Validate(request);
 
         if (result.IsValid) return;
