@@ -9,7 +9,6 @@ services:
       - POSTGRESQL_DATABASE=${POSTGRESQL_API_DATABASE}
     volumes:
       - api_db:/bitnami/postgresql
-
     networks:
       - app
 
