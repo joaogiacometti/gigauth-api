@@ -56,7 +56,7 @@ public class ChangePasswordUseCaseTest
         var request = RequestChangePasswordBuilder.Build();
         
         token.UserId = user.Id;
-        token.Expires = new Faker().Date.Past();
+        token.ExpirationDate = new Faker().Date.Past();
         request.Token = token.Token;
         
         var useCase = CreateUseCase(user, token);

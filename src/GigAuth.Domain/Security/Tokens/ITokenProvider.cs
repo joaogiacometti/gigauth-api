@@ -6,4 +6,5 @@ public interface ITokenProvider
 {
     public string GenerateToken(User user);
     public RefreshToken GenerateRefreshToken(Guid userId);
+    public ForgotPasswordToken GenerateForgetPasswordToken(User user);
 }

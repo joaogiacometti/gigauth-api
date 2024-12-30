@@ -18,7 +18,7 @@ public class ForgetPasswordTokenMap : IEntityTypeConfiguration<ForgotPasswordTok
             .IsRequired()
             .HasMaxLength(512);
 
-        builder.Property(f => f.Expires)
+        builder.Property(f => f.ExpirationDate)
             .IsRequired()
             .HasColumnType("timestamp with time zone");
 

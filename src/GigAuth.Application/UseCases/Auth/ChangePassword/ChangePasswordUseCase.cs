@@ -18,7 +18,7 @@ public class ChangePasswordUseCase(IForgotPasswordTokenWriteOnlyRepository token
         var token = await tokenWriteRepository.GetByToken(request.Token)
             ?? throw new NotFoundException(ResourceErrorMessages.TOKEN_NOT_FOUND);
 
-        if (token.Expires < DateTime.Now)
+        if (token.ExpirationDate < DateTime.Now)
             throw new ErrorOnValidationException([ResourceErrorMessages.TOKEN_EXPIRED]);
         
         var user = await userWriteRepository.GetById(token.UserId)

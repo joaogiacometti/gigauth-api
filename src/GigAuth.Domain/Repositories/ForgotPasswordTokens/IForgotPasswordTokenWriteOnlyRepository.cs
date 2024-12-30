@@ -6,6 +6,5 @@ public interface IForgotPasswordTokenWriteOnlyRepository
 {
     Task<ForgotPasswordToken?> GetByToken(string token);
     Task Create(ForgotPasswordToken token);
-    void Update(ForgotPasswordToken token);
     void Delete(ForgotPasswordToken token);
 }

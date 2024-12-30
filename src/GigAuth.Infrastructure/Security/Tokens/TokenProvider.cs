@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using GigAuth.Domain.Entities;
 using GigAuth.Domain.Security.Tokens;
+using GigAuth.Infrastructure.Mapping;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -31,18 +32,24 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
         return handler.CreateToken(tokenDescriptor);
     }
 
-    public RefreshToken GenerateRefreshToken(Guid userId)
+    public RefreshToken GenerateRefreshToken(Guid userId) => new()
     {
-        var token = Guid.NewGuid().ToString("N");
+        Id = Guid.NewGuid(),
+        Token = GenerateToken(),
+        UserId = userId,
+        ExpirationDate = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("RefreshToken:ExpirationInSeconds"))
+    };
 
-        return new RefreshToken
-        {
-            Id = Guid.NewGuid(),
-            Token = token,
-            UserId = userId,
-            ExpirationDate = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("RefreshToken:ExpirationInSeconds"))
-        };
-    }
+    public ForgotPasswordToken GenerateForgetPasswordToken(User user) => new()
+    {
+        Id = Guid.NewGuid(),
+        Token = GenerateToken(),
+        ExpirationDate =
+            DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("ForgotPasswordToken:ExpirationInSeconds")),
+        UserId = user.Id
+    };
+
+    private static string GenerateToken() => Guid.NewGuid().ToString("N");
 
     private static List<Claim> GenerateClaims(User user)
     {

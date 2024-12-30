@@ -1,8 +1,8 @@
 using CommonTestsUtilities.Entities;
-using CommonTestsUtilities.Externals;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Auth;
 using CommonTestsUtilities.Repositories.Users;
+using CommonTestsUtilities.Security;
 using FluentAssertions;
 using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Domain.Entities;
@@ -55,7 +55,7 @@ public class ForgotPasswordUseCaseTest
     }
 
     private static ForgotPasswordUseCase CreateUseCase(User? userForgotPassword = null,
-        ForgotPasswordToken? token = null, int time = 7200)
+        ForgotPasswordToken? token = null)
     {
         var tokenWriteRepository = new ForgotPasswordTokenWriteOnlyRepositoryBuilder().Build();
         var tokenReadRepository = new ForgotPasswordTokenReadOnlyRepositoryBuilder()
@@ -64,11 +64,9 @@ public class ForgotPasswordUseCaseTest
         var userReadRepository = new UserReadOnlyRepositoryBuilder()
             .GetByUserName(userForgotPassword).Build();
         var unitOfWork = new UnitOfWorkBuilder().Build();
-        var configuration = new ConfigurationBuilder()
-            .ForgotPasswordTime(time)
-            .Build();
+        var tokenProvider = new TokenProviderBuilder().Build();
 
         return new ForgotPasswordUseCase(tokenReadRepository, tokenWriteRepository, userReadRepository, unitOfWork,
-            configuration);
+            tokenProvider);
     }
 }
