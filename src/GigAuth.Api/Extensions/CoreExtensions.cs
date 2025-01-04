@@ -23,6 +23,8 @@ public static class CoreExtensions
 
     public static void ConfigureEndpoints(this WebApplication app)
     {
+        app.MapHealthChecks("/_health")
+            .RequireRateLimiting("Global");
         app.AddUserEndpoints();
         app.AddAuthEndpoints();
     }

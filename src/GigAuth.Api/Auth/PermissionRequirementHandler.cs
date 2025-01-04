@@ -11,7 +11,7 @@ public class PermissionRequirementHandler : AuthorizationHandler<PermissionRequi
             .Select(c => c.Value)
             .ToList();
 
-        if (!permissionsClaims.Any())
+        if (permissionsClaims.Count == 0)
             return Task.CompletedTask;
 
         if (permissionsClaims.Contains(requirement.Permission))

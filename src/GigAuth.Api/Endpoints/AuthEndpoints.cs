@@ -14,7 +14,8 @@ public static class AuthEndpoints
     public static void AddAuthEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/auth")
-            .WithTags("Auth");
+            .WithTags("Auth")
+            .RequireRateLimiting("Global");
 
         group.MapPost("/register",
                 async ([FromServices] IRegisterUseCase useCase, [FromBody] RequestRegister request) =>

@@ -16,6 +16,7 @@ public static class UserEndpoints
     {
         var group = app.MapGroup("/user")
             .WithTags("User")
+            .RequireRateLimiting("Authorized")
             .RequireAuthorization(policy => policy.RequirePermission("user"));
 
         group.MapPost("/get-filtered",

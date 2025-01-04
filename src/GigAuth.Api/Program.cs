@@ -6,6 +6,8 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+builder.Services.ConfigureRateLimiter();
+
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.ConfigureDependencies(configuration);
 
@@ -29,11 +31,10 @@ if (!configuration.IsTestEnvironment())
 app.ConfigureMiddlewares();
 app.ConfigureEndpoints();
 
-// TODO: Add rate limiting
-app.MapHealthChecks("/_health");
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 await app.RunAsync();
 
