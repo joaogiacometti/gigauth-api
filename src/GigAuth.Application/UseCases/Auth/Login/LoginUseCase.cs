@@ -11,7 +11,7 @@ using GigAuth.Exception.Resources;
 namespace GigAuth.Application.UseCases.Auth.Login;
 
 public class LoginUseCase(
-    IUserReadOnlyRepository repository,
+    IUserReadOnlyRepository userReadRepository,
     IRefreshTokenReadOnlyRepository refreshTokenReadRepository,
     IRefreshTokenWriteOnlyRepository refreshTokenWriteRepository,
     IUnitOfWork unitOfWork,
@@ -22,15 +22,15 @@ public class LoginUseCase(
     {
         Validate(request);
 
-        var user = await repository.GetByEmail(request.Email);
+        var user = await userReadRepository.GetByEmail(request.Email);
 
         if (user is null)
-            throw new InvalidCredentialsException(ResourceErrorMessages.INVALID_CREDENTIALS);
+            throw new InvalidCredentialsException(ResourceErrorMessages.CREDENTIALS_INVALID);
 
         var passwordMatch = cryptography.Verify(request.Password, user.PasswordHash);
 
         if (!passwordMatch)
-            throw new InvalidCredentialsException(ResourceErrorMessages.INVALID_CREDENTIALS);
+            throw new InvalidCredentialsException(ResourceErrorMessages.CREDENTIALS_INVALID);
 
         var existingRefreshToken = await refreshTokenReadRepository.GetByUserId(user.Id);
 
@@ -57,6 +57,6 @@ public class LoginUseCase(
 
         if (result.IsValid) return;
 
-        throw new InvalidCredentialsException(ResourceErrorMessages.INVALID_CREDENTIALS);
+        throw new InvalidCredentialsException(ResourceErrorMessages.CREDENTIALS_INVALID);
     }
 }

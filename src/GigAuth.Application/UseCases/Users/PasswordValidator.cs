@@ -22,7 +22,7 @@ public class PasswordValidator<T> : PropertyValidator<T, string>
     public override bool IsValid(ValidationContext<T> context, string password)
     {
         if (!string.IsNullOrWhiteSpace(password) && _passwordRegex.IsMatch(password)) return true;
-        context.MessageFormatter.AppendArgument(ErrorMessageKey, ResourceErrorMessages.INVALID_PASSWORD);
+        context.MessageFormatter.AppendArgument(ErrorMessageKey, ResourceErrorMessages.PASSWORD_INVALID);
         return false;
     }
 }

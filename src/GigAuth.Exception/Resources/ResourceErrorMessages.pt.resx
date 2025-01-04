@@ -20,7 +20,7 @@
     <data name="EMAIL_TOO_LONG" xml:space="preserve">
         <value>O e-mail não pode exceder 256 caracteres.</value>
     </data>
-    <data name="INVALID_PASSWORD" xml:space="preserve">
+    <data name="PASSWORD_INVALID" xml:space="preserve">
         <value>Sua senha deve ter pelo menos 8 caracteres e incluir pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.</value>
     </data>
     <data name="UNKNOWN_ERROR" xml:space="preserve">
@@ -38,7 +38,7 @@
     <data name="USER_NAME_TOO_SHORT" xml:space="preserve">
         <value>O nome de usuário deve ter pelo menos 8 caracteres.</value>
     </data>
-    <data name="INVALID_CREDENTIALS" xml:space="preserve">
+    <data name="CREDENTIALS_INVALID" xml:space="preserve">
         <value>Credenciais inválidas. O e-mail ou a senha estão incorretos.</value>
     </data>
     <data name="USER_NOT_FOUND" xml:space="preserve">
@@ -52,5 +52,20 @@
     </data>
     <data name="TOKEN_EXPIRED" xml:space="preserve">
         <value>O token expirou.</value>
+    </data>
+    <data name="REFRESH_TOKEN_EMPTY" xml:space="preserve">
+        <value>O token de atualização é obrigatório.</value>
+    </data>
+    <data name="TOKEN_INVALID" xml:space="preserve">
+        <value>Token invalido.</value>
+    </data>
+    <data name="REFRESH_TOKEN_NOT_FOUND" xml:space="preserve">
+        <value>Não foi possível encontrar o token de atualização.</value>
+    </data>
+    <data name="REFRESH_TOKEN_EXPIRED" xml:space="preserve">
+        <value>O token de atualização expirou.</value>
+    </data>
+    <data name="REFRESH_TOKEN_INVALID" xml:space="preserve">
+        <value>Token de atualização inválido.</value>
     </data>
 </root>

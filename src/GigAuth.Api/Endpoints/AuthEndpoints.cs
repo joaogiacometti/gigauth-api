@@ -1,6 +1,7 @@
 using GigAuth.Application.UseCases.Auth.ChangePassword;
 using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Application.UseCases.Auth.Login;
+using GigAuth.Application.UseCases.Auth.RefreshToken;
 using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
@@ -24,6 +25,14 @@ public static class AuthEndpoints
                 })
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
+
+        group.MapPost("/refresh-token",
+                async ([FromServices] IRefreshTokenUseCase useCase, [FromBody] RequestRefreshToken request) =>
+                Results.Ok(await useCase.Execute(request)))
+            .Produces<ResponseToken>()
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound);
         
         group.MapPost("/login",
                 async ([FromServices] ILoginUseCase useCase, [FromBody] RequestLogin request) =>

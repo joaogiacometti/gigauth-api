@@ -55,7 +55,7 @@ public class LoginUseCaseTest
         var result = await act.Should().ThrowAsync<InvalidCredentialsException>();
 
         result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.INVALID_CREDENTIALS));
+            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.CREDENTIALS_INVALID));
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class LoginUseCaseTest
         var result = await act.Should().ThrowAsync<InvalidCredentialsException>();
 
         result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.INVALID_CREDENTIALS));
+            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.CREDENTIALS_INVALID));
     }
 
     [Fact]
@@ -88,12 +88,12 @@ public class LoginUseCaseTest
         var result = await act.Should().ThrowAsync<InvalidCredentialsException>();
 
         result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.INVALID_CREDENTIALS));
+            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.CREDENTIALS_INVALID));
     }
 
     private static LoginUseCase CreateUseCase(User? user = null, RefreshToken? refreshToken = null, string? password = null)
     {
-        var readRepository = new UserReadOnlyRepositoryBuilder()
+        var userReadRepository = new UserReadOnlyRepositoryBuilder()
             .GetByEmail(user)
             .Build();
         var refreshTokenWriteRepository = new RefreshTokenWriteOnlyRepositoryBuilder().Build();
@@ -106,7 +106,7 @@ public class LoginUseCaseTest
             .GenerateToken(Guid.NewGuid().ToString())
             .Build();
 
-        return new LoginUseCase(readRepository, refreshTokenReadRepository, refreshTokenWriteRepository, 
+        return new LoginUseCase(userReadRepository, refreshTokenReadRepository, refreshTokenWriteRepository, 
             unitOfWork, cryptography, tokenProvider);
     }
 }

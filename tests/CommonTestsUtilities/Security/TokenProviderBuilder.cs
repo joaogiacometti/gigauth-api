@@ -14,5 +14,13 @@ public class TokenProviderBuilder
         return this;
     }
     
+    public TokenProviderBuilder GetUserIdByToken(string? token = null, string? userId = null) 
+    {
+        if (token is not null)
+            _tokenProvider.Setup(x => x.GetUserIdByToken(token, false)).Returns(userId ?? Guid.NewGuid().ToString());
+        
+        return this;
+    }
+    
     public ITokenProvider Build() => _tokenProvider.Object;
 }

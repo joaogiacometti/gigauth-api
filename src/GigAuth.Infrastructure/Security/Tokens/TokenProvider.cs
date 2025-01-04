@@ -1,11 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using GigAuth.Domain.Entities;
 using GigAuth.Domain.Security.Tokens;
-using GigAuth.Infrastructure.Mapping;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace GigAuth.Infrastructure.Security.Tokens;
 
@@ -32,6 +33,49 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
         return handler.CreateToken(tokenDescriptor);
     }
 
+    public string? GetUserIdByToken(string token, bool validateLifetime = true)
+    {
+        var isValid = ValidateToken(token, validateLifetime);
+
+        if (!isValid) return null;
+        
+        var handler = new JwtSecurityTokenHandler();
+        
+        var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+        var userIdClaim = jsonToken?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+        return userIdClaim?.Value;
+    }
+    
+    private bool ValidateToken(string token, bool validateLifetime = true)
+    {
+        var secretKey = configuration["Jwt:SecretKey"];
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
+
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = validateLifetime,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Audience"],
+            IssuerSigningKey = securityKey
+        };
+
+        var handler = new JwtSecurityTokenHandler();
+
+        try
+        {
+            _ = handler.ValidateToken(token, tokenValidationParameters, out _);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        
+        return true;
+    }
+    
     public RefreshToken GenerateRefreshToken(Guid userId) => new()
     {
         Id = Guid.NewGuid(),

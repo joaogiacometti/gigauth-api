@@ -45,9 +45,9 @@ namespace GigAuth.Exception.Resources {
             }
         }
         
-        public static string INVALID_PASSWORD {
+        public static string PASSWORD_INVALID {
             get {
-                return ResourceManager.GetString("INVALID_PASSWORD", resourceCulture);
+                return ResourceManager.GetString("PASSWORD_INVALID", resourceCulture);
             }
         }
         
@@ -99,9 +99,9 @@ namespace GigAuth.Exception.Resources {
             }
         }
         
-        public static string INVALID_CREDENTIALS {
+        public static string CREDENTIALS_INVALID {
             get {
-                return ResourceManager.GetString("INVALID_CREDENTIALS", resourceCulture);
+                return ResourceManager.GetString("CREDENTIALS_INVALID", resourceCulture);
             }
         }
         
@@ -126,6 +126,36 @@ namespace GigAuth.Exception.Resources {
         public static string TOKEN_EXPIRED {
             get {
                 return ResourceManager.GetString("TOKEN_EXPIRED", resourceCulture);
+            }
+        }
+        
+        public static string REFRESH_TOKEN_EMPTY {
+            get {
+                return ResourceManager.GetString("REFRESH_TOKEN_EMPTY", resourceCulture);
+            }
+        }
+        
+        public static string TOKEN_INVALID {
+            get {
+                return ResourceManager.GetString("TOKEN_INVALID", resourceCulture);
+            }
+        }
+        
+        public static string REFRESH_TOKEN_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("REFRESH_TOKEN_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        public static string REFRESH_TOKEN_EXPIRED {
+            get {
+                return ResourceManager.GetString("REFRESH_TOKEN_EXPIRED", resourceCulture);
+            }
+        }
+        
+        public static string REFRESH_TOKEN_INVALID {
+            get {
+                return ResourceManager.GetString("REFRESH_TOKEN_INVALID", resourceCulture);
             }
         }
     }
