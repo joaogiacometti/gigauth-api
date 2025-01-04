@@ -20,7 +20,11 @@ public static class DependencyInjectionExtension
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         if (!configuration.IsTestEnvironment())
+        {
             AddDbContext(services, configuration);
+            services.AddHealthChecks()
+                .AddDbContextCheck<GigAuthContext>();
+        }
 
         services.AddScoped<ICryptography, Cryptography>();
         services.AddScoped<ITokenProvider, TokenProvider>();

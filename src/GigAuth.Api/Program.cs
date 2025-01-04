@@ -4,10 +4,10 @@ using GigAuth.Infrastructure.Extensions;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
-
-builder.Services.ConfigureDependencies(builder.Configuration);
+builder.Services.ConfigureDependencies(configuration);
 
 builder.AddJwtAuth();
 
@@ -23,11 +23,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-if (!builder.Configuration.IsTestEnvironment())
+if (!configuration.IsTestEnvironment())
     await app.DatabaseMigrate();
 
 app.ConfigureMiddlewares();
 app.ConfigureEndpoints();
+
+// TODO: Add rate limiting
+app.MapHealthChecks("/_health");
 
 app.UseAuthentication();
 app.UseAuthorization();
