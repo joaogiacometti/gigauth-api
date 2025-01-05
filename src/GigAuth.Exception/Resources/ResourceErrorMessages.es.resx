@@ -81,4 +81,13 @@
     <data name="DESCRIPTION_TOO_LONG" xml:space="preserve">
         <value>La descripción no puede exceder los 256 caracteres.</value>
     </data>
+    <data name="ROLE_NOT_FOUND" xml:space="preserve">
+        <value>No se pudo encontrar el perfil.</value>
+    </data>
+    <data name="NAME_TOO_SHORT" xml:space="preserve">
+        <value>El nombre debe tener al menos 3 caracteres.</value>
+    </data>
+    <data name="NAME_ALREADY_USED" xml:space="preserve">
+        <value>El nombre ya está en uso.</value>
+    </data>
 </root>

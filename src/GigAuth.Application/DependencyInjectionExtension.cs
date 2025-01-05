@@ -3,6 +3,8 @@ using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Application.UseCases.Auth.RefreshToken;
 using GigAuth.Application.UseCases.Auth.Register;
+using GigAuth.Application.UseCases.Roles.Create;
+using GigAuth.Application.UseCases.Roles.Get;
 using GigAuth.Application.UseCases.Roles.GetFiltered;
 using GigAuth.Application.UseCases.Users.Delete;
 using GigAuth.Application.UseCases.Users.Get;
@@ -27,6 +29,8 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
         
+        services.AddScoped<ICreateRoleUseCase, CreateRoleUseCase>();
+        services.AddScoped<IGetRoleUseCase, GetRoleUseCase>();
         services.AddScoped<IGetFilteredRolesUseCase, GetFilteredRolesUseCase>();
     }
 }

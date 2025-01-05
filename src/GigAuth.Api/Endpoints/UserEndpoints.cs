@@ -30,17 +30,17 @@ public static class UserEndpoints
                 })
             .Produces<List<ResponseUser>>()
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status403Forbidden);
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden);
 
         group.MapGet("/get/{id:guid}",
                 async ([FromServices] IGetUserUseCase useCase, [FromRoute] Guid id) =>
                 Results.Ok(await useCase.Execute(id)))
             .Produces<ResponseUser>()
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status403Forbidden)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
 
         group.MapPut("/update/{id:guid}",
                 async ([FromServices] IUpdateUserUseCase useCase, [FromBody] RequestUpdateUser request,
@@ -51,10 +51,10 @@ public static class UserEndpoints
                     return Results.NoContent();
                 })
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status403Forbidden)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
 
         group.MapDelete("/delete/{id:guid}", async ([FromServices] IDeleteUserUseCase useCase, [FromRoute] Guid id) =>
             {
@@ -63,8 +63,8 @@ public static class UserEndpoints
                 return Results.NoContent();
             })
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status403Forbidden)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
     }
 }

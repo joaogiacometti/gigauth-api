@@ -10,8 +10,8 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Auth.Register;
 
-public class RegisterUseCase(IUserWriteOnlyRepository writeRepository, 
-    IUserReadOnlyRepository readRepository,
+public class RegisterUseCase(IUserReadOnlyRepository readRepository,
+    IUserWriteOnlyRepository writeRepository, 
     IUnitOfWork unitOfWork, ICryptography cryptography) : IRegisterUseCase
 {
     public async Task Execute(RequestRegister request)

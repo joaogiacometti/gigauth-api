@@ -1,4 +1,8 @@
+using GigAuth.Application.UseCases.Auth.Register;
+using GigAuth.Application.UseCases.Roles.Create;
+using GigAuth.Application.UseCases.Roles.Get;
 using GigAuth.Application.UseCases.Roles.GetFiltered;
+using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
 using GigAuth.Domain.Constants;
 using GigAuth.Domain.Filters;
@@ -15,6 +19,18 @@ public static class RoleEndpoints
             .RequireRateLimiting(RateLimiterConstants.Authorized)
             .RequireAuthorization(policy => policy.RequireRole(RoleConstants.RolePermissionName, RoleConstants.AdminPermissionName));
         
+        group.MapPost("/create",
+                async ([FromServices] ICreateRoleUseCase useCase, [FromBody] RequestCreateRole request) =>
+                {
+                    await useCase.Execute(request);
+
+                    return Results.Created();
+                })
+            .Produces(StatusCodes.Status201Created)
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden);
+        
         group.MapPost("/get-filtered",
                 async ([FromServices] IGetFilteredRolesUseCase useCase, [FromBody] RequestRoleFilter filter) =>
                 {
@@ -24,8 +40,16 @@ public static class RoleEndpoints
                 })
             .Produces<List<ResponseRole>>()
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status403Forbidden);
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden);
+        
+        group.MapGet("/get/{id:guid}",
+                async ([FromServices] IGetRoleUseCase useCase, [FromRoute] Guid id) =>
+                Results.Ok(await useCase.Execute(id)))
+            .Produces<ResponseRole>()
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
     }
 }

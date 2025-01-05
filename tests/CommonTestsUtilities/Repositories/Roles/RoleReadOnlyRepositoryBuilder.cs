@@ -19,5 +19,21 @@ public class RoleReadOnlyRepositoryBuilder
         return this;
     }
     
+    public RoleReadOnlyRepositoryBuilder GetById(Role? role = null)
+    {
+        if (role is not null)
+            _repository.Setup(r => r.GetById(role.Id)).ReturnsAsync(role);
+
+        return this;
+    }
+    
+    public RoleReadOnlyRepositoryBuilder GetByName(Role? role = null)
+    {
+        if (role is not null)
+            _repository.Setup(r => r.GetByName(role.Name)).ReturnsAsync(role);
+
+        return this;
+    }
+    
     public IRoleReadOnlyRepository Build() => _repository.Object;
 }

@@ -1,5 +1,6 @@
 using Bogus;
 using CommonTestsUtilities.InlineData;
+using CommonTestsUtilities.Requests.Auth;
 using CommonTestsUtilities.Requests.Users;
 using FluentAssertions;
 using GigAuth.Application.UseCases.Auth.Register;

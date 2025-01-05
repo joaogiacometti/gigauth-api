@@ -87,4 +87,13 @@
     <data name="DESCRIPTION_TOO_LONG" xml:space="preserve">
         <value>Description cannot exceed 256 characters.</value>
     </data>
+    <data name="ROLE_NOT_FOUND" xml:space="preserve">
+        <value>The role could not be found.</value>
+    </data>
+    <data name="NAME_TOO_SHORT" xml:space="preserve">
+        <value>Name must be at least 3 characters.</value>
+    </data>
+    <data name="NAME_ALREADY_USED" xml:space="preserve">
+        <value>The name is already used.</value>
+    </data>
 </root>

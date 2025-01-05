@@ -9,11 +9,18 @@ public static class RequestToDomain
     {
         return new User
         {
-            Id = Guid.NewGuid(),
             Email = request.Email,
             UserName = request.UserName,
             PasswordHash = request.Password,
-            IsActive = true,
+        };
+    }
+    
+    public static Role ToRoleDomain(this RequestCreateRole request)
+    {
+        return new Role
+        {
+            Name = request.Name,
+            Description = request.Description,
         };
     }
 }

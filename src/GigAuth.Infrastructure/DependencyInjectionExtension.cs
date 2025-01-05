@@ -35,6 +35,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUserReadOnlyRepository, UserRepository>();
         
         services.AddScoped<IRoleReadOnlyRepository, RoleRepository>();
+        services.AddScoped<IRoleWriteOnlyRepository, RoleRepository>();
         
         services.AddScoped<IForgotPasswordTokenWriteOnlyRepository, ForgotPasswordTokenRepository>();
         services.AddScoped<IForgotPasswordTokenReadOnlyRepository, ForgotPasswordTokenRepository>();

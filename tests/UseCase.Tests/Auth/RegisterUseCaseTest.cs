@@ -1,7 +1,7 @@
 using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Users;
-using CommonTestsUtilities.Requests.Users;
+using CommonTestsUtilities.Requests.Auth;
 using CommonTestsUtilities.Security;
 using FluentAssertions;
 using GigAuth.Application.UseCases.Auth.Register;
@@ -86,6 +86,6 @@ public class RegisterUseCaseTest
         var unitOfWork = new UnitOfWorkBuilder().Build();
         var cryptography = new CryptographyBuilder().Build();
 
-        return new RegisterUseCase(writeRepository, readRepository, unitOfWork, cryptography);
+        return new RegisterUseCase(readRepository, writeRepository, unitOfWork, cryptography);
     }
 }

@@ -26,22 +26,22 @@ public static class AuthEndpoints
                     return Results.Created();
                 })
             .Produces(StatusCodes.Status201Created)
-            .Produces(StatusCodes.Status400BadRequest);
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest);
 
         group.MapPost("/refresh-token",
                 async ([FromServices] IRefreshTokenUseCase useCase, [FromBody] RequestRefreshToken request) =>
                 Results.Ok(await useCase.Execute(request)))
             .Produces<ResponseToken>()
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
         
         group.MapPost("/login",
                 async ([FromServices] ILoginUseCase useCase, [FromBody] RequestLogin request) =>
                 await useCase.Execute(request))
             .Produces<ResponseToken>()
-            .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status400BadRequest);
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest);
         
         group.MapPost("/forgot-password/{username}",
                 async ([FromServices] IForgotPasswordUseCase useCase, [FromRoute] string userName) =>
@@ -51,7 +51,7 @@ public static class AuthEndpoints
                     return Results.NoContent();
                 })
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
 
         group.MapPut("/change-password",
                 async ([FromServices] IChangePasswordUseCase useCase, [FromBody] RequestChangePassword request) =>
@@ -61,7 +61,7 @@ public static class AuthEndpoints
                     return Results.NoContent();
                 })
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
     }
 }

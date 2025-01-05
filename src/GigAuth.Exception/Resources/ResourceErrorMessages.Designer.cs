@@ -182,5 +182,23 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("DESCRIPTION_TOO_LONG", resourceCulture);
             }
         }
+        
+        public static string ROLE_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ROLE_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        public static string NAME_TOO_SHORT {
+            get {
+                return ResourceManager.GetString("NAME_TOO_SHORT", resourceCulture);
+            }
+        }
+        
+        public static string NAME_ALREADY_USED {
+            get {
+                return ResourceManager.GetString("NAME_ALREADY_USED", resourceCulture);
+            }
+        }
     }
 }
