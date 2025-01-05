@@ -15,7 +15,7 @@ public static class RequestToDomain
         };
     }
     
-    public static Role ToRoleDomain(this RequestCreateRole request)
+    public static Role ToRoleDomain(this RequestRole request)
     {
         return new Role
         {

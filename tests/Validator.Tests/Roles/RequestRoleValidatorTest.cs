@@ -2,20 +2,20 @@ using Bogus;
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Roles;
 using FluentAssertions;
-using GigAuth.Application.UseCases.Roles.Create;
+using GigAuth.Application.UseCases.Roles;
 using GigAuth.Exception.Resources;
 
 namespace Validator.Tests.Roles;
 
-public class RequestCreateRoleValidatorTest
+public class RequestRoleValidatorTest
 {
-    private readonly RequestCreateRoleValidator _validator = new();
+    private readonly RequestRoleValidator _validator = new();
     private readonly Faker _faker = new();
     
     [Fact]
     public void Success()
     {
-        var request = RequestCreateRoleBuilder.Build();
+        var request = RequestRoleBuilder.Build();
 
         var result = _validator.Validate(request);
 
@@ -26,7 +26,7 @@ public class RequestCreateRoleValidatorTest
     [ClassData(typeof(NullOrWhiteSpaceInlineDataTest))]
     public void Error_Name_Empty(string name)
     {
-        var request = RequestCreateRoleBuilder.Build();
+        var request = RequestRoleBuilder.Build();
         request.Name = name;
 
         var result = _validator.Validate(request);
@@ -38,7 +38,7 @@ public class RequestCreateRoleValidatorTest
     [Fact]
     public void Error_Name_TooShort()
     {
-        var request = RequestCreateRoleBuilder.Build();
+        var request = RequestRoleBuilder.Build();
         request.Name = "a";
 
         var result = _validator.Validate(request);
@@ -50,7 +50,7 @@ public class RequestCreateRoleValidatorTest
     [Fact]
     public void Error_Name_TooLong()
     {
-        var request = RequestCreateRoleBuilder.Build();
+        var request = RequestRoleBuilder.Build();
         request.Name = _faker.Random.String(length: 101);
 
         var result = _validator.Validate(request);
@@ -63,7 +63,7 @@ public class RequestCreateRoleValidatorTest
     [ClassData(typeof(WhiteSpaceInlineDataTest))]
     public void Error_Description_Empty(string description)
     {
-        var request = RequestCreateRoleBuilder.Build();
+        var request = RequestRoleBuilder.Build();
         request.Description = description;
 
         var result = _validator.Validate(request);
@@ -75,7 +75,7 @@ public class RequestCreateRoleValidatorTest
     [Fact]
     public void Error_Description_TooLong()
     {
-        var request = RequestCreateRoleBuilder.Build();
+        var request = RequestRoleBuilder.Build();
         request.Description = _faker.Random.String(length: 257);
 
         var result = _validator.Validate(request);

@@ -3,9 +3,9 @@ using GigAuth.Communication.Requests;
 
 namespace CommonTestsUtilities.Requests.Roles;
 
-public static class RequestCreateRoleBuilder
+public static class RequestRoleBuilder
 {
-    public static RequestCreateRole Build() => new Faker<RequestCreateRole>()
+    public static RequestRole Build() => new Faker<RequestRole>()
         .RuleFor(u => u.Name, faker => faker.Lorem.Word().PadLeft(3, 'a'))
         .RuleFor(u => u.Description, faker => faker.Random.Bool() 
             ? faker.Lorem.Sentence(wordCount: 3) 

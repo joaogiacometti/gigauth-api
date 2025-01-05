@@ -7,6 +7,7 @@ using GigAuth.Application.UseCases.Roles.Create;
 using GigAuth.Application.UseCases.Roles.Delete;
 using GigAuth.Application.UseCases.Roles.Get;
 using GigAuth.Application.UseCases.Roles.GetFiltered;
+using GigAuth.Application.UseCases.Roles.Update;
 using GigAuth.Application.UseCases.Users.Delete;
 using GigAuth.Application.UseCases.Users.Get;
 using GigAuth.Application.UseCases.Users.GetFiltered;
@@ -33,6 +34,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<ICreateRoleUseCase, CreateRoleUseCase>();
         services.AddScoped<IGetRoleUseCase, GetRoleUseCase>();
         services.AddScoped<IGetFilteredRolesUseCase, GetFilteredRolesUseCase>();
+        services.AddScoped<IUpdateRoleUseCase, UpdateRoleUseCase>();
         services.AddScoped<IDeleteRoleUseCase, DeleteRoleUseCase>();
     }
 }

@@ -10,7 +10,7 @@ namespace GigAuth.Application.UseCases.Roles.Create;
 public class CreateRoleUseCase(IRoleReadOnlyRepository readRepository,
     IRoleWriteOnlyRepository writeRepository, IUnitOfWork unitOfWork) : ICreateRoleUseCase
 {
-    public async Task Execute(RequestCreateRole request)
+    public async Task Execute(RequestRole request)
     {
         Validate(request);
         var nameAlreadyUsed = await readRepository.GetByName(request.Name) != null; 
@@ -21,9 +21,9 @@ public class CreateRoleUseCase(IRoleReadOnlyRepository readRepository,
         await unitOfWork.Commit();
     }
 
-    private static void Validate(RequestCreateRole request)
+    private static void Validate(RequestRole request)
     {
-        var validator = new RequestCreateRoleValidator();
+        var validator = new RequestRoleValidator();
         
         var result = validator.Validate(request);
 

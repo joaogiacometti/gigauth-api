@@ -3,6 +3,7 @@ using GigAuth.Application.UseCases.Roles.Create;
 using GigAuth.Application.UseCases.Roles.Delete;
 using GigAuth.Application.UseCases.Roles.Get;
 using GigAuth.Application.UseCases.Roles.GetFiltered;
+using GigAuth.Application.UseCases.Roles.Update;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
 using GigAuth.Domain.Constants;
@@ -18,10 +19,11 @@ public static class RoleEndpoints
         var group = app.MapGroup("/role")
             .WithTags("Role")
             .RequireRateLimiting(RateLimiterConstants.Authorized)
-            .RequireAuthorization(policy => policy.RequireRole(RoleConstants.RolePermissionName, RoleConstants.AdminPermissionName));
-        
+            .RequireAuthorization(policy =>
+                policy.RequireRole(RoleConstants.RolePermissionName, RoleConstants.AdminPermissionName));
+
         group.MapPost("/create",
-                async ([FromServices] ICreateRoleUseCase useCase, [FromBody] RequestCreateRole request) =>
+                async ([FromServices] ICreateRoleUseCase useCase, [FromBody] RequestRole request) =>
                 {
                     await useCase.Execute(request);
 
@@ -31,7 +33,7 @@ public static class RoleEndpoints
             .Produces<ResponseError>(StatusCodes.Status400BadRequest)
             .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
             .Produces<ResponseError>(StatusCodes.Status403Forbidden);
-        
+
         group.MapPost("/get-filtered",
                 async ([FromServices] IGetFilteredRolesUseCase useCase, [FromBody] RequestRoleFilter filter) =>
                 {
@@ -44,7 +46,7 @@ public static class RoleEndpoints
             .Produces<ResponseError>(StatusCodes.Status400BadRequest)
             .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
             .Produces<ResponseError>(StatusCodes.Status403Forbidden);
-        
+
         group.MapGet("/get/{id:guid}",
                 async ([FromServices] IGetRoleUseCase useCase, [FromRoute] Guid id) =>
                 Results.Ok(await useCase.Execute(id)))
@@ -52,7 +54,21 @@ public static class RoleEndpoints
             .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
             .Produces<ResponseError>(StatusCodes.Status403Forbidden)
             .Produces<ResponseError>(StatusCodes.Status404NotFound);
-        
+
+        group.MapPut("/update/{id:guid}",
+                async ([FromServices] IUpdateRoleUseCase useCase, [FromBody] RequestRole request,
+                    [FromRoute] Guid id) =>
+                {
+                    await useCase.Execute(id, request);
+
+                    return Results.NoContent();
+                })
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
+
         group.MapDelete("/delete/{id:guid}", async ([FromServices] IDeleteRoleUseCase useCase, [FromRoute] Guid id) =>
             {
                 await useCase.Execute(id);

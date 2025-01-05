@@ -2,11 +2,11 @@ using FluentValidation;
 using GigAuth.Communication.Requests;
 using GigAuth.Exception.Resources;
 
-namespace GigAuth.Application.UseCases.Roles.Create;
+namespace GigAuth.Application.UseCases.Roles;
 
-public class RequestCreateRoleValidator: AbstractValidator<RequestCreateRole>
+public class RequestRoleValidator: AbstractValidator<RequestRole>
 {
-    public RequestCreateRoleValidator()
+    public RequestRoleValidator()
     {
         RuleFor(r => r.Name)
             .NotEmpty().WithMessage(ResourceErrorMessages.NAME_EMPTY)
