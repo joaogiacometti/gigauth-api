@@ -3,6 +3,7 @@ using System;
 using GigAuth.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GigAuth.Infrastructure.Migrations
 {
     [DbContext(typeof(GigAuthContext))]
-    partial class GigAuthContextModelSnapshot : ModelSnapshot
+    [Migration("20250105002057_AutoGenerateId")]
+    partial class AutoGenerateId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,13 +94,6 @@ namespace GigAuth.Infrastructure.Migrations
                             Id = new Guid("ba3b36b0-68c6-4bc7-84fd-2fac867ea86c"),
                             CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
                             Name = "User",
-                            UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = new Guid("f574d33c-d8bf-4dec-9173-09b6580f25ab"),
-                            CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
-                            Name = "Admin",
                             UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
                         });
                 });
@@ -211,12 +207,6 @@ namespace GigAuth.Infrastructure.Migrations
                             Id = new Guid("97773159-aa53-4761-8c27-d87705dd9280"),
                             PermissionId = new Guid("ba3b36b0-68c6-4bc7-84fd-2fac867ea86c"),
                             RoleId = new Guid("9eaeca53-2cfc-409c-a411-63bf7f69f8c6")
-                        },
-                        new
-                        {
-                            Id = new Guid("f9210a4e-fdaf-4cb2-a1b0-18925b493d6a"),
-                            PermissionId = new Guid("f574d33c-d8bf-4dec-9173-09b6580f25ab"),
-                            RoleId = new Guid("728e5486-ddd3-42cd-b8c5-3278181b1d36")
                         });
                 });
 

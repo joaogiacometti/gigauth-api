@@ -1,4 +1,5 @@
 using GigAuth.Domain.Entities;
+using GigAuth.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 
 namespace GigAuth.Infrastructure.DataAccess;
@@ -14,5 +15,7 @@ public class GigAuthContext(DbContextOptions options) : DbContext(options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GigAuthContext).Assembly);
+
+        RoleSeedData.Seed(modelBuilder);
     }
 }

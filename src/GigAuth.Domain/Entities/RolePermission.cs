@@ -2,10 +2,10 @@ namespace GigAuth.Domain.Entities;
 
 public class RolePermission
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public Guid RoleId { get; set; }
-    public required Role Role { get; set; }
+    public Role? Role { get; set; }
     public Guid PermissionId { get; set; }
-    public required Permission Permission { get; set; }
+    public Permission? Permission { get; set; }
 }

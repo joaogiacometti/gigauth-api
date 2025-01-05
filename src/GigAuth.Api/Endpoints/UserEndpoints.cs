@@ -1,10 +1,10 @@
-using GigAuth.Api.Extensions;
 using GigAuth.Application.UseCases.Users.Delete;
 using GigAuth.Application.UseCases.Users.Get;
 using GigAuth.Application.UseCases.Users.GetFiltered;
 using GigAuth.Application.UseCases.Users.Update;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
+using GigAuth.Domain.Constants;
 using GigAuth.Domain.Filters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +14,12 @@ public static class UserEndpoints
 {
     public static void AddUserEndpoints(this WebApplication app)
     {
+        // TODO: add role and permissions CRUD
+        
         var group = app.MapGroup("/user")
             .WithTags("User")
             .RequireRateLimiting("Authorized")
-            .RequireAuthorization(policy => policy.RequirePermission("user"));
+            .RequireAuthorization(policy => policy.RequireRole(RoleConstants.UserPermissionName, RoleConstants.AdminPermissionName));
 
         group.MapPost("/get-filtered",
                 async ([FromServices] IGetFilteredUsersUseCase useCase, [FromBody] RequestUserFilter filter) =>

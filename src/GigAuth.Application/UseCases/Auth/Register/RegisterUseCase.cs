@@ -1,5 +1,7 @@
 using GigAuth.Application.Mapping;
 using GigAuth.Communication.Requests;
+using GigAuth.Domain.Constants;
+using GigAuth.Domain.Entities;
 using GigAuth.Domain.Repositories;
 using GigAuth.Domain.Repositories.Users;
 using GigAuth.Domain.Security.Cryptography;
@@ -24,8 +26,18 @@ public class RegisterUseCase(IUserWriteOnlyRepository writeRepository,
         if (emailAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.EMAIL_INVALID]); 
         
         request.Password = cryptography.Encrypt(request.Password);
+
+        var user = request.ToUserDomain();
+        user.UserRoles = new List<UserRole>()
+        {
+            new()
+            {
+                UserId = user.Id,
+                RoleId = RoleConstants.UserRoleId
+            }
+        };
         
-        await writeRepository.Add(request.ToUserDomain());
+        await writeRepository.Add(user);
         await unitOfWork.Commit();
     }
 

@@ -97,10 +97,9 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
 
     private static List<Claim> GenerateClaims(User user)
     {
-        var roles = user.UserRoles.Select(ur => ur.Role.Name).ToList();
         var permissions = user.UserRoles
-            .SelectMany(ur => ur.Role.RolePermissions)
-            .Select(rp => rp.Permission.Name)
+            .SelectMany(ur => ur.Role!.RolePermissions)
+            .Select(rp => rp.Permission!.Name)
             .Distinct()
             .ToList();
 
@@ -110,9 +109,7 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
             new(JwtRegisteredClaimNames.Email, user.Email)
         };
 
-        claims.AddRange(roles.Select(role => new Claim("roles", role)));
-
-        claims.AddRange(permissions.Select(permission => new Claim("permissions", permission)));
+        claims.AddRange(permissions.Select(role => new Claim(ClaimTypes.Role, role)));
 
         return claims;
     }

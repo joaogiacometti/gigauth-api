@@ -5,11 +5,11 @@ namespace GigAuth.Application.Mapping;
 
 public static class DomainToRequest
 {
-    public static ResponseUserShort ToUserResponse(this User user) => new ResponseUserShort()
+    public static ResponseUserShort ToUserResponse(this User user) => new ()
     {
         Id = user.Id,
         Email = user.Email,
-        Roles = user.UserRoles.Select(ur => ur.Role).ToRoleResponse(),
+        Roles = user.UserRoles.Select(ur => ur.Role!).ToRoleResponse(),
         UserName = user.UserName,
         CreatedDate = user.CreatedDate,
         UpdatedDate = user.UpdatedDate,

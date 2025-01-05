@@ -38,4 +38,6 @@ app.UseRateLimiter();
 
 await app.RunAsync();
 
-public abstract partial class Program { }
+public abstract partial class Program
+{
+}
