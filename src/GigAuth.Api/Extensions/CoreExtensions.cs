@@ -26,5 +26,6 @@ public static class CoreExtensions
         app.AddAuthEndpoints();
         app.AddUserEndpoints();
         app.AddRoleEndpoints();
+        app.AddPermissionEndpoints();
     }
 }

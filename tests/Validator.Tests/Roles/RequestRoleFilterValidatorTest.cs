@@ -38,31 +38,7 @@ public class RequestRoleFilterValidatorTest
         result.IsValid.Should().BeTrue();
     }
 
-    [Theory]
-    [ClassData(typeof(WhiteSpaceInlineDataTest))]
-    public void Description_Empty(string roleName)
-    {
-        var request = RequestRoleFilterBuilder.Build();
-        request.Description = roleName;
-
-        var result = _validator.Validate(request);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.DESCRIPTION_EMPTY);
-    }
-
-    [Fact]
-    public void Description_TooLong()
-    {
-        var request = RequestRoleFilterBuilder.Build();
-        request.Description = _faker.Random.String(length: 257);
-
-        var result = _validator.Validate(request);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.DESCRIPTION_TOO_LONG);
-    }
-
+    
     [Theory]
     [ClassData(typeof(WhiteSpaceInlineDataTest))]
     public void Error_Name_Empty(string name)
@@ -86,5 +62,30 @@ public class RequestRoleFilterValidatorTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.NAME_TOO_LONG);
+    }
+    
+    [Theory]
+    [ClassData(typeof(WhiteSpaceInlineDataTest))]
+    public void Description_Empty(string roleName)
+    {
+        var request = RequestRoleFilterBuilder.Build();
+        request.Description = roleName;
+
+        var result = _validator.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.DESCRIPTION_EMPTY);
+    }
+
+    [Fact]
+    public void Description_TooLong()
+    {
+        var request = RequestRoleFilterBuilder.Build();
+        request.Description = _faker.Random.String(length: 257);
+
+        var result = _validator.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.DESCRIPTION_TOO_LONG);
     }
 }

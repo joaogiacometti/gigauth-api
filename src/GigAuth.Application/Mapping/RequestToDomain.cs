@@ -23,4 +23,13 @@ public static class RequestToDomain
             Description = request.Description,
         };
     }
+    
+    public static Permission ToPermissionDomain(this RequestPermission request)
+    {
+        return new Permission
+        {
+            Name = request.Name,
+            Description = request.Description,
+        };
+    }
 }

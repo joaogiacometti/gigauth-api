@@ -39,6 +39,11 @@ public static class RoleSeedData
             },
             new Permission
             {
+                Id = RoleConstants.PermissionPermissionId, Name = RoleConstants.PermissionPermissionName,
+                CreatedDate = RoleConstants.SeedDate, UpdatedDate = RoleConstants.SeedDate
+            },
+            new Permission
+            {
                 Id = RoleConstants.AdminPermissionId, Name = RoleConstants.AdminPermissionName,
                 CreatedDate = RoleConstants.SeedDate, UpdatedDate = RoleConstants.SeedDate
             }
@@ -54,6 +59,11 @@ public static class RoleSeedData
             {
                 Id = RoleConstants.RoleRolePermissionId, RoleId = RoleConstants.ManagerRoleId,
                 PermissionId = RoleConstants.RolePermissionId
+            },
+            new RolePermission
+            {
+                Id = RoleConstants.PermissionRolePermissionId, RoleId = RoleConstants.ManagerRoleId,
+                PermissionId = RoleConstants.PermissionPermissionId
             },
             new RolePermission
             {

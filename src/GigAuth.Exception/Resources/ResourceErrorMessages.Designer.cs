@@ -200,5 +200,11 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("NAME_ALREADY_USED", resourceCulture);
             }
         }
+        
+        public static string PERMISSION_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("PERMISSION_NOT_FOUND", resourceCulture);
+            }
+        }
     }
 }

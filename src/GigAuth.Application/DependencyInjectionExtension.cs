@@ -3,6 +3,11 @@ using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Application.UseCases.Auth.RefreshToken;
 using GigAuth.Application.UseCases.Auth.Register;
+using GigAuth.Application.UseCases.Permissions.Create;
+using GigAuth.Application.UseCases.Permissions.Delete;
+using GigAuth.Application.UseCases.Permissions.Get;
+using GigAuth.Application.UseCases.Permissions.GetFiltered;
+using GigAuth.Application.UseCases.Permissions.Update;
 using GigAuth.Application.UseCases.Roles.Create;
 using GigAuth.Application.UseCases.Roles.Delete;
 using GigAuth.Application.UseCases.Roles.Get;
@@ -36,5 +41,11 @@ public static class DependencyInjectionExtension
         services.AddScoped<IGetFilteredRolesUseCase, GetFilteredRolesUseCase>();
         services.AddScoped<IUpdateRoleUseCase, UpdateRoleUseCase>();
         services.AddScoped<IDeleteRoleUseCase, DeleteRoleUseCase>();
+        
+        services.AddScoped<ICreatePermissionUseCase, CreatePermissionUseCase>();
+        services.AddScoped<IGetPermissionUseCase, GetPermissionUseCase>();
+        services.AddScoped<IGetFilteredPermissionsUseCase, GetFilteredPermissionsUseCase>();
+        services.AddScoped<IUpdatePermissionUseCase, UpdatePermissionUseCase>();
+        services.AddScoped<IDeletePermissionUseCase, DeletePermissionUseCase>();
     }
 }

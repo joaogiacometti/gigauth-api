@@ -90,4 +90,7 @@
     <data name="NAME_ALREADY_USED" xml:space="preserve">
         <value>El nombre ya está en uso.</value>
     </data>
+    <data name="PERMISSION_NOT_FOUND" xml:space="preserve">
+        <value>No se pudo encontrar el permiso.</value>
+    </data>
 </root>
