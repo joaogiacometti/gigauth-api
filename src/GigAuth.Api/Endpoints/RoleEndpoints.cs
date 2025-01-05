@@ -1,5 +1,6 @@
 using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Application.UseCases.Roles.Create;
+using GigAuth.Application.UseCases.Roles.Delete;
 using GigAuth.Application.UseCases.Roles.Get;
 using GigAuth.Application.UseCases.Roles.GetFiltered;
 using GigAuth.Communication.Requests;
@@ -48,6 +49,17 @@ public static class RoleEndpoints
                 async ([FromServices] IGetRoleUseCase useCase, [FromRoute] Guid id) =>
                 Results.Ok(await useCase.Execute(id)))
             .Produces<ResponseRole>()
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
+            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces<ResponseError>(StatusCodes.Status404NotFound);
+        
+        group.MapDelete("/delete/{id:guid}", async ([FromServices] IDeleteRoleUseCase useCase, [FromRoute] Guid id) =>
+            {
+                await useCase.Execute(id);
+
+                return Results.NoContent();
+            })
+            .Produces(StatusCodes.Status204NoContent)
             .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
             .Produces<ResponseError>(StatusCodes.Status403Forbidden)
             .Produces<ResponseError>(StatusCodes.Status404NotFound);
