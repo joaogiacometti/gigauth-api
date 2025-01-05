@@ -21,10 +21,10 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
             .AsNoTracking();
 
         if (!string.IsNullOrEmpty(filter.UserName))
-            query = query.Where(u => u.UserName.Contains(filter.UserName));
-
+            query = query.Where(r => EF.Functions.ILike(r.UserName, $"%{filter.UserName}%"));
+        
         if (!string.IsNullOrEmpty(filter.Email))
-            query = query.Where(u => u.Email.Contains(filter.Email));
+            query = query.Where(r => EF.Functions.ILike(r.Email, $"%{filter.Email}%"));
 
         if (filter.IsActive.HasValue)
             query = query.Where(u => u.IsActive == filter.IsActive.Value);
@@ -44,7 +44,7 @@ public class UserRepository(GigAuthContext dbContext) : IUserWriteOnlyRepository
         .AsNoTracking()
         .Include(u => u.UserRoles)
         .ThenInclude(ur => ur.Role)
-        .ThenInclude(ur => ur.RolePermissions)
+        .ThenInclude(ur => ur!.RolePermissions)
         .ThenInclude(urp => urp.Permission)
         .SingleOrDefaultAsync(u => u.Email.Equals(email));
 
