@@ -8,7 +8,7 @@ namespace GigAuth.Application.UseCases.Users.Get;
 
 public class GetUserUseCase(IUserReadOnlyRepository readRepository) : IGetUserUseCase
 {
-    public async Task<ResponseUserShort> Execute(Guid id)
+    public async Task<ResponseUser> Execute(Guid id)
     {
         var user = await readRepository.GetById(id)
             ?? throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);

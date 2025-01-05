@@ -21,6 +21,10 @@ public class RoleMap : IEntityTypeConfiguration<Role>
 
         builder.Property(r => r.Description)
             .HasMaxLength(500);
+        
+        builder.Property(u => u.IsActive)
+            .IsRequired()
+            .HasDefaultValue(true);
 
         builder.Property(r => r.CreatedDate)
             .IsRequired()

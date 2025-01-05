@@ -68,4 +68,16 @@
     <data name="REFRESH_TOKEN_INVALID" xml:space="preserve">
         <value>Token de atualização inválido.</value>
     </data>
+    <data name="NAME_EMPTY" xml:space="preserve">
+        <value>O nome é obrigatório.</value>
+    </data>
+    <data name="NAME_TOO_LONG" xml:space="preserve">
+        <value>O nome não pode exceder 100 caracteres.</value>
+    </data>
+    <data name="DESCRIPTION_EMPTY" xml:space="preserve">
+        <value>A descrição é obrigatória.</value>
+    </data>
+    <data name="DESCRIPTION_TOO_LONG" xml:space="preserve">
+        <value>A descrição não pode exceder 256 caracteres.</value>
+    </data>
 </root>

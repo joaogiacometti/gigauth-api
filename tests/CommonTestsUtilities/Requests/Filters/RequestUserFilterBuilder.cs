@@ -1,8 +1,7 @@
 using Bogus;
-using GigAuth.Communication.Requests;
 using GigAuth.Domain.Filters;
 
-namespace CommonTestsUtilities.Requests.Users;
+namespace CommonTestsUtilities.Requests.Filters;
 
 public static class RequestUserFilterBuilder
 {

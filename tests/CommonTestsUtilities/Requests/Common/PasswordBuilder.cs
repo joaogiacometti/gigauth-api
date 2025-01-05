@@ -1,6 +1,6 @@
-namespace CommonTestsUtilities.Requests.Users;
-
 using Bogus;
+
+namespace CommonTestsUtilities.Requests.Common;
 
 public static class PasswordBuilder
 {

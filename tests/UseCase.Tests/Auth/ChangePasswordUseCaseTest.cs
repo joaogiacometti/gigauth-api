@@ -3,6 +3,7 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Auth;
 using CommonTestsUtilities.Repositories.Users;
+using CommonTestsUtilities.Requests.Auth;
 using CommonTestsUtilities.Requests.Users;
 using CommonTestsUtilities.Security;
 using FluentAssertions;

@@ -1,4 +1,5 @@
 using Bogus;
+using CommonTestsUtilities.Requests.Common;
 using CommonTestsUtilities.Requests.Users;
 using GigAuth.Domain.Entities;
 

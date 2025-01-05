@@ -5,6 +5,7 @@ using GigAuth.Application.UseCases.Auth.RefreshToken;
 using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
+using GigAuth.Domain.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GigAuth.Api.Endpoints;
@@ -15,7 +16,7 @@ public static class AuthEndpoints
     {
         var group = app.MapGroup("/auth")
             .WithTags("Auth")
-            .RequireRateLimiting("Global");
+            .RequireRateLimiting(RateLimiterConstants.Global);
 
         group.MapPost("/register",
                 async ([FromServices] IRegisterUseCase useCase, [FromBody] RequestRegister request) =>

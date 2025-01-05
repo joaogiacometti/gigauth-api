@@ -158,5 +158,29 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("REFRESH_TOKEN_INVALID", resourceCulture);
             }
         }
+        
+        public static string NAME_EMPTY {
+            get {
+                return ResourceManager.GetString("NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        public static string NAME_TOO_LONG {
+            get {
+                return ResourceManager.GetString("NAME_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        public static string DESCRIPTION_EMPTY {
+            get {
+                return ResourceManager.GetString("DESCRIPTION_EMPTY", resourceCulture);
+            }
+        }
+        
+        public static string DESCRIPTION_TOO_LONG {
+            get {
+                return ResourceManager.GetString("DESCRIPTION_TOO_LONG", resourceCulture);
+            }
+        }
     }
 }

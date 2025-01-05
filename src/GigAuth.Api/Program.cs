@@ -38,6 +38,9 @@ app.UseRateLimiter();
 
 await app.RunAsync();
 
-public abstract partial class Program
+namespace GigAuth.Api
 {
+    public abstract partial class Program
+    {
+    }
 }

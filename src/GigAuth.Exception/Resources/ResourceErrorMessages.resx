@@ -75,4 +75,16 @@
     <data name="REFRESH_TOKEN_INVALID" xml:space="preserve">
         <value>Invalid refresh token.</value>
     </data>
+    <data name="NAME_EMPTY" xml:space="preserve">
+        <value>Name is required.</value>
+    </data>
+    <data name="NAME_TOO_LONG" xml:space="preserve">
+        <value>Name cannot exceed 100 characters.</value>
+    </data>
+    <data name="DESCRIPTION_EMPTY" xml:space="preserve">
+        <value>Description is required.</value>
+    </data>
+    <data name="DESCRIPTION_TOO_LONG" xml:space="preserve">
+        <value>Description cannot exceed 256 characters.</value>
+    </data>
 </root>

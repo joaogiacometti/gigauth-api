@@ -1,7 +1,7 @@
 using Bogus;
 using GigAuth.Communication.Requests;
 
-namespace CommonTestsUtilities.Requests.Users;
+namespace CommonTestsUtilities.Requests.Auth;
 
 public static class RequestRefreshTokenBuilder
 {

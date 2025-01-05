@@ -23,6 +23,10 @@ public class PermissionMap : IEntityTypeConfiguration<Permission>
 
         builder.Property(p => p.Description)
             .HasMaxLength(500);
+        
+        builder.Property(u => u.IsActive)
+            .IsRequired()
+            .HasDefaultValue(true);
 
         builder.Property(p => p.CreatedDate)
             .IsRequired()

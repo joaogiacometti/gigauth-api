@@ -1,4 +1,5 @@
 using Bogus;
+using CommonTestsUtilities.Requests.Common;
 using GigAuth.Communication.Requests;
 
 namespace CommonTestsUtilities.Requests.Users;

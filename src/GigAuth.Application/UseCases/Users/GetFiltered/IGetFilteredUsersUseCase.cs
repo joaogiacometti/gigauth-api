@@ -5,5 +5,5 @@ namespace GigAuth.Application.UseCases.Users.GetFiltered;
 
 public interface IGetFilteredUsersUseCase
 {
-    Task<List<ResponseUserShort>?> Execute(RequestUserFilter filter);
+    Task<List<ResponseUser>?> Execute(RequestUserFilter filter);
 }

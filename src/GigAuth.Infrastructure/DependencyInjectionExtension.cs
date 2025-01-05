@@ -1,6 +1,7 @@
 using GigAuth.Domain.Repositories;
 using GigAuth.Domain.Repositories.ForgotPasswordTokens;
 using GigAuth.Domain.Repositories.RefreshTokens;
+using GigAuth.Domain.Repositories.Roles;
 using GigAuth.Domain.Repositories.Users;
 using GigAuth.Domain.Security.Cryptography;
 using GigAuth.Domain.Security.Tokens;
@@ -32,6 +33,8 @@ public static class DependencyInjectionExtension
         
         services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
         services.AddScoped<IUserReadOnlyRepository, UserRepository>();
+        
+        services.AddScoped<IRoleReadOnlyRepository, RoleRepository>();
         
         services.AddScoped<IForgotPasswordTokenWriteOnlyRepository, ForgotPasswordTokenRepository>();
         services.AddScoped<IForgotPasswordTokenReadOnlyRepository, ForgotPasswordTokenRepository>();

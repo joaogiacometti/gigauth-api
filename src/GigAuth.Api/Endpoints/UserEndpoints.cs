@@ -18,7 +18,7 @@ public static class UserEndpoints
         
         var group = app.MapGroup("/user")
             .WithTags("User")
-            .RequireRateLimiting("Authorized")
+            .RequireRateLimiting(RateLimiterConstants.Authorized)
             .RequireAuthorization(policy => policy.RequireRole(RoleConstants.UserPermissionName, RoleConstants.AdminPermissionName));
 
         group.MapPost("/get-filtered",
@@ -28,7 +28,7 @@ public static class UserEndpoints
 
                     return result is null ? Results.NoContent() : Results.Ok(result);
                 })
-            .Produces<List<ResponseUserShort>>()
+            .Produces<List<ResponseUser>>()
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status401Unauthorized)
@@ -37,7 +37,7 @@ public static class UserEndpoints
         group.MapGet("/get/{id:guid}",
                 async ([FromServices] IGetUserUseCase useCase, [FromRoute] Guid id) =>
                 Results.Ok(await useCase.Execute(id)))
-            .Produces<ResponseUserShort>()
+            .Produces<ResponseUser>()
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound);

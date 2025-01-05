@@ -5,5 +5,5 @@ namespace GigAuth.Application.UseCases.Users.Get;
 
 public interface IGetUserUseCase
 {
-    Task<ResponseUserShort> Execute(Guid id);
+    Task<ResponseUser> Execute(Guid id);
 }

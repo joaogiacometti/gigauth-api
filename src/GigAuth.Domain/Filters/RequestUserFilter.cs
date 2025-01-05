@@ -1,9 +1,9 @@
 namespace GigAuth.Domain.Filters;
 
-public class RequestUserFilter
+public class RequestRoleFilter
 {
-    public string? UserName { get; set; }
-    public string? Email { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
     public bool? IsActive { get; set; }
     
     // TODO: add more filters

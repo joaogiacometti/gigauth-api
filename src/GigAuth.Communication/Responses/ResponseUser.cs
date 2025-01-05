@@ -1,6 +1,6 @@
 namespace GigAuth.Communication.Responses;
 
-public sealed class ResponseUserShort
+public sealed class ResponseUser
 {
     public Guid Id { get; set; }
     public required string UserName { get; set; }

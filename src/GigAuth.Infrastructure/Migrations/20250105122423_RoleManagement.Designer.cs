@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GigAuth.Infrastructure.Migrations
 {
     [DbContext(typeof(GigAuthContext))]
-    [Migration("20250105002057_AutoGenerateId")]
-    partial class AutoGenerateId
+    [Migration("20250105122423_RoleManagement")]
+    partial class RoleManagement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,6 +71,11 @@ namespace GigAuth.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -93,7 +98,24 @@ namespace GigAuth.Infrastructure.Migrations
                         {
                             Id = new Guid("ba3b36b0-68c6-4bc7-84fd-2fac867ea86c"),
                             CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
+                            IsActive = false,
                             Name = "User",
+                            UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("f55923e4-bcc8-4397-a9e3-2f9ff0bd025e"),
+                            CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
+                            IsActive = false,
+                            Name = "Role",
+                            UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("f574d33c-d8bf-4dec-9173-09b6580f25ab"),
+                            CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
+                            IsActive = false,
+                            Name = "Admin",
                             UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
                         });
                 });
@@ -141,6 +163,11 @@ namespace GigAuth.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -163,6 +190,7 @@ namespace GigAuth.Infrastructure.Migrations
                         {
                             Id = new Guid("728e5486-ddd3-42cd-b8c5-3278181b1d36"),
                             CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
+                            IsActive = false,
                             Name = "Admin",
                             UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
                         },
@@ -170,6 +198,7 @@ namespace GigAuth.Infrastructure.Migrations
                         {
                             Id = new Guid("9eaeca53-2cfc-409c-a411-63bf7f69f8c6"),
                             CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
+                            IsActive = false,
                             Name = "Manager",
                             UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
                         },
@@ -177,6 +206,7 @@ namespace GigAuth.Infrastructure.Migrations
                         {
                             Id = new Guid("f66caaf2-f359-4aee-a057-784023736d67"),
                             CreatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc),
+                            IsActive = false,
                             Name = "User",
                             UpdatedDate = new DateTime(2025, 1, 1, 12, 12, 59, 0, DateTimeKind.Utc)
                         });
@@ -207,6 +237,18 @@ namespace GigAuth.Infrastructure.Migrations
                             Id = new Guid("97773159-aa53-4761-8c27-d87705dd9280"),
                             PermissionId = new Guid("ba3b36b0-68c6-4bc7-84fd-2fac867ea86c"),
                             RoleId = new Guid("9eaeca53-2cfc-409c-a411-63bf7f69f8c6")
+                        },
+                        new
+                        {
+                            Id = new Guid("3f4760f9-f709-41b1-a07c-1d4b914f53f3"),
+                            PermissionId = new Guid("f55923e4-bcc8-4397-a9e3-2f9ff0bd025e"),
+                            RoleId = new Guid("9eaeca53-2cfc-409c-a411-63bf7f69f8c6")
+                        },
+                        new
+                        {
+                            Id = new Guid("f9210a4e-fdaf-4cb2-a1b0-18925b493d6a"),
+                            PermissionId = new Guid("f574d33c-d8bf-4dec-9173-09b6580f25ab"),
+                            RoleId = new Guid("728e5486-ddd3-42cd-b8c5-3278181b1d36")
                         });
                 });
 

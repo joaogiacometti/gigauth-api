@@ -8,7 +8,7 @@ namespace GigAuth.Application.UseCases.Users.GetFiltered;
 
 public class GetFilteredUsersUseCase(IUserReadOnlyRepository readRepository) : IGetFilteredUsersUseCase
 {
-    public async Task<List<ResponseUserShort>?> Execute(RequestUserFilter filter)
+    public async Task<List<ResponseUser>?> Execute(RequestUserFilter filter)
     {
         Validate(filter);
 
