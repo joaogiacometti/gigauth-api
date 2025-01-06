@@ -105,6 +105,7 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
 
         var claims = new List<Claim>
         {
+            new(JwtRegisteredClaimNames.Name, user.UserName),
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Email, user.Email)
         };

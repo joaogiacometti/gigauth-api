@@ -1,5 +1,4 @@
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.RateLimiting;
 
 namespace GigAuth.Api.Extensions;
 
@@ -7,27 +6,33 @@ public static class RateLimiterExtensions
 {
     public static void ConfigureRateLimiter(this IServiceCollection services)
     {
-        services.AddRateLimiter(rateLimiterOptions =>
+        services.AddRateLimiter(options =>
         {
-            rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-            rateLimiterOptions.AddSlidingWindowLimiter("Global", options =>
-            {
-                options.PermitLimit = 100;
-                options.Window = TimeSpan.FromMinutes(1);
-                options.SegmentsPerWindow = 10;
-                options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                options.QueueLimit = 10;
-            });
-            
-            rateLimiterOptions.AddSlidingWindowLimiter("Authorized", options =>
-            {
-                options.PermitLimit = 1000;
-                options.Window = TimeSpan.FromMinutes(1);
-                options.SegmentsPerWindow = 10;
-                options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                options.QueueLimit = 50;
-            });
+            options.AddPolicy("Global", httpContent =>
+                RateLimitPartition.GetSlidingWindowLimiter(
+                    partitionKey: httpContent.Connection.RemoteIpAddress?.ToString(),
+                    factory: _ => new SlidingWindowRateLimiterOptions
+                    {
+                        PermitLimit = 3,
+                        Window = TimeSpan.FromMinutes(1),
+                        SegmentsPerWindow = 10,
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 0
+                    }));
+
+            options.AddPolicy("Authorized", httpContent =>
+                RateLimitPartition.GetSlidingWindowLimiter(
+                    partitionKey: httpContent.User.Identity?.Name?.ToString(),
+                    factory: _ => new SlidingWindowRateLimiterOptions
+                    {
+                        PermitLimit = 3,
+                        Window = TimeSpan.FromMinutes(1),
+                        SegmentsPerWindow = 100,
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 0
+                    }));
         });
     }
 }
