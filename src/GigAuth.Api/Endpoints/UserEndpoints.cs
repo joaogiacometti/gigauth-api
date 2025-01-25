@@ -14,8 +14,6 @@ public static class UserEndpoints
 {
     public static void AddUserEndpoints(this WebApplication app)
     {
-        // TODO: add role and permissions CRUD
-        
         var group = app.MapGroup("/user")
             .WithTags("User")
             .RequireRateLimiting(RateLimiterConstants.Authorized)

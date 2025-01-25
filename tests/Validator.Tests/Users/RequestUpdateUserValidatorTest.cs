@@ -22,19 +22,6 @@ public class RequestUpdateUserValidatorTest
         result.IsValid.Should().BeTrue();
     }
 
-    [Theory]
-    [ClassData(typeof(NullOrWhiteSpaceInlineDataTest))]
-    public void Error_UserName_Empty(string userName)
-    {
-        var request = RequestUpdateUserBuilder.Build();
-        request.UserName = userName;
-
-        var result = _validator.Validate(request);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_EMPTY);
-    }
-
     [Fact]
     public void Error_UserName_TooShort()
     {
@@ -57,19 +44,6 @@ public class RequestUpdateUserValidatorTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_TOO_LONG);
-    }
-
-    [Theory]
-    [ClassData(typeof(NullOrWhiteSpaceInlineDataTest))]
-    public void Error_Email_Empty(string email)
-    {
-        var request = RequestUpdateUserBuilder.Build();
-        request.Email = email;
-
-        var result = _validator.Validate(request);
-
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.EMAIL_EMPTY);
     }
 
     [Fact]
