@@ -15,11 +15,11 @@ public static class RateLimiterExtensions
                     partitionKey: httpContent.Connection.RemoteIpAddress?.ToString(),
                     factory: _ => new SlidingWindowRateLimiterOptions
                     {
-                        PermitLimit = 3,
+                        PermitLimit = 100,
                         Window = TimeSpan.FromMinutes(1),
                         SegmentsPerWindow = 10,
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = 0
+                        QueueLimit = 200
                     }));
 
             options.AddPolicy("Authorized", httpContent =>
@@ -27,11 +27,11 @@ public static class RateLimiterExtensions
                     partitionKey: httpContent.User.Identity?.Name?.ToString(),
                     factory: _ => new SlidingWindowRateLimiterOptions
                     {
-                        PermitLimit = 3,
+                        PermitLimit = 1000,
                         Window = TimeSpan.FromMinutes(1),
                         SegmentsPerWindow = 100,
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = 0
+                        QueueLimit = 2000
                     }));
         });
     }

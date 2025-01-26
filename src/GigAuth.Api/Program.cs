@@ -1,5 +1,6 @@
 using GigAuth.Api.Auth;
 using GigAuth.Api.Extensions;
+using GigAuth.Domain.Constants;
 using GigAuth.Infrastructure.Extensions;
 using Scalar.AspNetCore;
 
@@ -26,7 +27,11 @@ if (app.Environment.IsDevelopment())
 }
 
 if (!configuration.IsTestEnvironment())
+{
     await app.DatabaseMigrate();
+    app.MapHealthChecks("/_health")
+        .RequireRateLimiting(RateLimiterConstants.Global);
+}
 
 app.ConfigureMiddlewares();
 app.ConfigureEndpoints();

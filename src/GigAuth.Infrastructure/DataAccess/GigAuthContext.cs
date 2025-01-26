@@ -11,6 +11,9 @@ public class GigAuthContext(DbContextOptions options) : DbContext(options)
     public required DbSet<ForgotPasswordToken> ForgotPasswordTokens { get; set; }
     public required DbSet<RefreshToken> RefreshTokens { get; init; }
     public required DbSet<Permission> Permissions { get; init; }
+    
+    public required DbSet<UserRole> UserRoles { get; init; }
+    public required DbSet<RolePermission> RolePermissions { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
