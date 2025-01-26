@@ -16,6 +16,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     public UserIdentityManager Admin { get; private set; } = null!;
     public UserIdentityManager User { get; private set; } = null!;
+    public GigAuthContext DbContext { get; private set; } = null!;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -48,6 +49,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         
         Admin = admin;
         User = user;
+        DbContext = dbContext;
 
         dbContext.SaveChanges();
     }

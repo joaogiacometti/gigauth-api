@@ -12,6 +12,7 @@ namespace GigAuth.Api.Endpoints;
 
 public static class UserEndpoints
 {
+    // TODO: fix produces, 401 and 403 not always send responseError.
     public static void AddUserEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/user")
