@@ -7,7 +7,7 @@ using GigAuth.Communication.Responses;
 using GigAuth.Domain.Filters;
 using GigAuth.Exception.Resources;
 
-namespace WebApi.Test.Users;
+namespace WebApi.Tests.Users;
 
 public class GetFilteredUsersTest : GigAuthFixture
 {

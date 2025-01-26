@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace WebApi.Test;
+namespace WebApi.Tests;
 
 public class GigAuthFixture(CustomWebApplicationFactory webApplicationFactory) : IClassFixture<CustomWebApplicationFactory>
 {

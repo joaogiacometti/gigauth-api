@@ -1,6 +1,6 @@
 using GigAuth.Domain.Entities;
 
-namespace WebApi.Test.Resources;
+namespace WebApi.Tests.Resources;
 
 public class UserIdentityManager(User user, string password, string token)
 {
