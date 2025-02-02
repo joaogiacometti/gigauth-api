@@ -1,4 +1,5 @@
 using CommonTestsUtilities.Entities;
+using GigAuth.Api;
 using GigAuth.Domain.Constants;
 using GigAuth.Domain.Entities;
 using GigAuth.Domain.Security.Cryptography;

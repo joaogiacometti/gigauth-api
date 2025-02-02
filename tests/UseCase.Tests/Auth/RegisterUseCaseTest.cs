@@ -36,7 +36,7 @@ public class RegisterUseCaseTest
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
+        var result = await act.Should().ThrowAsync<AlreadyUsedException>();
 
         result.Where(ex =>
             ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NAME_ALREADY_USED));

@@ -19,7 +19,7 @@ public class RegisterUseCase(IUserReadOnlyRepository readRepository,
         Validate(request);
         var userNameAlreadyUsed = await readRepository.GetByUserName(request.UserName) != null; 
         
-        if (userNameAlreadyUsed) throw new ErrorOnValidationException([ResourceErrorMessages.USER_NAME_ALREADY_USED]); 
+        if (userNameAlreadyUsed) throw new AlreadyUsedException([ResourceErrorMessages.USER_NAME_ALREADY_USED]); 
         
         var emailAlreadyTaken = await readRepository.GetByEmail(request.Email) != null;
         

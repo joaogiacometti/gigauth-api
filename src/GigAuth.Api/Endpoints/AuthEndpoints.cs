@@ -26,7 +26,8 @@ public static class AuthEndpoints
                     return Results.Created();
                 })
             .Produces(StatusCodes.Status201Created)
-            .Produces<ResponseError>(StatusCodes.Status400BadRequest);
+            .Produces<ResponseError>(StatusCodes.Status400BadRequest)
+            .Produces<ResponseError>(StatusCodes.Status409Conflict);
 
         group.MapPost("/refresh-token",
                 async ([FromServices] IRefreshTokenUseCase useCase, [FromBody] RequestRefreshToken request) =>
