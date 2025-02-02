@@ -36,13 +36,12 @@ public static class AuthEndpoints
             .Produces<ResponseError>(StatusCodes.Status400BadRequest)
             .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
             .Produces<ResponseError>(StatusCodes.Status404NotFound);
-        
+
         group.MapPost("/login",
                 async ([FromServices] ILoginUseCase useCase, [FromBody] RequestLogin request) =>
                 await useCase.Execute(request))
             .Produces<ResponseToken>()
-            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
-            .Produces<ResponseError>(StatusCodes.Status400BadRequest);
+            .Produces<ResponseError>(StatusCodes.Status401Unauthorized);
         
         group.MapPost("/forgot-password/{username}",
                 async ([FromServices] IForgotPasswordUseCase useCase, [FromRoute] string userName) =>
