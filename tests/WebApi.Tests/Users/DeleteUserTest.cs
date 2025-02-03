@@ -1,6 +1,9 @@
+using System.Globalization;
 using System.Net;
 using CommonTestsUtilities.Entities;
+using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
+using GigAuth.Exception.Resources;
 using GigAuth.Infrastructure.DataAccess;
 
 namespace WebApi.Tests.Users;
@@ -19,8 +22,6 @@ public class DeleteUserTest : GigAuthFixture
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
-
-    // TODO: check which error message
 
     [Fact]
     public async Task Success()
@@ -45,6 +46,11 @@ public class DeleteUserTest : GigAuthFixture
         var result = await DoDelete(Method, _adminToken, culture, Guid.NewGuid().ToString());
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.NotFound);
+        
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("USER_NOT_FOUND", new CultureInfo(culture))!;
+
+        await result.CompareException(expectedMessage);
     }
 
     [Theory]

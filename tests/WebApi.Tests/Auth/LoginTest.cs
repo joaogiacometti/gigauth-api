@@ -36,7 +36,7 @@ public class LoginTest : GigAuthFixture
 
         Assert.NotNull(response?.Token);
         Assert.NotEmpty(response.Token);
-        Assert.NotNull(response?.RefreshToken);
+        Assert.NotNull(response.RefreshToken);
         Assert.NotEmpty(response.Token);
     }
 

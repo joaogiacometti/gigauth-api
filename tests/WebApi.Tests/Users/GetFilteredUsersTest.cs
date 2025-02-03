@@ -32,6 +32,20 @@ public class GetFilteredUsersTest : GigAuthFixture
 
         Assert.NotNull(response);
     }
+    
+    [Theory]
+    [ClassData(typeof(CultureInlineDataTest))]
+    public async Task Error_Invalid_Request(string culture)
+    {
+        var result = await DoPost(Method, new RequestUserFilter { UserName = "" }, _adminToken, culture);
+
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.BadRequest);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("USER_NAME_EMPTY", new CultureInfo(culture))!;
+
+        await result.CompareException(expectedMessage);
+    }
 
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
@@ -49,19 +63,5 @@ public class GetFilteredUsersTest : GigAuthFixture
         var result = await DoPost(Method, new object(), _userToken, culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Forbidden);
-    }
-
-    [Theory]
-    [ClassData(typeof(CultureInlineDataTest))]
-    public async Task Error_Invalid_Request(string culture)
-    {
-        var result = await DoPost(Method, new RequestUserFilter { UserName = "" }, _adminToken, culture);
-
-        Assert.Equivalent(result.StatusCode, HttpStatusCode.BadRequest);
-
-        var expectedMessage =
-            ResourceErrorMessages.ResourceManager.GetString("USER_NAME_EMPTY", new CultureInfo(culture))!;
-
-        await result.CompareException(expectedMessage);
     }
 }

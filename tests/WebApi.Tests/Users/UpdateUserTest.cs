@@ -3,6 +3,7 @@ using System.Net;
 using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
+using CommonTestsUtilities.Requests.Users;
 using GigAuth.Communication.Requests;
 using GigAuth.Exception.Resources;
 using GigAuth.Infrastructure.DataAccess;
@@ -66,9 +67,15 @@ public class UpdateUserTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_NotFound(string culture)
     {
-        var result = await DoPut(Method, _adminToken, culture, Guid.NewGuid().ToString());
+        var request = RequestUpdateUserBuilder.Build();
+        var result = await DoPut(Method, _adminToken, request, culture, Guid.NewGuid().ToString());
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.NotFound);
+        
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("USER_NOT_FOUND", new CultureInfo(culture))!;
+
+        await result.CompareException(expectedMessage);
     }
 
     [Theory]
