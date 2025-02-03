@@ -12,6 +12,7 @@ public static class CoreExtensions
         services.AddInfrastructure(configuration);
         services.AddApplication();
     }
+
     public static void ConfigureMiddlewares(this WebApplication app)
     {
         app.UseMiddleware<CultureMiddleware>();

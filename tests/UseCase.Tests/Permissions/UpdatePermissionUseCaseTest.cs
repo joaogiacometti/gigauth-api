@@ -2,7 +2,6 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Permissions;
 using CommonTestsUtilities.Requests.Permissions;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Permissions.Update;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -19,9 +18,9 @@ public class UpdatePermissionUseCaseTest
         var request = RequestPermissionBuilder.Build();
         var useCase = CreateUseCase(permission);
 
-        var act = async () => await useCase.Execute(permission.Id, request);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(permission.Id, request));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -33,12 +32,10 @@ public class UpdatePermissionUseCaseTest
 
         var act = async () => await useCase.Execute(Guid.NewGuid(), request);
 
-        var result = await act.Should().ThrowAsync<NotFoundException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.PERMISSION_NOT_FOUND));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.PERMISSION_NOT_FOUND);
     }
-    
+
     [Fact]
     public async Task Error_Name_Already_Used()
     {
@@ -48,14 +45,12 @@ public class UpdatePermissionUseCaseTest
         var request = RequestPermissionBuilder.Build();
         request.Name = permissionWithName.Name;
 
-        var useCase = CreateUseCase(permissionToUpdate: permissionToUpdate, permissionWithName: permissionWithName);
+        var useCase = CreateUseCase(permissionToUpdate, permissionWithName);
 
         var act = async () => await useCase.Execute(permissionToUpdate.Id, request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_ALREADY_USED));
+        var exception = await Assert.ThrowsAsync<AlreadyUsedException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_ALREADY_USED);
     }
 
     [Fact]
@@ -68,13 +63,12 @@ public class UpdatePermissionUseCaseTest
 
         var act = async () => await useCase.Execute(Guid.NewGuid(), request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_TOO_SHORT));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_TOO_SHORT);
     }
 
-    private static UpdatePermissionUseCase CreateUseCase(Permission? permissionToUpdate = null, Permission? permissionWithName = null)
+    private static UpdatePermissionUseCase CreateUseCase(Permission? permissionToUpdate = null,
+        Permission? permissionWithName = null)
     {
         var readRepository = new PermissionReadOnlyRepositoryBuilder()
             .GetByName(permissionWithName)

@@ -18,7 +18,8 @@ public static class UserEndpoints
         var group = app.MapGroup("/user")
             .WithTags("User")
             .RequireRateLimiting(RateLimiterConstants.Authorized)
-            .RequireAuthorization(policy => policy.RequireRole(RoleConstants.UserPermissionName, RoleConstants.AdminPermissionName));
+            .RequireAuthorization(policy =>
+                policy.RequireRole(RoleConstants.UserPermissionName, RoleConstants.AdminPermissionName));
 
         group.MapPost("/get-filtered",
                 async ([FromServices] IGetFilteredUsersUseCase useCase, [FromBody] RequestUserFilter filter) =>

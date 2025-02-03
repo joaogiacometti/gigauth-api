@@ -10,8 +10,8 @@ public class DeleteUserUseCase(IUserWriteOnlyRepository writeRepository, IUnitOf
     public async Task Execute(Guid id)
     {
         var user = await writeRepository.GetById(id)
-            ?? throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);
-        
+                   ?? throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);
+
         writeRepository.Delete(user);
 
         await unitOfWork.Commit();

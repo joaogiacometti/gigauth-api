@@ -4,7 +4,7 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Users.GetFiltered;
 
-public class RequestUserFilterValidator: AbstractValidator<RequestUserFilter>
+public class RequestUserFilterValidator : AbstractValidator<RequestUserFilter>
 {
     public RequestUserFilterValidator()
     {

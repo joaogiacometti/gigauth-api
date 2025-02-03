@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\ResourceErrorMessages.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>ResourceErrorMessages.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Resources\ResourceErrorMessages.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>ResourceErrorMessages.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
 </Project>

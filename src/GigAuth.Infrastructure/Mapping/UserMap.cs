@@ -12,25 +12,25 @@ public class UserMap : IEntityTypeConfiguration<User>
         builder.Property(u => u.Id)
             .IsRequired()
             .ValueGeneratedNever();
-        
+
         builder.Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(256);
 
         builder.HasIndex(u => u.Email)
             .IsUnique();
-        
+
         builder.Property(u => u.PasswordHash)
             .IsRequired()
             .HasMaxLength(512);
-        
+
         builder.Property(u => u.UserName)
             .IsRequired()
             .HasMaxLength(100);
 
         builder.HasIndex(u => u.UserName)
             .IsUnique();
-        
+
         builder.Property(u => u.IsActive)
             .IsRequired()
             .HasDefaultValue(true);
@@ -43,7 +43,7 @@ public class UserMap : IEntityTypeConfiguration<User>
         builder.Property(u => u.UpdatedDate)
             .HasColumnType("timestamp with time zone")
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
+
         builder.HasMany(u => u.UserRoles)
             .WithOne(rp => rp.User)
             .HasForeignKey(rp => rp.UserId)

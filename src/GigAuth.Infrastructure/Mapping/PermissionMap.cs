@@ -1,4 +1,3 @@
-using System;
 using GigAuth.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -23,7 +22,7 @@ public class PermissionMap : IEntityTypeConfiguration<Permission>
 
         builder.Property(p => p.Description)
             .HasMaxLength(500);
-        
+
         builder.Property(u => u.IsActive)
             .IsRequired()
             .HasDefaultValue(true);

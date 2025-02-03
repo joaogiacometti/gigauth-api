@@ -5,7 +5,7 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Auth.Register;
 
-public class RequestRegisterValidator: AbstractValidator<RequestRegister>
+public class RequestRegisterValidator : AbstractValidator<RequestRegister>
 {
     public RequestRegisterValidator()
     {

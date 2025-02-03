@@ -1,7 +1,6 @@
 using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories.Roles;
 using CommonTestsUtilities.Requests.Filters;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Roles.GetFiltered;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -17,14 +16,15 @@ public class GetFilteredRolesTest
         var rolesToGet = RoleBuilder.BuildList();
         var request = RequestRoleFilterBuilder.Build();
 
-        var useCase = CreateUseCase(rolesToGet: rolesToGet);
+        var useCase = CreateUseCase(rolesToGet);
 
         var result = await useCase.Execute(request);
 
-        result.Should().NotBeNullOrEmpty();
-        result!.Count.Should().Be(rolesToGet.Count);
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+        Assert.Equivalent(result.Count, rolesToGet.Count);
     }
-    
+
     [Fact]
     public async Task Success_No_Content()
     {
@@ -35,8 +35,8 @@ public class GetFilteredRolesTest
 
         var result = await useCase.Execute(request);
 
-        result.Should().NotBeNull();
-        result!.Count.Should().Be(0);
+        Assert.NotNull(result);
+        Assert.Equivalent(result.Count, 0);
     }
 
     [Fact]
@@ -47,14 +47,12 @@ public class GetFilteredRolesTest
 
         var useCase = CreateUseCase();
 
-        var act = async() => await useCase.Execute(request);
+        var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-        
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_EMPTY));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_EMPTY);
     }
-    
+
     private static GetFilteredRolesUseCase CreateUseCase(List<Role>? rolesToGet = null)
     {
         var readRepository = new RoleReadOnlyRepositoryBuilder()

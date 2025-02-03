@@ -6,8 +6,8 @@ namespace CommonTestsUtilities.Repositories.Roles;
 
 public class RoleWriteOnlyRepositoryBuilder
 {
-    private readonly Mock<IRoleWriteOnlyRepository> _repository = new ();
-    
+    private readonly Mock<IRoleWriteOnlyRepository> _repository = new();
+
     public RoleWriteOnlyRepositoryBuilder GetById(Role? role = null)
     {
         if (role is not null)
@@ -15,6 +15,9 @@ public class RoleWriteOnlyRepositoryBuilder
 
         return this;
     }
-    
-    public IRoleWriteOnlyRepository Build() => _repository.Object;
+
+    public IRoleWriteOnlyRepository Build()
+    {
+        return _repository.Object;
+    }
 }

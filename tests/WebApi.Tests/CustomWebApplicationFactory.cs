@@ -45,28 +45,29 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     private void Setup(GigAuthContext dbContext, ICryptography cryptography, ITokenProvider tokenProvider)
     {
-        var admin = AddUser(dbContext, cryptography, tokenProvider, isAdmin: true);
+        var admin = AddUser(dbContext, cryptography, tokenProvider, true);
         var user = AddUser(dbContext, cryptography, tokenProvider);
-        
+
         Admin = admin;
         User = user;
         DbContext = dbContext;
 
         dbContext.SaveChanges();
     }
-    
-    private static UserIdentityManager AddUser(GigAuthContext dbContext, ICryptography cryptography, ITokenProvider tokenProvider, bool isAdmin = false)
+
+    private static UserIdentityManager AddUser(GigAuthContext dbContext, ICryptography cryptography,
+        ITokenProvider tokenProvider, bool isAdmin = false)
     {
         var user = UserBuilder.Build();
-        
+
         var password = user.PasswordHash;
         user.PasswordHash = cryptography.Encrypt(user.PasswordHash);
-        
+
         dbContext.Users.Add(user);
 
-        if(isAdmin)
+        if (isAdmin)
             AddAdminRole(dbContext, user);
-        
+
         var token = tokenProvider.GenerateToken(user);
 
         return new UserIdentityManager(user, password, token);
@@ -74,34 +75,34 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     private static void AddAdminRole(GigAuthContext dbContext, User user)
     {
-        var adminPermission = new Permission()
+        var adminPermission = new Permission
         {
             Id = RoleConstants.AdminPermissionId,
-            Name = RoleConstants.AdminPermissionName,
-        };
-    
-        var adminRole = new Role()
-        {
-            Id = RoleConstants.AdminRoleId,
-            Name = RoleConstants.AdminRoleName,
+            Name = RoleConstants.AdminPermissionName
         };
 
-        var rolePermission = new RolePermission()
+        var adminRole = new Role
+        {
+            Id = RoleConstants.AdminRoleId,
+            Name = RoleConstants.AdminRoleName
+        };
+
+        var rolePermission = new RolePermission
         {
             Role = adminRole,
             Permission = adminPermission,
             RoleId = RoleConstants.AdminRoleId,
-            PermissionId = adminPermission.Id,
+            PermissionId = adminPermission.Id
         };
-    
+
         var userRole = new UserRole
         {
             User = user,
             Role = adminRole,
             RoleId = adminRole.Id,
-            UserId = user.Id,
+            UserId = user.Id
         };
-    
+
         dbContext.Permissions.Add(adminPermission);
         dbContext.Roles.Add(adminRole);
         dbContext.RolePermissions.Add(rolePermission);

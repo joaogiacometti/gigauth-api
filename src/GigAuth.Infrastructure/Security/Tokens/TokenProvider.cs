@@ -19,13 +19,13 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
 
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var tokenDescriptor = new SecurityTokenDescriptor()
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(GenerateClaims(user)),
             Expires = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("Jwt:ExpirationInSeconds")),
             SigningCredentials = credentials,
             Issuer = configuration["Jwt:Issuer"],
-            Audience = configuration["Jwt:Audience"],
+            Audience = configuration["Jwt:Audience"]
         };
 
         var handler = new JsonWebTokenHandler();
@@ -38,14 +38,37 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
         var isValid = ValidateToken(token, validateLifetime);
 
         if (!isValid) return null;
-        
+
         var handler = new JwtSecurityTokenHandler();
-        
+
         var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
         var userIdClaim = jsonToken?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
         return userIdClaim?.Value;
     }
-    
+
+    public RefreshToken GenerateRefreshToken(Guid userId)
+    {
+        return new RefreshToken
+        {
+            Id = Guid.NewGuid(),
+            Token = GenerateToken(),
+            UserId = userId,
+            ExpirationDate = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("RefreshToken:ExpirationInSeconds"))
+        };
+    }
+
+    public ForgotPasswordToken GenerateForgetPasswordToken(User user)
+    {
+        return new ForgotPasswordToken
+        {
+            Id = Guid.NewGuid(),
+            Token = GenerateToken(),
+            ExpirationDate =
+                DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("ForgotPasswordToken:ExpirationInSeconds")),
+            UserId = user.Id
+        };
+    }
+
     private bool ValidateToken(string token, bool validateLifetime = true)
     {
         var secretKey = configuration["Jwt:SecretKey"];
@@ -72,28 +95,14 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
         {
             return false;
         }
-        
+
         return true;
     }
-    
-    public RefreshToken GenerateRefreshToken(Guid userId) => new()
-    {
-        Id = Guid.NewGuid(),
-        Token = GenerateToken(),
-        UserId = userId,
-        ExpirationDate = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("RefreshToken:ExpirationInSeconds"))
-    };
 
-    public ForgotPasswordToken GenerateForgetPasswordToken(User user) => new()
+    private static string GenerateToken()
     {
-        Id = Guid.NewGuid(),
-        Token = GenerateToken(),
-        ExpirationDate =
-            DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("ForgotPasswordToken:ExpirationInSeconds")),
-        UserId = user.Id
-    };
-
-    private static string GenerateToken() => Guid.NewGuid().ToString("N");
+        return Guid.NewGuid().ToString("N");
+    }
 
     private static List<Claim> GenerateClaims(User user)
     {

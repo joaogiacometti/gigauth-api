@@ -11,7 +11,7 @@ public class GetRoleUseCase(IRoleReadOnlyRepository readRepository) : IGetRoleUs
     public async Task<ResponseRole> Execute(Guid id)
     {
         var role = await readRepository.GetById(id)
-            ?? throw new NotFoundException(ResourceErrorMessages.ROLE_NOT_FOUND);
+                   ?? throw new NotFoundException(ResourceErrorMessages.ROLE_NOT_FOUND);
 
         return role.ToRoleResponse();
     }

@@ -5,21 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GigAuth.Infrastructure.DataAccess.Repositories;
 
-public class PermissionRepository(GigAuthContext dbContext) : IPermissionReadOnlyRepository, IPermissionWriteOnlyRepository
+public class PermissionRepository(GigAuthContext dbContext)
+    : IPermissionReadOnlyRepository, IPermissionWriteOnlyRepository
 {
-    public async Task Add(Permission permission) => await dbContext.Permissions.AddAsync(permission);
-    public void Delete(Permission permission) => dbContext.Permissions.Remove(permission);
+    async Task<Permission?> IPermissionReadOnlyRepository.GetById(Guid id)
+    {
+        return await dbContext.Permissions
+            .AsNoTracking()
+            .SingleOrDefaultAsync(r => r.Id.Equals(id));
+    }
 
-    async Task<Permission?> IPermissionReadOnlyRepository.GetById(Guid id) => await dbContext.Permissions
-        .AsNoTracking()
-        .SingleOrDefaultAsync(r => r.Id.Equals(id));
-    
-    async Task<Permission?> IPermissionWriteOnlyRepository.GetById(Guid id) => await dbContext.Permissions
-        .SingleOrDefaultAsync(r => r.Id.Equals(id));
-
-    public async Task<Permission?> GetByName(string name) => await dbContext.Permissions
-        .AsNoTracking()
-        .SingleOrDefaultAsync(r => r.Name.Equals(name));
+    public async Task<Permission?> GetByName(string name)
+    {
+        return await dbContext.Permissions
+            .AsNoTracking()
+            .SingleOrDefaultAsync(r => r.Name.Equals(name));
+    }
 
     public Task<List<Permission>> GetFiltered(RequestPermissionFilter filter)
     {
@@ -38,5 +39,21 @@ public class PermissionRepository(GigAuthContext dbContext) : IPermissionReadOnl
             query = query.Where(r => r.IsActive == filter.IsActive.Value);
 
         return query.ToListAsync();
+    }
+
+    public async Task Add(Permission permission)
+    {
+        await dbContext.Permissions.AddAsync(permission);
+    }
+
+    public void Delete(Permission permission)
+    {
+        dbContext.Permissions.Remove(permission);
+    }
+
+    async Task<Permission?> IPermissionWriteOnlyRepository.GetById(Guid id)
+    {
+        return await dbContext.Permissions
+            .SingleOrDefaultAsync(r => r.Id.Equals(id));
     }
 }

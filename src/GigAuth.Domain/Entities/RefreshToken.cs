@@ -7,6 +7,6 @@ public class RefreshToken
     public required string Token { get; set; }
     public DateTime ExpirationDate { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-    
+
     public User? User { get; set; }
 }

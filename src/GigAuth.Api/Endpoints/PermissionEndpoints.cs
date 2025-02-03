@@ -1,4 +1,3 @@
-using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Application.UseCases.Permissions.Create;
 using GigAuth.Application.UseCases.Permissions.Delete;
 using GigAuth.Application.UseCases.Permissions.Get;
@@ -35,7 +34,8 @@ public static class PermissionEndpoints
             .Produces<ResponseError>(StatusCodes.Status403Forbidden);
 
         group.MapPost("/get-filtered",
-                async ([FromServices] IGetFilteredPermissionsUseCase useCase, [FromBody] RequestPermissionFilter filter) =>
+                async ([FromServices] IGetFilteredPermissionsUseCase useCase,
+                    [FromBody] RequestPermissionFilter filter) =>
                 {
                     var result = await useCase.Execute(filter);
 
@@ -69,12 +69,13 @@ public static class PermissionEndpoints
             .Produces<ResponseError>(StatusCodes.Status403Forbidden)
             .Produces<ResponseError>(StatusCodes.Status404NotFound);
 
-        group.MapDelete("/delete/{id:guid}", async ([FromServices] IDeletePermissionUseCase useCase, [FromRoute] Guid id) =>
-            {
-                await useCase.Execute(id);
+        group.MapDelete("/delete/{id:guid}",
+                async ([FromServices] IDeletePermissionUseCase useCase, [FromRoute] Guid id) =>
+                {
+                    await useCase.Execute(id);
 
-                return Results.NoContent();
-            })
+                    return Results.NoContent();
+                })
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
             .Produces<ResponseError>(StatusCodes.Status403Forbidden)

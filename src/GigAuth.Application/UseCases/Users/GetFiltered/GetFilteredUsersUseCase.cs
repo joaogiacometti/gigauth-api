@@ -16,15 +16,15 @@ public class GetFilteredUsersUseCase(IUserReadOnlyRepository readRepository) : I
 
         return users.ToUserResponse();
     }
-    
+
     private static void Validate(RequestUserFilter request)
     {
         var validator = new RequestUserFilterValidator();
-        
+
         var result = validator.Validate(request);
 
         if (result.IsValid) return;
-        
+
         var errorMessages = result.Errors.Select(r => r.ErrorMessage).ToList();
 
         throw new ErrorOnValidationException(errorMessages);

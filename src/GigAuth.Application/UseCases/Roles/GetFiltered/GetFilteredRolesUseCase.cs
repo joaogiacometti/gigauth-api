@@ -16,15 +16,15 @@ public class GetFilteredRolesUseCase(IRoleReadOnlyRepository readRepository) : I
 
         return roles.ToRoleResponse();
     }
-    
+
     private static void Validate(RequestRoleFilter request)
     {
         var validator = new RequestRoleFilterValidator();
-        
+
         var result = validator.Validate(request);
 
         if (result.IsValid) return;
-        
+
         var errorMessages = result.Errors.Select(r => r.ErrorMessage).ToList();
 
         throw new ErrorOnValidationException(errorMessages);

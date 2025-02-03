@@ -3,7 +3,6 @@ using System.Net;
 using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
-using FluentAssertions;
 using GigAuth.Communication.Requests;
 using GigAuth.Exception.Resources;
 using GigAuth.Infrastructure.DataAccess;
@@ -14,10 +13,10 @@ namespace WebApi.Tests.Users;
 public class UpdateUserTest : GigAuthFixture
 {
     private const string Method = "user/update";
+    private readonly string _adminToken;
 
     private readonly GigAuthContext _dbContext;
     private readonly string _userToken;
-    private readonly string _adminToken;
 
     public UpdateUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
@@ -30,62 +29,63 @@ public class UpdateUserTest : GigAuthFixture
     public async Task Success()
     {
         var user = UserBuilder.Build();
-        var request = new RequestUpdateUser() { UserName = "newUserName"};
+        var request = new RequestUpdateUser { UserName = "newUserName" };
         await _dbContext.AddAsync(user);
         await _dbContext.SaveChangesAsync();
-        
-        var result = await DoPut(Method, token: _adminToken, request, pathParameter: user.Id.ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
-        
+        var result = await DoPut(Method, _adminToken, request, pathParameter: user.Id.ToString());
+
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.NoContent);
+
         _dbContext.ChangeTracker.Clear();
         var updatedUser = await _dbContext.Users.FirstAsync(u => u.Id.Equals(user.Id));
-        updatedUser.Should().NotBeNull();
-        updatedUser.UserName.Should().Be(request.UserName);
+        Assert.NotNull(updatedUser);
+        Assert.Equivalent(updatedUser.UserName, request.UserName);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Invalid_Request(string culture)
     {
         var user = UserBuilder.Build();
-        var request = new RequestUpdateUser() { UserName = "short"};
+        var request = new RequestUpdateUser { UserName = "short" };
         await _dbContext.AddAsync(user);
         await _dbContext.SaveChangesAsync();
-        
-        var result = await DoPut(Method, token: _adminToken, request, culture, user.Id.ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("USER_NAME_TOO_SHORT", new CultureInfo(culture))!;
+        var result = await DoPut(Method, _adminToken, request, culture, user.Id.ToString());
+
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.BadRequest);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("USER_NAME_TOO_SHORT", new CultureInfo(culture))!;
 
         await result.CompareException(expectedMessage);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_NotFound(string culture)
     {
         var result = await DoPut(Method, _adminToken, culture, Guid.NewGuid().ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.NotFound);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Unauthorized(string culture)
     {
         var result = await DoPut(Method, null, new object(), culture, Guid.NewGuid().ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Forbidden(string culture)
     {
         var result = await DoPut(Method, _userToken, new object(), culture, Guid.NewGuid().ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Forbidden);
     }
 }

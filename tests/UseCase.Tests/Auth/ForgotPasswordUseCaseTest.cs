@@ -3,7 +3,6 @@ using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Auth;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Security;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Auth.ForgotPassword;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -20,23 +19,23 @@ public class ForgotPasswordUseCaseTest
 
         var useCase = CreateUseCase(user);
 
-        var act = async () => await useCase.Execute(user.UserName);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(user.UserName));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
     public async Task Success_Update()
     {
-        var userForgotPassword = UserBuilder.Build();
+        var user = UserBuilder.Build();
 
         var token = ForgotPasswordTokenBuilder.Build();
 
-        var useCase = CreateUseCase(userForgotPassword, token);
+        var useCase = CreateUseCase(user, token);
 
-        var act = async () => await useCase.Execute(userForgotPassword.UserName);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(user.UserName));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -48,10 +47,8 @@ public class ForgotPasswordUseCaseTest
 
         var act = async () => await useCase.Execute(user.UserName);
 
-        var result = await act.Should().ThrowAsync<NotFoundException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NOT_FOUND));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(act);
+        Assert.Equal(ResourceErrorMessages.USER_NOT_FOUND, exception.Message);
     }
 
     private static ForgotPasswordUseCase CreateUseCase(User? userForgotPassword = null,

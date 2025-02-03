@@ -7,16 +7,18 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Roles.Create;
 
-public class CreateRoleUseCase(IRoleReadOnlyRepository readRepository,
-    IRoleWriteOnlyRepository writeRepository, IUnitOfWork unitOfWork) : ICreateRoleUseCase
+public class CreateRoleUseCase(
+    IRoleReadOnlyRepository readRepository,
+    IRoleWriteOnlyRepository writeRepository,
+    IUnitOfWork unitOfWork) : ICreateRoleUseCase
 {
     public async Task Execute(RequestRole request)
     {
         Validate(request);
-        var nameAlreadyUsed = await readRepository.GetByName(request.Name) != null; 
-        
-        if (nameAlreadyUsed) throw new ErrorOnValidationException([ResourceErrorMessages.NAME_ALREADY_USED]); 
-        
+        var nameAlreadyUsed = await readRepository.GetByName(request.Name) != null;
+
+        if (nameAlreadyUsed) throw new AlreadyUsedException([ResourceErrorMessages.NAME_ALREADY_USED]);
+
         await writeRepository.Add(request.ToRoleDomain());
         await unitOfWork.Commit();
     }
@@ -24,11 +26,11 @@ public class CreateRoleUseCase(IRoleReadOnlyRepository readRepository,
     private static void Validate(RequestRole request)
     {
         var validator = new RequestRoleValidator();
-        
+
         var result = validator.Validate(request);
 
         if (result.IsValid) return;
-        
+
         var errorMessages = result.Errors.Select(r => r.ErrorMessage).ToList();
 
         throw new ErrorOnValidationException(errorMessages);

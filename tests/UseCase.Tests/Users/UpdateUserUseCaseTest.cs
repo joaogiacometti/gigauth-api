@@ -2,7 +2,6 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Users;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Users.Update;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -19,9 +18,9 @@ public class UpdateUserUseCaseTest
         var request = RequestUpdateUserBuilder.Build();
         var useCase = CreateUseCase(user);
 
-        var act = async () => await useCase.Execute(user.Id, request);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(user.Id, request));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -36,12 +35,10 @@ public class UpdateUserUseCaseTest
 
         var act = async () => await useCase.Execute(Guid.NewGuid(), request);
 
-        var result = await act.Should().ThrowAsync<NotFoundException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NOT_FOUND));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(act);
+        Assert.Equal(ResourceErrorMessages.USER_NOT_FOUND, exception.Message);
     }
-    
+
     [Fact]
     public async Task Error_UserName_Already_Used()
     {
@@ -51,14 +48,12 @@ public class UpdateUserUseCaseTest
         var request = RequestUpdateUserBuilder.Build();
         request.UserName = userWithUserName.UserName;
 
-        var useCase = CreateUseCase(userToUpdate: userToUpdate, userWithUserName: userWithUserName);
+        var useCase = CreateUseCase(userToUpdate, userWithUserName);
 
         var act = async () => await useCase.Execute(userToUpdate.Id, request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NAME_ALREADY_USED));
+        var exception = await Assert.ThrowsAsync<AlreadyUsedException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.USER_NAME_ALREADY_USED);
     }
 
     [Fact]
@@ -70,14 +65,12 @@ public class UpdateUserUseCaseTest
         var request = RequestUpdateUserBuilder.Build();
         request.Email = userWithEmail.Email;
 
-        var useCase = CreateUseCase(userToUpdate: userToUpdate, userWithEmail: userWithEmail);
+        var useCase = CreateUseCase(userToUpdate, userWithEmail: userWithEmail);
 
         var act = async () => await useCase.Execute(userToUpdate.Id, request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.EMAIL_INVALID));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.EMAIL_INVALID);
     }
 
     [Fact]
@@ -90,13 +83,12 @@ public class UpdateUserUseCaseTest
 
         var act = async () => await useCase.Execute(Guid.NewGuid(), request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NAME_TOO_SHORT));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.USER_NAME_TOO_SHORT);
     }
 
-    private static UpdateUserUseCase CreateUseCase(User? userToUpdate = null, User? userWithUserName = null, User? userWithEmail = null)
+    private static UpdateUserUseCase CreateUseCase(User? userToUpdate = null, User? userWithUserName = null,
+        User? userWithEmail = null)
     {
         var readRepository = new UserReadOnlyRepositoryBuilder()
             .GetByUserName(userWithUserName)

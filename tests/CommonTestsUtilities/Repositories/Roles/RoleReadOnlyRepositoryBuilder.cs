@@ -18,7 +18,7 @@ public class RoleReadOnlyRepositoryBuilder
 
         return this;
     }
-    
+
     public RoleReadOnlyRepositoryBuilder GetById(Role? role = null)
     {
         if (role is not null)
@@ -26,7 +26,7 @@ public class RoleReadOnlyRepositoryBuilder
 
         return this;
     }
-    
+
     public RoleReadOnlyRepositoryBuilder GetByName(Role? role = null)
     {
         if (role is not null)
@@ -34,6 +34,9 @@ public class RoleReadOnlyRepositoryBuilder
 
         return this;
     }
-    
-    public IRoleReadOnlyRepository Build() => _repository.Object;
+
+    public IRoleReadOnlyRepository Build()
+    {
+        return _repository.Object;
+    }
 }

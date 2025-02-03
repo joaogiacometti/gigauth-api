@@ -9,14 +9,14 @@ public class RefreshTokenMap : IEntityTypeConfiguration<RefreshToken>
     public void Configure(EntityTypeBuilder<RefreshToken> builder)
     {
         builder.HasKey(rt => rt.Id);
-        
+
         builder.Property(rt => rt.Id)
             .IsRequired()
             .ValueGeneratedNever();
 
         builder.Property(rt => rt.UserId)
             .IsRequired();
-        
+
         builder.Property(rt => rt.Token)
             .IsRequired()
             .HasMaxLength(1000);
@@ -31,7 +31,7 @@ public class RefreshTokenMap : IEntityTypeConfiguration<RefreshToken>
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.HasOne(rt => rt.User)
-            .WithOne() 
+            .WithOne()
             .HasForeignKey<RefreshToken>(rt => rt.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }

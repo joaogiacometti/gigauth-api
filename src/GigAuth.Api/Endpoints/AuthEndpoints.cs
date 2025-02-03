@@ -42,7 +42,7 @@ public static class AuthEndpoints
                 await useCase.Execute(request))
             .Produces<ResponseToken>()
             .Produces<ResponseError>(StatusCodes.Status401Unauthorized);
-        
+
         group.MapPost("/forgot-password/{username}",
                 async ([FromServices] IForgotPasswordUseCase useCase, [FromRoute] string userName) =>
                 {

@@ -12,8 +12,8 @@ public static class RateLimiterExtensions
 
             options.AddPolicy("Global", httpContent =>
                 RateLimitPartition.GetSlidingWindowLimiter(
-                    partitionKey: httpContent.Connection.RemoteIpAddress?.ToString(),
-                    factory: _ => new SlidingWindowRateLimiterOptions
+                    httpContent.Connection.RemoteIpAddress?.ToString(),
+                    _ => new SlidingWindowRateLimiterOptions
                     {
                         PermitLimit = 100,
                         Window = TimeSpan.FromMinutes(1),
@@ -24,8 +24,8 @@ public static class RateLimiterExtensions
 
             options.AddPolicy("Authorized", httpContent =>
                 RateLimitPartition.GetSlidingWindowLimiter(
-                    partitionKey: httpContent.User.Identity?.Name?.ToString(),
-                    factory: _ => new SlidingWindowRateLimiterOptions
+                    httpContent.User.Identity?.Name?.ToString(),
+                    _ => new SlidingWindowRateLimiterOptions
                     {
                         PermitLimit = 1000,
                         Window = TimeSpan.FromMinutes(1),

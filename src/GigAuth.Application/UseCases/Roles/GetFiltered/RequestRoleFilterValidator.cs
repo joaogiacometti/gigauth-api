@@ -4,7 +4,7 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Roles.GetFiltered;
 
-public class RequestRoleFilterValidator: AbstractValidator<RequestRoleFilter>
+public class RequestRoleFilterValidator : AbstractValidator<RequestRoleFilter>
 {
     public RequestRoleFilterValidator()
     {

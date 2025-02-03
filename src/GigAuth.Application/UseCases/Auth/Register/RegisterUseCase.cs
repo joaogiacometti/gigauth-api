@@ -10,25 +10,27 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Auth.Register;
 
-public class RegisterUseCase(IUserReadOnlyRepository readRepository,
-    IUserWriteOnlyRepository writeRepository, 
-    IUnitOfWork unitOfWork, ICryptography cryptography) : IRegisterUseCase
+public class RegisterUseCase(
+    IUserReadOnlyRepository readRepository,
+    IUserWriteOnlyRepository writeRepository,
+    IUnitOfWork unitOfWork,
+    ICryptography cryptography) : IRegisterUseCase
 {
     public async Task Execute(RequestRegister request)
     {
         Validate(request);
-        var userNameAlreadyUsed = await readRepository.GetByUserName(request.UserName) != null; 
-        
-        if (userNameAlreadyUsed) throw new AlreadyUsedException([ResourceErrorMessages.USER_NAME_ALREADY_USED]); 
-        
+        var userNameAlreadyUsed = await readRepository.GetByUserName(request.UserName) != null;
+
+        if (userNameAlreadyUsed) throw new AlreadyUsedException([ResourceErrorMessages.USER_NAME_ALREADY_USED]);
+
         var emailAlreadyTaken = await readRepository.GetByEmail(request.Email) != null;
-        
-        if (emailAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.EMAIL_INVALID]); 
-        
+
+        if (emailAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.EMAIL_INVALID]);
+
         request.Password = cryptography.Encrypt(request.Password);
 
         var user = request.ToUserDomain();
-        user.UserRoles = new List<UserRole>()
+        user.UserRoles = new List<UserRole>
         {
             new()
             {
@@ -36,7 +38,7 @@ public class RegisterUseCase(IUserReadOnlyRepository readRepository,
                 RoleId = RoleConstants.UserRoleId
             }
         };
-        
+
         await writeRepository.Add(user);
         await unitOfWork.Commit();
     }
@@ -44,11 +46,11 @@ public class RegisterUseCase(IUserReadOnlyRepository readRepository,
     private static void Validate(RequestRegister request)
     {
         var validator = new RequestRegisterValidator();
-        
+
         var result = validator.Validate(request);
 
         if (result.IsValid) return;
-        
+
         var errorMessages = result.Errors.Select(r => r.ErrorMessage).ToList();
 
         throw new ErrorOnValidationException(errorMessages);

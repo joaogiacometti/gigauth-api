@@ -1,8 +1,6 @@
 using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Filters;
-using CommonTestsUtilities.Requests.Users;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Users.GetFiltered;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -18,14 +16,14 @@ public class GetFilteredUsersTest
         var usersToGet = UserBuilder.BuildList();
         var request = RequestUserFilterBuilder.Build();
 
-        var useCase = CreateUseCase(usersToGet: usersToGet);
+        var useCase = CreateUseCase(usersToGet);
 
         var result = await useCase.Execute(request);
 
-        result.Should().NotBeNullOrEmpty();
-        result!.Count.Should().Be(usersToGet.Count);
+        Assert.NotNull(result);
+        Assert.Equivalent(result.Count, usersToGet.Count);
     }
-    
+
     [Fact]
     public async Task Success_No_Content()
     {
@@ -36,8 +34,8 @@ public class GetFilteredUsersTest
 
         var result = await useCase.Execute(request);
 
-        result.Should().NotBeNull();
-        result!.Count.Should().Be(0);
+        Assert.NotNull(result);
+        Assert.Equivalent(result.Count, 0);
     }
 
     [Fact]
@@ -48,14 +46,12 @@ public class GetFilteredUsersTest
 
         var useCase = CreateUseCase();
 
-        var act = async() => await useCase.Execute(request);
+        var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-        
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.USER_NAME_EMPTY));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.USER_NAME_EMPTY);
     }
-    
+
     private static GetFilteredUsersUseCase CreateUseCase(List<User>? usersToGet = null)
     {
         var readRepository = new UserReadOnlyRepositoryBuilder()

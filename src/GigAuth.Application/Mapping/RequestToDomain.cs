@@ -11,25 +11,25 @@ public static class RequestToDomain
         {
             Email = request.Email,
             UserName = request.UserName,
-            PasswordHash = request.Password,
+            PasswordHash = request.Password
         };
     }
-    
+
     public static Role ToRoleDomain(this RequestRole request)
     {
         return new Role
         {
             Name = request.Name,
-            Description = request.Description,
+            Description = request.Description
         };
     }
-    
+
     public static Permission ToPermissionDomain(this RequestPermission request)
     {
         return new Permission
         {
             Name = request.Name,
-            Description = request.Description,
+            Description = request.Description
         };
     }
 }

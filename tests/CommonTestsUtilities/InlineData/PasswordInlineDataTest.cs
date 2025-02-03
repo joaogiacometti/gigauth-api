@@ -2,11 +2,11 @@ using System.Collections;
 
 namespace CommonTestsUtilities.InlineData;
 
-public class PasswordInlineDataTest : IEnumerable<object []>
+public class PasswordInlineDataTest : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
-        yield return new object[] { "A1@" }; 
+        yield return new object[] { "A1@" };
         yield return new object[] { "password1@" };
         yield return new object[] { "PASSWORD1@" };
         yield return new object[] { "Password@@" };
@@ -16,6 +16,9 @@ public class PasswordInlineDataTest : IEnumerable<object []>
         yield return new object[] { "Ab1@" };
         yield return new object[] { "Password" };
     }
-        
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

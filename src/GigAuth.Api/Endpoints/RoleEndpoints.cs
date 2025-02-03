@@ -1,4 +1,3 @@
-using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Application.UseCases.Roles.Create;
 using GigAuth.Application.UseCases.Roles.Delete;
 using GigAuth.Application.UseCases.Roles.Get;

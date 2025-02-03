@@ -20,13 +20,13 @@ public class RefreshTokenUseCase(
     {
         Validate(request);
 
-        var userId = tokenProvider.GetUserIdByToken(request.Token, validateLifetime: false) 
+        var userId = tokenProvider.GetUserIdByToken(request.Token, false)
                      ?? throw new InvalidCredentialsException(ResourceErrorMessages.TOKEN_INVALID);
 
-        var user = await userReadRepository.GetById(Guid.Parse(userId)) 
+        var user = await userReadRepository.GetById(Guid.Parse(userId))
                    ?? throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);
 
-        var existingRefreshToken = await refreshTokenReadRepository.GetByUserId(user.Id) 
+        var existingRefreshToken = await refreshTokenReadRepository.GetByUserId(user.Id)
                                    ?? throw new NotFoundException(ResourceErrorMessages.REFRESH_TOKEN_NOT_FOUND);
 
         if (existingRefreshToken.Token != request.RefreshToken)
@@ -42,7 +42,7 @@ public class RefreshTokenUseCase(
         await refreshTokenWriteRepository.Create(refreshToken);
         await unitOfWork.Commit();
 
-        return new ResponseToken()
+        return new ResponseToken
         {
             Token = tokenProvider.GenerateToken(user),
             RefreshToken = refreshToken.Token

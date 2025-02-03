@@ -3,7 +3,6 @@ using System.Net;
 using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Auth;
-using FluentAssertions;
 using GigAuth.Communication.Requests;
 using GigAuth.Communication.Responses;
 using GigAuth.Domain.Entities;
@@ -27,61 +26,66 @@ public class LoginTest : GigAuthFixture
     [Fact]
     public async Task Success()
     {
-        var request = new RequestLogin() {Email = _user.Email, Password = _userPassword};
-        
+        var request = new RequestLogin { Email = _user.Email, Password = _userPassword };
+
         var result = await DoPost(Method, request);
 
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.OK);
 
         var response = await result.Deserialize<ResponseToken>();
-        
-        response?.Token.Should().NotBeNullOrEmpty();
-        response?.RefreshToken.Should().NotBeNullOrEmpty();
+
+        Assert.NotNull(response?.Token);
+        Assert.NotEmpty(response.Token);
+        Assert.NotNull(response?.RefreshToken);
+        Assert.NotEmpty(response.Token);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Email_Not_Found(string culture)
     {
-        var request = new RequestLogin() {Email = "not@exists.com", Password = _userPassword};
-        
-        var result = await DoPost(Method, request, culture:culture);
+        var request = new RequestLogin { Email = "not@exists.com", Password = _userPassword };
 
-        result.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var result = await DoPost(Method, request, culture: culture);
 
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("CREDENTIALS_INVALID", new CultureInfo(culture))!;
-     
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("CREDENTIALS_INVALID", new CultureInfo(culture))!;
+
         await result.CompareException(expectedMessage);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Invalid_Password(string culture)
     {
-        var request = new RequestLogin() {Email = _user.Email, Password = "InvalidPassword123!"};
-        
-        var result = await DoPost(Method, request, culture:culture);
+        var request = new RequestLogin { Email = _user.Email, Password = "InvalidPassword123!" };
 
-        result.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var result = await DoPost(Method, request, culture: culture);
 
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("CREDENTIALS_INVALID", new CultureInfo(culture))!;
-     
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("CREDENTIALS_INVALID", new CultureInfo(culture))!;
+
         await result.CompareException(expectedMessage);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Invalid_Request(string culture)
     {
         var request = RequestLoginBuilder.Build();
         request.Email = "invalid_email";
-        
+
         var result = await DoPost(Method, request, culture: culture);
-    
-        result.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-        
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("CREDENTIALS_INVALID", new CultureInfo(culture))!;
-    
+
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("CREDENTIALS_INVALID", new CultureInfo(culture))!;
+
         await result.CompareException(expectedMessage);
     }
 }

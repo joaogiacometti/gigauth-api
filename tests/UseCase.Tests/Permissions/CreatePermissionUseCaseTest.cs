@@ -2,7 +2,6 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Permissions;
 using CommonTestsUtilities.Requests.Permissions;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Permissions.Create;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -18,9 +17,9 @@ public class CreatePermissionUseCaseTest
         var request = RequestPermissionBuilder.Build();
         var useCase = CreateUseCase();
 
-        var act = async () => await useCase.Execute(request);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(request));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -31,14 +30,12 @@ public class CreatePermissionUseCaseTest
         var request = RequestPermissionBuilder.Build();
         request.Name = permission.Name;
 
-        var useCase = CreateUseCase(permissionWithName: permission);
+        var useCase = CreateUseCase(permission);
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_ALREADY_USED));
+        var exception = await Assert.ThrowsAsync<AlreadyUsedException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_ALREADY_USED);
     }
 
     [Fact]
@@ -51,10 +48,8 @@ public class CreatePermissionUseCaseTest
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_TOO_SHORT));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_TOO_SHORT);
     }
 
     private static CreatePermissionUseCase CreateUseCase(Permission? permissionWithName = null)

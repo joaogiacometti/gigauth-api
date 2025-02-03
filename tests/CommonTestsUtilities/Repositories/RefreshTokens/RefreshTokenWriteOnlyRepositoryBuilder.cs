@@ -6,6 +6,9 @@ namespace CommonTestsUtilities.Repositories.RefreshTokens;
 public class RefreshTokenWriteOnlyRepositoryBuilder
 {
     private readonly Mock<IRefreshTokenWriteOnlyRepository> _repository = new();
-    
-    public IRefreshTokenWriteOnlyRepository Build() => _repository.Object;
+
+    public IRefreshTokenWriteOnlyRepository Build()
+    {
+        return _repository.Object;
+    }
 }

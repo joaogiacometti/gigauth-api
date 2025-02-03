@@ -1,8 +1,6 @@
 using Bogus;
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Auth;
-using CommonTestsUtilities.Requests.Users;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Exception.Resources;
 
@@ -10,9 +8,9 @@ namespace Validator.Tests.Auth;
 
 public class RequestRegisterValidatorTest
 {
-    private readonly RequestRegisterValidator _validator = new();
     private readonly Faker _faker = new();
-    
+    private readonly RequestRegisterValidator _validator = new();
+
     [Fact]
     public void Success()
     {
@@ -20,7 +18,7 @@ public class RequestRegisterValidatorTest
 
         var result = _validator.Validate(request);
 
-        result.IsValid.Should().BeTrue();
+        Assert.True(result.IsValid);
     }
 
     [Theory]
@@ -32,8 +30,8 @@ public class RequestRegisterValidatorTest
 
         var result = _validator.Validate(request);
 
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_EMPTY);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_EMPTY);
     }
 
     [Fact]
@@ -44,20 +42,20 @@ public class RequestRegisterValidatorTest
 
         var result = _validator.Validate(request);
 
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_TOO_SHORT);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_TOO_SHORT);
     }
 
     [Fact]
     public void Error_UserName_TooLong()
     {
         var request = RequestRegisterBuilder.Build();
-        request.UserName = _faker.Random.String(length: 101);
+        request.UserName = _faker.Random.String(101);
 
         var result = _validator.Validate(request);
 
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_TOO_LONG);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.USER_NAME_TOO_LONG);
     }
 
     [Theory]
@@ -69,8 +67,8 @@ public class RequestRegisterValidatorTest
 
         var result = _validator.Validate(request);
 
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.EMAIL_EMPTY);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.EMAIL_EMPTY);
     }
 
     [Fact]
@@ -81,19 +79,19 @@ public class RequestRegisterValidatorTest
 
         var result = _validator.Validate(request);
 
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.EMAIL_INVALID);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.EMAIL_INVALID);
     }
 
     [Fact]
     public void Error_Email_TooLong()
     {
         var request = RequestRegisterBuilder.Build();
-        request.Email = _faker.Random.String(length: 257);
+        request.Email = _faker.Random.String(257);
 
         var result = _validator.Validate(request);
 
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().Contain(e => e.ErrorMessage == ResourceErrorMessages.EMAIL_TOO_LONG);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.EMAIL_TOO_LONG);
     }
 }

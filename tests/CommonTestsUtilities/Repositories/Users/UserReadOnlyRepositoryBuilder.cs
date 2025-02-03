@@ -18,7 +18,7 @@ public class UserReadOnlyRepositoryBuilder
 
         return this;
     }
-    
+
     public UserReadOnlyRepositoryBuilder GetById(User? user = null)
     {
         if (user is not null)
@@ -26,7 +26,7 @@ public class UserReadOnlyRepositoryBuilder
 
         return this;
     }
-    
+
     public UserReadOnlyRepositoryBuilder GetByUserName(User? user = null)
     {
         if (user is not null)
@@ -34,7 +34,7 @@ public class UserReadOnlyRepositoryBuilder
 
         return this;
     }
-    
+
     public UserReadOnlyRepositoryBuilder GetByEmail(User? user = null)
     {
         if (user is not null)
@@ -42,6 +42,9 @@ public class UserReadOnlyRepositoryBuilder
 
         return this;
     }
-    
-    public IUserReadOnlyRepository Build() => _repository.Object;
+
+    public IUserReadOnlyRepository Build()
+    {
+        return _repository.Object;
+    }
 }

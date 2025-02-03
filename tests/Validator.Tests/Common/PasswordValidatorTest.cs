@@ -1,7 +1,5 @@
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Auth;
-using CommonTestsUtilities.Requests.Users;
-using FluentAssertions;
 using FluentValidation;
 using GigAuth.Application.UseCases.Users;
 using GigAuth.Communication.Requests;
@@ -22,9 +20,9 @@ public class PasswordValidatorTest
         var result = validator
             .IsValid(new ValidationContext<RequestRegister>(request), password);
 
-        result.Should().BeFalse();
+        Assert.False(result);
     }
-    
+
     [Theory]
     [ClassData(typeof(PasswordInlineDataTest))]
     public void Error_Password_Invalid_Login(string password)
@@ -37,21 +35,21 @@ public class PasswordValidatorTest
         var result = validator
             .IsValid(new ValidationContext<RequestLogin>(request), password);
 
-        result.Should().BeFalse();
+        Assert.False(result);
     }
-    
+
     [Theory]
     [ClassData(typeof(PasswordInlineDataTest))]
     public void Error_Password_Invalid_Change_Password(string newPassword)
     {
         var request = RequestChangePasswordBuilder.Build();
-        request.NewPassword= newPassword;
+        request.NewPassword = newPassword;
 
         var validator = new PasswordValidator<RequestChangePassword>();
 
         var result = validator
             .IsValid(new ValidationContext<RequestChangePassword>(request), newPassword);
 
-        result.Should().BeFalse();
+        Assert.False(result);
     }
 }

@@ -18,7 +18,7 @@ public class PermissionReadOnlyRepositoryBuilder
 
         return this;
     }
-    
+
     public PermissionReadOnlyRepositoryBuilder GetById(Permission? permission = null)
     {
         if (permission is not null)
@@ -26,7 +26,7 @@ public class PermissionReadOnlyRepositoryBuilder
 
         return this;
     }
-    
+
     public PermissionReadOnlyRepositoryBuilder GetByName(Permission? permission = null)
     {
         if (permission is not null)
@@ -34,6 +34,9 @@ public class PermissionReadOnlyRepositoryBuilder
 
         return this;
     }
-    
-    public IPermissionReadOnlyRepository Build() => _repository.Object;
+
+    public IPermissionReadOnlyRepository Build()
+    {
+        return _repository.Object;
+    }
 }

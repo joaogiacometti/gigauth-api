@@ -11,7 +11,7 @@ public class GetUserUseCase(IUserReadOnlyRepository readRepository) : IGetUserUs
     public async Task<ResponseUser> Execute(Guid id)
     {
         var user = await readRepository.GetById(id)
-            ?? throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);
+                   ?? throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);
 
         return user.ToUserResponse();
     }

@@ -6,5 +6,8 @@ public class InvalidCredentialsException(string message) : GigAuthException(mess
 {
     public override int StatusCode => HttpStatusCode.Unauthorized.GetHashCode();
 
-    public override List<string> GetErrorList() => [Message];
+    public override List<string> GetErrorList()
+    {
+        return [Message];
+    }
 }

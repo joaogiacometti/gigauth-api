@@ -16,5 +16,8 @@ public class ForgotPasswordTokenWriteOnlyRepositoryBuilder
         return this;
     }
 
-    public IForgotPasswordTokenWriteOnlyRepository Build() => _repository.Object;
+    public IForgotPasswordTokenWriteOnlyRepository Build()
+    {
+        return _repository.Object;
+    }
 }

@@ -3,9 +3,7 @@ using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.RefreshTokens;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Auth;
-using CommonTestsUtilities.Requests.Users;
 using CommonTestsUtilities.Security;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Auth.Login;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -16,7 +14,7 @@ namespace UseCase.Tests.Auth;
 public class LoginUseCaseTest
 {
     [Fact]
-    public async Task Success_Create()
+    public async Task Success_Create_Refresh_Token()
     {
         var user = UserBuilder.Build();
         var request = RequestLoginBuilder.Build();
@@ -24,13 +22,13 @@ public class LoginUseCaseTest
 
         var useCase = CreateUseCase(user, password: request.Password);
 
-        var act = async () => await useCase.Execute(request);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(request));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
-    
+
     [Fact]
-    public async Task Success_Update()
+    public async Task Success_Update_Refresh_Token()
     {
         var user = UserBuilder.Build();
         var refreshToken = RefreshTokenBuilder.Build(user.Id);
@@ -39,9 +37,9 @@ public class LoginUseCaseTest
 
         var useCase = CreateUseCase(user, refreshToken, request.Password);
 
-        var act = async () => await useCase.Execute(request);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(request));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -53,10 +51,8 @@ public class LoginUseCaseTest
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<InvalidCredentialsException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.CREDENTIALS_INVALID));
+        var exception = await Assert.ThrowsAsync<InvalidCredentialsException>(act);
+        Assert.Equal(ResourceErrorMessages.CREDENTIALS_INVALID, exception.Message);
     }
 
     [Fact]
@@ -70,10 +66,8 @@ public class LoginUseCaseTest
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<InvalidCredentialsException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.CREDENTIALS_INVALID));
+        var exception = await Assert.ThrowsAsync<InvalidCredentialsException>(act);
+        Assert.Equal(ResourceErrorMessages.CREDENTIALS_INVALID, exception.Message);
     }
 
     [Fact]
@@ -86,13 +80,12 @@ public class LoginUseCaseTest
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<InvalidCredentialsException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.CREDENTIALS_INVALID));
+        var exception = await Assert.ThrowsAsync<InvalidCredentialsException>(act);
+        Assert.Equal(ResourceErrorMessages.CREDENTIALS_INVALID, exception.Message);
     }
 
-    private static LoginUseCase CreateUseCase(User? user = null, RefreshToken? refreshToken = null, string? password = null)
+    private static LoginUseCase CreateUseCase(User? user = null, RefreshToken? refreshToken = null,
+        string? password = null)
     {
         var userReadRepository = new UserReadOnlyRepositoryBuilder()
             .GetByEmail(user)
@@ -107,7 +100,7 @@ public class LoginUseCaseTest
             .GenerateToken(Guid.NewGuid().ToString())
             .Build();
 
-        return new LoginUseCase(userReadRepository, refreshTokenReadRepository, refreshTokenWriteRepository, 
+        return new LoginUseCase(userReadRepository, refreshTokenReadRepository, refreshTokenWriteRepository,
             unitOfWork, cryptography, tokenProvider);
     }
 }

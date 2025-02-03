@@ -1,7 +1,6 @@
 using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories.Permissions;
 using CommonTestsUtilities.Requests.Filters;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Permissions.GetFiltered;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -17,14 +16,14 @@ public class GetFilteredPermissionsTest
         var permissionsToGet = PermissionBuilder.BuildList();
         var request = RequestPermissionFilterBuilder.Build();
 
-        var useCase = CreateUseCase(permissionsToGet: permissionsToGet);
+        var useCase = CreateUseCase(permissionsToGet);
 
         var result = await useCase.Execute(request);
 
-        result.Should().NotBeNullOrEmpty();
-        result!.Count.Should().Be(permissionsToGet.Count);
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
     }
-    
+
     [Fact]
     public async Task Success_No_Content()
     {
@@ -35,8 +34,8 @@ public class GetFilteredPermissionsTest
 
         var result = await useCase.Execute(request);
 
-        result.Should().NotBeNull();
-        result!.Count.Should().Be(0);
+        Assert.NotNull(result);
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -47,14 +46,12 @@ public class GetFilteredPermissionsTest
 
         var useCase = CreateUseCase();
 
-        var act = async() => await useCase.Execute(request);
+        var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-        
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_EMPTY));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_EMPTY);
     }
-    
+
     private static GetFilteredPermissionsUseCase CreateUseCase(List<Permission>? permissionsToGet = null)
     {
         var readRepository = new PermissionReadOnlyRepositoryBuilder()

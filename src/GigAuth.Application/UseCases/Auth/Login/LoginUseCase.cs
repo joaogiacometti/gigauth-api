@@ -38,11 +38,11 @@ public class LoginUseCase(
             refreshTokenWriteRepository.Delete(existingRefreshToken);
 
         var refreshToken = tokenProvider.GenerateRefreshToken(user.Id);
-        
+
         await refreshTokenWriteRepository.Create(refreshToken);
         await unitOfWork.Commit();
 
-        return new ResponseToken()
+        return new ResponseToken
         {
             Token = tokenProvider.GenerateToken(user),
             RefreshToken = refreshToken.Token

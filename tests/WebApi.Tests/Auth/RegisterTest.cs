@@ -4,7 +4,6 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Auth;
-using FluentAssertions;
 using GigAuth.Exception.Resources;
 using GigAuth.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -26,15 +25,16 @@ public class RegisterTest : GigAuthFixture
     public async Task Success()
     {
         var request = RequestRegisterBuilder.Build();
-        
+
         var result = await DoPost(Method, request);
 
-        result.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Created);
+
         var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
-        user.Should().NotBeNull();
+
+        Assert.NotNull(user);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Username_Already_Used(string culture)
@@ -45,16 +45,17 @@ public class RegisterTest : GigAuthFixture
 
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
-        
+
         var result = await DoPost(Method, request, culture: culture);
-    
-        result.StatusCode.Should().Be(HttpStatusCode.Conflict);
-        
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("USER_NAME_ALREADY_USED", new CultureInfo(culture))!;
-    
+
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Conflict);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("USER_NAME_ALREADY_USED", new CultureInfo(culture))!;
+
         await result.CompareException(expectedMessage);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Email_Already_Used(string culture)
@@ -65,29 +66,31 @@ public class RegisterTest : GigAuthFixture
 
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
-        
+
         var result = await DoPost(Method, request, culture: culture);
-    
-        result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("EMAIL_INVALID", new CultureInfo(culture))!;
-    
+
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.BadRequest);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("EMAIL_INVALID", new CultureInfo(culture))!;
+
         await result.CompareException(expectedMessage);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Invalid_Request(string culture)
     {
         var request = RequestRegisterBuilder.Build();
         request.UserName = "short";
-        
+
         var result = await DoPost(Method, request, culture: culture);
-    
-        result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("USER_NAME_TOO_SHORT", new CultureInfo(culture))!;
-    
+
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.BadRequest);
+
+        var expectedMessage =
+            ResourceErrorMessages.ResourceManager.GetString("USER_NAME_TOO_SHORT", new CultureInfo(culture))!;
+
         await result.CompareException(expectedMessage);
     }
 }

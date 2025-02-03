@@ -6,8 +6,8 @@ namespace CommonTestsUtilities.Repositories.Permissions;
 
 public class PermissionWriteOnlyRepositoryBuilder
 {
-    private readonly Mock<IPermissionWriteOnlyRepository> _repository = new ();
-    
+    private readonly Mock<IPermissionWriteOnlyRepository> _repository = new();
+
     public PermissionWriteOnlyRepositoryBuilder GetById(Permission? permission = null)
     {
         if (permission is not null)
@@ -15,6 +15,9 @@ public class PermissionWriteOnlyRepositoryBuilder
 
         return this;
     }
-    
-    public IPermissionWriteOnlyRepository Build() => _repository.Object;
+
+    public IPermissionWriteOnlyRepository Build()
+    {
+        return _repository.Object;
+    }
 }

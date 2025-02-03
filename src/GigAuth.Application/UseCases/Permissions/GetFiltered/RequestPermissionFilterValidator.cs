@@ -4,7 +4,7 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Permissions.GetFiltered;
 
-public class RequestPermissionFilterValidator: AbstractValidator<RequestPermissionFilter>
+public class RequestPermissionFilterValidator : AbstractValidator<RequestPermissionFilter>
 {
     public RequestPermissionFilterValidator()
     {

@@ -11,5 +11,8 @@ public class CultureInlineDataTest : IEnumerable<object[]>
         yield return new object[] { "pt-PT" };
     }
 
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

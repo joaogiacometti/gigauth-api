@@ -21,7 +21,7 @@ public class RoleMap : IEntityTypeConfiguration<Role>
 
         builder.Property(r => r.Description)
             .HasMaxLength(500);
-        
+
         builder.Property(u => u.IsActive)
             .IsRequired()
             .HasDefaultValue(true);
@@ -39,7 +39,7 @@ public class RoleMap : IEntityTypeConfiguration<Role>
             .WithOne(rp => rp.Role)
             .HasForeignKey(rp => rp.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.HasMany(r => r.UserRoles)
             .WithOne(rp => rp.Role)
             .HasForeignKey(rp => rp.RoleId)

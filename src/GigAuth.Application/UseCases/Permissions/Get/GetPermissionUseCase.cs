@@ -11,7 +11,7 @@ public class GetPermissionUseCase(IPermissionReadOnlyRepository readRepository) 
     public async Task<ResponsePermission> Execute(Guid id)
     {
         var permission = await readRepository.GetById(id)
-            ?? throw new NotFoundException(ResourceErrorMessages.PERMISSION_NOT_FOUND);
+                         ?? throw new NotFoundException(ResourceErrorMessages.PERMISSION_NOT_FOUND);
 
         return permission.ToPermissionResponse();
     }

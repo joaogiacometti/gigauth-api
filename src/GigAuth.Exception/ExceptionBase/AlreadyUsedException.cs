@@ -6,5 +6,8 @@ public class AlreadyUsedException(List<string> errorList) : GigAuthException(str
 {
     public override int StatusCode => HttpStatusCode.Conflict.GetHashCode();
 
-    public override List<string> GetErrorList() => errorList;
+    public override List<string> GetErrorList()
+    {
+        return errorList;
+    }
 }

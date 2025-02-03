@@ -2,7 +2,6 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Roles;
 using CommonTestsUtilities.Requests.Roles;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Roles.Update;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -19,9 +18,9 @@ public class UpdateRoleUseCaseTest
         var request = RequestRoleBuilder.Build();
         var useCase = CreateUseCase(role);
 
-        var act = async () => await useCase.Execute(role.Id, request);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(role.Id, request));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -33,12 +32,10 @@ public class UpdateRoleUseCaseTest
 
         var act = async () => await useCase.Execute(Guid.NewGuid(), request);
 
-        var result = await act.Should().ThrowAsync<NotFoundException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.ROLE_NOT_FOUND));
+        var exception = await Assert.ThrowsAsync<NotFoundException>(act);
+        Assert.Equal(ResourceErrorMessages.ROLE_NOT_FOUND, exception.Message);
     }
-    
+
     [Fact]
     public async Task Error_Name_Already_Used()
     {
@@ -48,14 +45,12 @@ public class UpdateRoleUseCaseTest
         var request = RequestRoleBuilder.Build();
         request.Name = roleWithName.Name;
 
-        var useCase = CreateUseCase(roleToUpdate: roleToUpdate, roleWithName: roleWithName);
+        var useCase = CreateUseCase(roleToUpdate, roleWithName);
 
         var act = async () => await useCase.Execute(roleToUpdate.Id, request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_ALREADY_USED));
+        var exception = await Assert.ThrowsAsync<AlreadyUsedException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_ALREADY_USED);
     }
 
     [Fact]
@@ -68,10 +63,9 @@ public class UpdateRoleUseCaseTest
 
         var act = async () => await useCase.Execute(Guid.NewGuid(), request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
 
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_TOO_SHORT));
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_TOO_SHORT);
     }
 
     private static UpdateRoleUseCase CreateUseCase(Role? roleToUpdate = null, Role? roleWithName = null)

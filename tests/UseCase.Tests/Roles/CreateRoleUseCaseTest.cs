@@ -2,7 +2,6 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Roles;
 using CommonTestsUtilities.Requests.Roles;
-using FluentAssertions;
 using GigAuth.Application.UseCases.Roles.Create;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -18,9 +17,9 @@ public class CreateRoleUseCaseTest
         var request = RequestRoleBuilder.Build();
         var useCase = CreateUseCase();
 
-        var act = async () => await useCase.Execute(request);
+        var exception = await Record.ExceptionAsync(async () => await useCase.Execute(request));
 
-        await act.Should().NotThrowAsync();
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -31,14 +30,12 @@ public class CreateRoleUseCaseTest
         var request = RequestRoleBuilder.Build();
         request.Name = role.Name;
 
-        var useCase = CreateUseCase(roleWithName: role);
+        var useCase = CreateUseCase(role);
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_ALREADY_USED));
+        var exception = await Assert.ThrowsAsync<AlreadyUsedException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_ALREADY_USED);
     }
 
     [Fact]
@@ -51,10 +48,8 @@ public class CreateRoleUseCaseTest
 
         var act = async () => await useCase.Execute(request);
 
-        var result = await act.Should().ThrowAsync<ErrorOnValidationException>();
-
-        result.Where(ex =>
-            ex.GetErrorList().Count == 1 && ex.GetErrorList().Contains(ResourceErrorMessages.NAME_TOO_SHORT));
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.NAME_TOO_SHORT);
     }
 
     private static CreateRoleUseCase CreateUseCase(Role? roleWithName = null)

@@ -6,7 +6,8 @@ using GigAuth.Exception.ExceptionBase;
 
 namespace GigAuth.Application.UseCases.Permissions.GetFiltered;
 
-public class GetFilteredPermissionsUseCase(IPermissionReadOnlyRepository readRepository) : IGetFilteredPermissionsUseCase
+public class GetFilteredPermissionsUseCase(IPermissionReadOnlyRepository readRepository)
+    : IGetFilteredPermissionsUseCase
 {
     public async Task<List<ResponsePermission>?> Execute(RequestPermissionFilter filter)
     {
@@ -16,15 +17,15 @@ public class GetFilteredPermissionsUseCase(IPermissionReadOnlyRepository readRep
 
         return permissions.ToPermissionResponse();
     }
-    
+
     private static void Validate(RequestPermissionFilter request)
     {
         var validator = new RequestPermissionFilterValidator();
-        
+
         var result = validator.Validate(request);
 
         if (result.IsValid) return;
-        
+
         var errorMessages = result.Errors.Select(r => r.ErrorMessage).ToList();
 
         throw new ErrorOnValidationException(errorMessages);

@@ -4,7 +4,7 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Roles;
 
-public class RequestRoleValidator: AbstractValidator<RequestRole>
+public class RequestRoleValidator : AbstractValidator<RequestRole>
 {
     public RequestRoleValidator()
     {

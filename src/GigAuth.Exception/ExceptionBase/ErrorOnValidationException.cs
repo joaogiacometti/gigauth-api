@@ -6,5 +6,8 @@ public class ErrorOnValidationException(List<string> errorList) : GigAuthExcepti
 {
     public override int StatusCode => HttpStatusCode.BadRequest.GetHashCode();
 
-    public override List<string> GetErrorList() => errorList;
+    public override List<string> GetErrorList()
+    {
+        return errorList;
+    }
 }

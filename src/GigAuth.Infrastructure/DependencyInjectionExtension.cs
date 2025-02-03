@@ -31,16 +31,16 @@ public static class DependencyInjectionExtension
         services.AddScoped<ICryptography, Cryptography>();
         services.AddScoped<ITokenProvider, TokenProvider>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        
+
         services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
         services.AddScoped<IUserReadOnlyRepository, UserRepository>();
-        
+
         services.AddScoped<IRoleReadOnlyRepository, RoleRepository>();
         services.AddScoped<IRoleWriteOnlyRepository, RoleRepository>();
-        
+
         services.AddScoped<IPermissionReadOnlyRepository, PermissionRepository>();
         services.AddScoped<IPermissionWriteOnlyRepository, PermissionRepository>();
-        
+
         services.AddScoped<IForgotPasswordTokenWriteOnlyRepository, ForgotPasswordTokenRepository>();
         services.AddScoped<IForgotPasswordTokenReadOnlyRepository, ForgotPasswordTokenRepository>();
 
@@ -52,9 +52,6 @@ public static class DependencyInjectionExtension
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddDbContext<GigAuthContext>(options =>
-        {
-            options.UseNpgsql(connectionString); 
-        });
+        services.AddDbContext<GigAuthContext>(options => { options.UseNpgsql(connectionString); });
     }
 }

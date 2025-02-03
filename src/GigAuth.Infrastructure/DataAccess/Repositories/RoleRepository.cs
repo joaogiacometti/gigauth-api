@@ -7,21 +7,21 @@ namespace GigAuth.Infrastructure.DataAccess.Repositories;
 
 public class RoleRepository(GigAuthContext dbContext) : IRoleReadOnlyRepository, IRoleWriteOnlyRepository
 {
-    public async Task Add(Role role) => await dbContext.Roles.AddAsync(role);
-    public void Delete(Role role) => dbContext.Roles.Remove(role);
+    async Task<Role?> IRoleReadOnlyRepository.GetById(Guid id)
+    {
+        return await dbContext.Roles
+            .AsNoTracking()
+            .Include(r => r.RolePermissions)
+            .ThenInclude(rp => rp.Permission)
+            .SingleOrDefaultAsync(r => r.Id.Equals(id));
+    }
 
-    async Task<Role?> IRoleReadOnlyRepository.GetById(Guid id) => await dbContext.Roles
-        .AsNoTracking()
-        .Include(r => r.RolePermissions)
-        .ThenInclude(rp => rp.Permission)
-        .SingleOrDefaultAsync(r => r.Id.Equals(id));
-    
-    async Task<Role?> IRoleWriteOnlyRepository.GetById(Guid id) => await dbContext.Roles
-        .SingleOrDefaultAsync(r => r.Id.Equals(id));
-
-    public async Task<Role?> GetByName(string name) => await dbContext.Roles
-        .AsNoTracking()
-        .SingleOrDefaultAsync(r => r.Name.Equals(name));
+    public async Task<Role?> GetByName(string name)
+    {
+        return await dbContext.Roles
+            .AsNoTracking()
+            .SingleOrDefaultAsync(r => r.Name.Equals(name));
+    }
 
     public Task<List<Role>> GetFiltered(RequestRoleFilter filter)
     {
@@ -42,5 +42,21 @@ public class RoleRepository(GigAuthContext dbContext) : IRoleReadOnlyRepository,
             query = query.Where(r => r.IsActive == filter.IsActive.Value);
 
         return query.ToListAsync();
+    }
+
+    public async Task Add(Role role)
+    {
+        await dbContext.Roles.AddAsync(role);
+    }
+
+    public void Delete(Role role)
+    {
+        dbContext.Roles.Remove(role);
+    }
+
+    async Task<Role?> IRoleWriteOnlyRepository.GetById(Guid id)
+    {
+        return await dbContext.Roles
+            .SingleOrDefaultAsync(r => r.Id.Equals(id));
     }
 }

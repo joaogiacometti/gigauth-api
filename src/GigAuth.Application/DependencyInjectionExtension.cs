@@ -30,18 +30,18 @@ public static class DependencyInjectionExtension
         services.AddScoped<IRefreshTokenUseCase, RefreshTokenUseCase>();
         services.AddScoped<IForgotPasswordUseCase, ForgotPasswordUseCase>();
         services.AddScoped<IChangePasswordUseCase, ChangePasswordUseCase>();
-        
+
         services.AddScoped<IGetUserUseCase, GetUserUseCase>();
         services.AddScoped<IGetFilteredUsersUseCase, GetFilteredUsersUseCase>();
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
-        
+
         services.AddScoped<ICreateRoleUseCase, CreateRoleUseCase>();
         services.AddScoped<IGetRoleUseCase, GetRoleUseCase>();
         services.AddScoped<IGetFilteredRolesUseCase, GetFilteredRolesUseCase>();
         services.AddScoped<IUpdateRoleUseCase, UpdateRoleUseCase>();
         services.AddScoped<IDeleteRoleUseCase, DeleteRoleUseCase>();
-        
+
         services.AddScoped<ICreatePermissionUseCase, CreatePermissionUseCase>();
         services.AddScoped<IGetPermissionUseCase, GetPermissionUseCase>();
         services.AddScoped<IGetFilteredPermissionsUseCase, GetFilteredPermissionsUseCase>();

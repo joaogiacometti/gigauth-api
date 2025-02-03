@@ -1,7 +1,6 @@
 using System.Net;
 using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
-using FluentAssertions;
 using GigAuth.Communication.Responses;
 using GigAuth.Domain.Entities;
 
@@ -10,10 +9,10 @@ namespace WebApi.Tests.Users;
 public class GetUserTest : GigAuthFixture
 {
     private const string Method = "user/get";
+    private readonly string _adminToken;
 
     private readonly User _user;
     private readonly string _userToken;
-    private readonly string _adminToken;
 
     public GetUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
@@ -25,30 +24,30 @@ public class GetUserTest : GigAuthFixture
     [Fact]
     public async Task Success()
     {
-        var result = await DoGet(Method, token: _adminToken, pathParameter: _user.Id.ToString());
+        var result = await DoGet(Method, _adminToken, pathParameter: _user.Id.ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.OK);
 
-        var response = await result.Deserialize<ResponseUser>(); 
+        var response = await result.Deserialize<ResponseUser>();
 
-        response.Should().NotBeNull();
+        Assert.NotNull(response);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Unauthorized(string culture)
     {
-        var result = await DoGet(Method, token: null, culture, _user.Id.ToString());
+        var result = await DoGet(Method, null, culture, _user.Id.ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
     }
-    
+
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Forbidden(string culture)
     {
-        var result = await DoGet(Method, token: _userToken, culture, _user.Id.ToString());
+        var result = await DoGet(Method, _userToken, culture, _user.Id.ToString());
 
-        result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.Forbidden);
     }
 }

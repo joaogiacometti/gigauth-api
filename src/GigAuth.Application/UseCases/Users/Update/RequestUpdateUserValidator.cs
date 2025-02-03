@@ -4,7 +4,7 @@ using GigAuth.Exception.Resources;
 
 namespace GigAuth.Application.UseCases.Users.Update;
 
-public class RequestUpdateUserValidator: AbstractValidator<RequestUpdateUser>
+public class RequestUpdateUserValidator : AbstractValidator<RequestUpdateUser>
 {
     public RequestUpdateUserValidator()
     {

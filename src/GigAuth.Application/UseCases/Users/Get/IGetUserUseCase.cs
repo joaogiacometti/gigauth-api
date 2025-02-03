@@ -1,5 +1,4 @@
 using GigAuth.Communication.Responses;
-using GigAuth.Domain.Entities;
 
 namespace GigAuth.Application.UseCases.Users.Get;
 
