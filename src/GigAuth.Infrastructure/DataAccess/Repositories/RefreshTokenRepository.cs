@@ -11,7 +11,7 @@ public class RefreshTokenRepository(GigAuthContext dbContext)
     {
         return await dbContext.RefreshTokens
             .AsNoTracking()
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(u => u.UserId.Equals(userId));
     }
 
     public async Task Create(RefreshToken refreshToken)

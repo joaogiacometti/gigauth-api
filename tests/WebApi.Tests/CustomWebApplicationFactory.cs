@@ -69,8 +69,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             AddAdminRole(dbContext, user);
 
         var token = tokenProvider.GenerateToken(user);
+        var refreshToken = tokenProvider.GenerateRefreshToken(user.Id);
+        
+        dbContext.RefreshTokens.Add(refreshToken);
 
-        return new UserIdentityManager(user, password, token);
+        return new UserIdentityManager(user, password, token, refreshToken.Token);
     }
 
     private static void AddAdminRole(GigAuthContext dbContext, User user)
