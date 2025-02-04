@@ -37,7 +37,7 @@ public class GetFilteredUsersTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Invalid_Request(string culture)
     {
-        var result = await DoPost(Method, new RequestUserFilter { UserName = "" }, _adminToken, culture);
+        var result = await DoPost(Method, new RequestUserFilter { UserName = "" }, _adminToken, culture: culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.BadRequest);
 
@@ -51,7 +51,7 @@ public class GetFilteredUsersTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Unauthorized(string culture)
     {
-        var result = await DoPost(Method, new object(), null, culture);
+        var result = await DoPost(Method, new object(), null, culture: culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
     }
@@ -60,7 +60,7 @@ public class GetFilteredUsersTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Forbidden(string culture)
     {
-        var result = await DoPost(Method, new object(), _userToken, culture);
+        var result = await DoPost(Method, new object(), _userToken, culture: culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Forbidden);
     }

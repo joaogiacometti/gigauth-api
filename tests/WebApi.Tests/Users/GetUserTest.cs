@@ -37,7 +37,7 @@ public class GetUserTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Unauthorized(string culture)
     {
-        var result = await DoGet(Method, null, culture, _user.Id.ToString());
+        var result = await DoGet(Method, null, pathParameter: _user.Id.ToString(), culture: culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
     }
@@ -46,7 +46,7 @@ public class GetUserTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Forbidden(string culture)
     {
-        var result = await DoGet(Method, _userToken, culture, _user.Id.ToString());
+        var result = await DoGet(Method, _userToken, pathParameter: _user.Id.ToString(), culture: culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Forbidden);
     }
