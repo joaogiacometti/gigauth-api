@@ -8,17 +8,19 @@ public class GigAuthFixture(CustomWebApplicationFactory webApplicationFactory)
 {
     private readonly HttpClient _httpClient = webApplicationFactory.CreateClient();
 
-    protected async Task<HttpResponseMessage> DoPost(string requestUri, object request, string? token = "",
-        string culture = "en")
+    protected async Task<HttpResponseMessage> DoPost(string requestUri, object? request = null, string? token = "",
+        string? pathParameter = null, string? culture = "en")
     {
         AuthorizeRequest(token);
         SetRequestCulture(culture);
+        
+        if (!string.IsNullOrWhiteSpace(pathParameter))
+            requestUri = $"{requestUri}/{pathParameter}";
 
         return await _httpClient.PostAsJsonAsync(requestUri, request);
     }
 
-    protected async Task<HttpResponseMessage> DoGet(string requestUri, string? token, string culture = "en",
-        string? pathParameter = null)
+    protected async Task<HttpResponseMessage> DoGet(string requestUri, string? token, string? pathParameter = null, string culture = "en")
     {
         AuthorizeRequest(token);
         SetRequestCulture(culture);
@@ -59,7 +61,7 @@ public class GigAuthFixture(CustomWebApplicationFactory webApplicationFactory)
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
-    private void SetRequestCulture(string culture)
+    private void SetRequestCulture(string? culture)
     {
         if (string.IsNullOrWhiteSpace(culture)) return;
         _httpClient.DefaultRequestHeaders.AcceptLanguage.Clear();
