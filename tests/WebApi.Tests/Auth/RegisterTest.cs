@@ -40,20 +40,19 @@ public class RegisterTest : GigAuthFixture
     public async Task Error_Username_Already_Used(string culture)
     {
         var request = RequestRegisterBuilder.Build();
-        var user = UserBuilder.Build();
-        user.UserName = request.UserName;
 
-        await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        var firstTry = await DoPost(Method, request, culture: culture);
 
-        var result = await DoPost(Method, request, culture: culture);
+        Assert.Equivalent(firstTry.StatusCode, HttpStatusCode.Created);
 
-        Assert.Equivalent(result.StatusCode, HttpStatusCode.Conflict);
-
+        var secondTry = await DoPost(Method, request, culture: culture);
+        
+        Assert.Equivalent(secondTry.StatusCode, HttpStatusCode.Conflict);
+        
         var expectedMessage =
             ResourceErrorMessages.ResourceManager.GetString("USER_NAME_ALREADY_USED", new CultureInfo(culture))!;
 
-        await result.CompareException(expectedMessage);
+        await secondTry.CompareException(expectedMessage);
     }
 
     [Theory]

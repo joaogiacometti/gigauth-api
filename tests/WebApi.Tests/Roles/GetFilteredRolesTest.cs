@@ -3,22 +3,20 @@ using System.Net;
 using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
 using GigAuth.Communication.Responses;
-using GigAuth.Domain.Entities;
+using GigAuth.Domain.Filters;
 using GigAuth.Exception.Resources;
 
-namespace WebApi.Tests.Users;
+namespace WebApi.Tests.Roles;
 
-public class GetUserTest : GigAuthFixture
+public class GetFilteredRolesTest : GigAuthFixture
 {
-    private const string Method = "user/get";
+    private const string Method = "role/get-filtered";
     private readonly string _adminToken;
 
-    private readonly User _user;
     private readonly string _userToken;
 
-    public GetUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
+    public GetFilteredRolesTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _user = webApplicationFactory.User.GetUser();
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
@@ -26,25 +24,25 @@ public class GetUserTest : GigAuthFixture
     [Fact]
     public async Task Success()
     {
-        var result = await DoGet(Method, _adminToken, pathParameter: _user.Id.ToString());
+        var result = await DoPost(Method, new object(), _adminToken);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.OK);
 
-        var response = await result.Deserialize<ResponseUser>();
+        var response = await result.Deserialize<List<ResponseRole>>();
 
         Assert.NotNull(response);
     }
     
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
-    public async Task Error_NotFound(string culture)
+    public async Task Error_Invalid_Request(string culture)
     {
-        var result = await DoGet(Method, _adminToken, pathParameter: Guid.NewGuid().ToString(), culture: culture);
+        var result = await DoPost(Method, new RequestRoleFilter { Name = "" }, _adminToken, culture: culture);
 
-        Assert.Equivalent(result.StatusCode, HttpStatusCode.NotFound);
-        
+        Assert.Equivalent(result.StatusCode, HttpStatusCode.BadRequest);
+
         var expectedMessage =
-            ResourceErrorMessages.ResourceManager.GetString("USER_NOT_FOUND", new CultureInfo(culture))!;
+            ResourceErrorMessages.ResourceManager.GetString("NAME_EMPTY", new CultureInfo(culture))!;
 
         await result.CompareException(expectedMessage);
     }
@@ -53,7 +51,7 @@ public class GetUserTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Unauthorized(string culture)
     {
-        var result = await DoGet(Method, null, pathParameter: _user.Id.ToString(), culture: culture);
+        var result = await DoPost(Method, new object(), null, culture: culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Unauthorized);
     }
@@ -62,7 +60,7 @@ public class GetUserTest : GigAuthFixture
     [ClassData(typeof(CultureInlineDataTest))]
     public async Task Error_Forbidden(string culture)
     {
-        var result = await DoGet(Method, _userToken, pathParameter: _user.Id.ToString(), culture: culture);
+        var result = await DoPost(Method, new object(), _userToken, culture: culture);
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Forbidden);
     }
