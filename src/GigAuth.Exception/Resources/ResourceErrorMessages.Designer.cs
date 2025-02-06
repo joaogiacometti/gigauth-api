@@ -206,5 +206,11 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("PERMISSION_NOT_FOUND", resourceCulture);
             }
         }
+        
+        public static string PASSWORD_SAME {
+            get {
+                return ResourceManager.GetString("PASSWORD_SAME", resourceCulture);
+            }
+        }
     }
 }

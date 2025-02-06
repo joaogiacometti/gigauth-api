@@ -97,4 +97,7 @@
     <data name="PERMISSION_NOT_FOUND" xml:space="preserve">
         <value>No se pudo encontrar el permiso.</value>
     </data>
+    <data name="PASSWORD_SAME" xml:space="preserve">
+        <value>La nueva contraseña debe ser diferente a la contraseña actual.</value>
+    </data>
 </root>

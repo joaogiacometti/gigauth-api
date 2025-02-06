@@ -27,6 +27,11 @@ public class ChangePasswordUseCase(
         var user = await userWriteRepository.GetById(token.UserId)
                    ?? throw new NotFoundException(ResourceErrorMessages.USER_NOT_FOUND);
 
+        var isSamePassword = cryptography.Verify(request.NewPassword, user.PasswordHash);
+        
+        if(isSamePassword)
+            throw new ErrorOnValidationException([ResourceErrorMessages.PASSWORD_SAME]);
+        
         user.PasswordHash = cryptography.Encrypt(request.NewPassword);
 
         tokenWriteRepository.Delete(token);
