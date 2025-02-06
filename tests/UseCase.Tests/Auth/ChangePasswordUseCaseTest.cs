@@ -79,6 +79,24 @@ public class ChangePasswordUseCaseTest
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
         Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.USER_NOT_FOUND);
     }
+    
+    [Fact]
+    public async Task Error_NewPassword_Equals_Old()
+    {
+        var user = UserBuilder.Build();
+        var token = ForgotPasswordTokenBuilder.Build();
+        var request = RequestChangePasswordBuilder.Build();
+
+        token.UserId = user.Id;
+        request.Token = token.Token;
+
+        var useCase = CreateUseCase(user, token, request.NewPassword);
+
+        var act = async () => await useCase.Execute(request);
+
+        var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+        Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.PASSWORD_SAME);
+    }
 
     [Fact]
     public async Task Error_Validation()
@@ -94,7 +112,7 @@ public class ChangePasswordUseCaseTest
         Assert.Contains(exception.GetErrorList(), ex => ex == ResourceErrorMessages.TOKEN_EMPTY);
     }
 
-    private static ChangePasswordUseCase CreateUseCase(User? user = null, ForgotPasswordToken? token = null)
+    private static ChangePasswordUseCase CreateUseCase(User? user = null, ForgotPasswordToken? token = null, string? samePassword = null)
     {
         var tokenWriteRepository = new ForgotPasswordTokenWriteOnlyRepositoryBuilder()
             .GetByToken(token)
@@ -103,7 +121,9 @@ public class ChangePasswordUseCaseTest
             .GetById(user)
             .Build();
         var unitOfWork = new UnitOfWorkBuilder().Build();
-        var cryptography = new CryptographyBuilder().Build();
+        var cryptography = new CryptographyBuilder()
+            .Verify(samePassword)
+            .Build();
 
         return new ChangePasswordUseCase(tokenWriteRepository, userWriteRepository, unitOfWork, cryptography);
     }
