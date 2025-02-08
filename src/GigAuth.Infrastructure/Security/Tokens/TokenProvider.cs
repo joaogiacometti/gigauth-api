@@ -14,7 +14,7 @@ public class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
     public string GenerateToken(User user)
     {
-        var secretKey = configuration["Jwt:SecretKey"];
+        var secretKey = Environment.GetEnvironmentVariable("JwtSecretKey") ?? configuration["Jwt:SecretKey"];
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
 
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

@@ -5,7 +5,6 @@
 
 # env files
 .env
-appsettings.json
 appsettings.Production.json
 
 # User-specific files
