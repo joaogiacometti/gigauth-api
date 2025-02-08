@@ -50,7 +50,8 @@ public static class DependencyInjectionExtension
 
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") ??
+            configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<GigAuthContext>(options => { options.UseNpgsql(connectionString); });
     }
