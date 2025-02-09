@@ -1,12 +1,21 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using GigAuth.Infrastructure.DataAccess;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApi.Tests;
 
-public class GigAuthFixture(CustomWebApplicationFactory webApplicationFactory)
-    : IClassFixture<CustomWebApplicationFactory>
+public class GigAuthFixture : IClassFixture<CustomWebApplicationFactory>
 {
-    private readonly HttpClient _httpClient = webApplicationFactory.CreateClient();
+    private readonly HttpClient _httpClient;
+    protected readonly GigAuthContext DbContext;
+
+    protected GigAuthFixture(CustomWebApplicationFactory webApplicationFactory)
+    {
+        _httpClient = webApplicationFactory.CreateClient();
+        var scope = webApplicationFactory.Services.CreateScope();
+        DbContext = scope.ServiceProvider.GetRequiredService<GigAuthContext>();
+    }
 
     protected async Task<HttpResponseMessage> DoPost(string requestUri, object? request = null, string? token = "",
         string? pathParameter = null, string? culture = "en")

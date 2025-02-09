@@ -12,13 +12,10 @@ public class DeleteRoleTest : GigAuthFixture
 {
     private const string Method = "role/delete";
     private readonly string _adminToken;
-
-    private readonly GigAuthContext _dbContext;
     private readonly string _userToken;
 
     public DeleteRoleTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _dbContext = webApplicationFactory.DbContext;
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
@@ -27,8 +24,8 @@ public class DeleteRoleTest : GigAuthFixture
     public async Task Success()
     {
         var role = RoleBuilder.Build();
-        await _dbContext.AddAsync(role);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(role);
+        await DbContext.SaveChangesAsync();
 
         var firstTry = await DoDelete(Method, _adminToken, pathParameter: role.Id.ToString());
 

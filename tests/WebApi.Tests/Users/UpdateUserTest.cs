@@ -16,12 +16,10 @@ public class UpdateUserTest : GigAuthFixture
     private const string Method = "user/update";
     private readonly string _adminToken;
 
-    private readonly GigAuthContext _dbContext;
     private readonly string _userToken;
 
     public UpdateUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _dbContext = webApplicationFactory.DbContext;
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
@@ -31,15 +29,15 @@ public class UpdateUserTest : GigAuthFixture
     {
         var user = UserBuilder.Build();
         var request = new RequestUpdateUser { UserName = "newUserName" };
-        await _dbContext.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(user);
+        await DbContext.SaveChangesAsync();
 
         var result = await DoPut(Method, _adminToken, request, pathParameter: user.Id.ToString());
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.NoContent);
 
-        _dbContext.ChangeTracker.Clear();
-        var updatedUser = await _dbContext.Users.FirstAsync(u => u.Id.Equals(user.Id));
+        DbContext.ChangeTracker.Clear();
+        var updatedUser = await DbContext.Users.FirstAsync(u => u.Id.Equals(user.Id));
         Assert.NotNull(updatedUser);
         Assert.Equivalent(updatedUser.UserName, request.UserName);
     }
@@ -50,8 +48,8 @@ public class UpdateUserTest : GigAuthFixture
     {
         var user = UserBuilder.Build();
         var request = new RequestUpdateUser { UserName = "short" };
-        await _dbContext.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(user);
+        await DbContext.SaveChangesAsync();
 
         var result = await DoPut(Method, _adminToken, request, culture, user.Id.ToString());
 

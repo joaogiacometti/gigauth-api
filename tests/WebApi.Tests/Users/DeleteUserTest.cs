@@ -12,13 +12,10 @@ public class DeleteUserTest : GigAuthFixture
 {
     private const string Method = "user/delete";
     private readonly string _adminToken;
-
-    private readonly GigAuthContext _dbContext;
     private readonly string _userToken;
 
     public DeleteUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _dbContext = webApplicationFactory.DbContext;
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
@@ -27,8 +24,8 @@ public class DeleteUserTest : GigAuthFixture
     public async Task Success()
     {
         var user = UserBuilder.Build();
-        await _dbContext.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(user);
+        await DbContext.SaveChangesAsync();
 
         var firstTry = await DoDelete(Method, _adminToken, pathParameter: user.Id.ToString());
 

@@ -5,7 +5,6 @@ using CommonTestsUtilities.Extensions;
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Auth;
 using GigAuth.Exception.Resources;
-using GigAuth.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Tests.Auth;
@@ -14,12 +13,8 @@ public class RegisterTest : GigAuthFixture
 {
     private const string Method = "auth/register";
 
-    private readonly GigAuthContext _dbContext;
-
     public RegisterTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
-    {
-        _dbContext = webApplicationFactory.DbContext;
-    }
+    { }
 
     [Fact]
     public async Task Success()
@@ -30,7 +25,7 @@ public class RegisterTest : GigAuthFixture
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.Created);
 
-        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
+        var user = await DbContext.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
 
         Assert.NotNull(user);
     }
@@ -63,8 +58,8 @@ public class RegisterTest : GigAuthFixture
         var user = UserBuilder.Build();
         user.Email = request.Email;
 
-        await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.Users.AddAsync(user);
+        await DbContext.SaveChangesAsync();
 
         var result = await DoPost(Method, request, culture: culture);
 

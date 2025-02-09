@@ -15,13 +15,10 @@ public class UpdateRoleTest : GigAuthFixture
 {
     private const string Method = "role/update";
     private readonly string _adminToken;
-
-    private readonly GigAuthContext _dbContext;
     private readonly string _userToken;
 
     public UpdateRoleTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _dbContext = webApplicationFactory.DbContext;
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
@@ -31,15 +28,15 @@ public class UpdateRoleTest : GigAuthFixture
     {
         var role = RoleBuilder.Build();
         var request = new RequestRole { Name = "newRoleName" };
-        await _dbContext.AddAsync(role);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(role);
+        await DbContext.SaveChangesAsync();
 
         var result = await DoPut(Method, _adminToken, request, pathParameter: role.Id.ToString());
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.NoContent);
 
-        _dbContext.ChangeTracker.Clear();
-        var updatedRole = await _dbContext.Roles.FirstAsync(u => u.Id.Equals(role.Id));
+        DbContext.ChangeTracker.Clear();
+        var updatedRole = await DbContext.Roles.FirstAsync(u => u.Id.Equals(role.Id));
         Assert.NotNull(updatedRole);
         Assert.Equivalent(updatedRole.Name, request.Name);
     }
@@ -50,8 +47,8 @@ public class UpdateRoleTest : GigAuthFixture
     {
         var role = RoleBuilder.Build();
         var request = new RequestRole { Name = "sh" };
-        await _dbContext.AddAsync(role);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(role);
+        await DbContext.SaveChangesAsync();
 
         var result = await DoPut(Method, _adminToken, request, culture, role.Id.ToString());
 

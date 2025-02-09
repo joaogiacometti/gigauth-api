@@ -6,7 +6,6 @@ using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Permissions;
 using GigAuth.Communication.Requests;
 using GigAuth.Exception.Resources;
-using GigAuth.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Tests.Permissions;
@@ -15,13 +14,10 @@ public class UpdatePermissionTest : GigAuthFixture
 {
     private const string Method = "permission/update";
     private readonly string _adminToken;
-
-    private readonly GigAuthContext _dbContext;
     private readonly string _userToken;
 
     public UpdatePermissionTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _dbContext = webApplicationFactory.DbContext;
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
@@ -31,15 +27,15 @@ public class UpdatePermissionTest : GigAuthFixture
     {
         var permission = PermissionBuilder.Build();
         var request = new RequestPermission { Name = "newPermissionName" };
-        await _dbContext.AddAsync(permission);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(permission);
+        await DbContext.SaveChangesAsync();
 
         var result = await DoPut(Method, _adminToken, request, pathParameter: permission.Id.ToString());
 
         Assert.Equivalent(result.StatusCode, HttpStatusCode.NoContent);
 
-        _dbContext.ChangeTracker.Clear();
-        var updatedPermission = await _dbContext.Permissions.FirstAsync(u => u.Id.Equals(permission.Id));
+        DbContext.ChangeTracker.Clear();
+        var updatedPermission = await DbContext.Permissions.FirstAsync(u => u.Id.Equals(permission.Id));
         Assert.NotNull(updatedPermission);
         Assert.Equivalent(updatedPermission.Name, request.Name);
     }
@@ -50,8 +46,8 @@ public class UpdatePermissionTest : GigAuthFixture
     {
         var permission = PermissionBuilder.Build();
         var request = new RequestPermission { Name = "sh" };
-        await _dbContext.AddAsync(permission);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(permission);
+        await DbContext.SaveChangesAsync();
 
         var result = await DoPut(Method, _adminToken, request, culture, permission.Id.ToString());
 

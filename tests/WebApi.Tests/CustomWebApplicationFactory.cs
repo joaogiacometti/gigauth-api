@@ -1,5 +1,4 @@
 using CommonTestsUtilities.Entities;
-using GigAuth.Api;
 using GigAuth.Domain.Constants;
 using GigAuth.Domain.Entities;
 using GigAuth.Domain.Security.Cryptography;
@@ -9,52 +8,49 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Testcontainers.PostgreSql;
 using WebApi.Tests.Resources;
 
 namespace WebApi.Tests;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
+        .WithImage("postgres:latest")
+        .WithDatabase("gigauth")
+        .WithUsername("postgres")
+        .WithPassword("root")
+        .Build();
+
     public UserIdentityManager Admin { get; private set; } = null!;
     public UserIdentityManager User { get; private set; } = null!;
-    public GigAuthContext DbContext { get; private set; } = null!;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Test")
             .ConfigureServices(services =>
             {
-                var provider = services.AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
-
                 services.AddDbContext<GigAuthContext>(config =>
                 {
-                    config.UseInMemoryDatabase("InMemoryDbForTesting");
-                    config.UseInternalServiceProvider(provider);
+                    config.UseNpgsql(_dbContainer.GetConnectionString());
                 });
 
-                var scope = services.BuildServiceProvider().CreateScope();
+                var serviceProvider = services.BuildServiceProvider();
+
+                using var scope = serviceProvider.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<GigAuthContext>();
                 var cryptography = scope.ServiceProvider.GetRequiredService<ICryptography>();
                 var tokenProvider = scope.ServiceProvider.GetRequiredService<ITokenProvider>();
-
-                Setup(dbContext, cryptography, tokenProvider);
-
+                
+                dbContext.Database.Migrate();
+                
+                Admin = AddUser(dbContext, cryptography, tokenProvider, true);
+                User = AddUser(dbContext, cryptography, tokenProvider);
+                
                 dbContext.SaveChanges();
             });
     }
-
-    private void Setup(GigAuthContext dbContext, ICryptography cryptography, ITokenProvider tokenProvider)
-    {
-        var admin = AddUser(dbContext, cryptography, tokenProvider, true);
-        var user = AddUser(dbContext, cryptography, tokenProvider);
-
-        Admin = admin;
-        User = user;
-        DbContext = dbContext;
-
-        dbContext.SaveChanges();
-    }
-
+    
     private static UserIdentityManager AddUser(GigAuthContext dbContext, ICryptography cryptography,
         ITokenProvider tokenProvider, bool isAdmin = false)
     {
@@ -66,7 +62,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         dbContext.Users.Add(user);
 
         if (isAdmin)
-            AddAdminRole(dbContext, user);
+            SetAdminRole(dbContext, user);
 
         var token = tokenProvider.GenerateToken(user);
         var refreshToken = tokenProvider.GenerateRefreshToken(user.Id);
@@ -75,40 +71,24 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
         return new UserIdentityManager(user, password, token, refreshToken.Token);
     }
-
-    private static void AddAdminRole(GigAuthContext dbContext, User user)
+    
+    private static void SetAdminRole(GigAuthContext dbContext, User user)
     {
-        var adminPermission = new Permission
-        {
-            Id = RoleConstants.AdminPermissionId,
-            Name = RoleConstants.AdminPermissionName
-        };
+        var adminRole = dbContext.Roles
+            .Include(r => r.RolePermissions)
+            .ThenInclude(rp => rp.Permission)
+            .Single(r => r.Id.Equals(RoleConstants.AdminRoleId));
 
-        var adminRole = new Role
-        {
-            Id = RoleConstants.AdminRoleId,
-            Name = RoleConstants.AdminRoleName
-        };
+        user.UserRoles.Add(new UserRole {Role = adminRole, RoleId = adminRole.Id, UserId = user.Id});
+    }
 
-        var rolePermission = new RolePermission
-        {
-            Role = adminRole,
-            Permission = adminPermission,
-            RoleId = RoleConstants.AdminRoleId,
-            PermissionId = adminPermission.Id
-        };
+    public Task InitializeAsync()
+    {
+        return _dbContainer.StartAsync();
+    }
 
-        var userRole = new UserRole
-        {
-            User = user,
-            Role = adminRole,
-            RoleId = adminRole.Id,
-            UserId = user.Id
-        };
-
-        dbContext.Permissions.Add(adminPermission);
-        dbContext.Roles.Add(adminRole);
-        dbContext.RolePermissions.Add(rolePermission);
-        dbContext.UserRoles.Add(userRole);
+    public new Task DisposeAsync()
+    {
+        return _dbContainer.StopAsync();
     }
 }

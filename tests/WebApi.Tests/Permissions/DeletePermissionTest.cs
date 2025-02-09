@@ -13,12 +13,10 @@ public class DeletePermissionTest : GigAuthFixture
     private const string Method = "permission/delete";
     private readonly string _adminToken;
 
-    private readonly GigAuthContext _dbContext;
     private readonly string _userToken;
 
     public DeletePermissionTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _dbContext = webApplicationFactory.DbContext;
         _adminToken = webApplicationFactory.Admin.GetToken();
         _userToken = webApplicationFactory.User.GetToken();
     }
@@ -27,8 +25,8 @@ public class DeletePermissionTest : GigAuthFixture
     public async Task Success()
     {
         var permission = PermissionBuilder.Build();
-        await _dbContext.AddAsync(permission);
-        await _dbContext.SaveChangesAsync();
+        await DbContext.AddAsync(permission);
+        await DbContext.SaveChangesAsync();
 
         var firstTry = await DoDelete(Method, _adminToken, pathParameter: permission.Id.ToString());
 

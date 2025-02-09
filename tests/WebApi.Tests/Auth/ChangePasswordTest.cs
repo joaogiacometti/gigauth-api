@@ -7,7 +7,6 @@ using CommonTestsUtilities.Requests.Common;
 using GigAuth.Communication.Requests;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.Resources;
-using GigAuth.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Tests.Auth;
@@ -17,12 +16,10 @@ public class ChangePasswordTest : GigAuthFixture
     private const string Method = "auth/change-password";
 
     private readonly User _user;
-    private readonly GigAuthContext _context;
 
     public ChangePasswordTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
         _user = webApplicationFactory.User.GetUser();
-        _context = webApplicationFactory.DbContext;
     }
 
     [Fact]
@@ -34,7 +31,7 @@ public class ChangePasswordTest : GigAuthFixture
         
         Assert.Equivalent(forgotResult.StatusCode, HttpStatusCode.NoContent);
         
-        var token = await _context.ForgotPasswordTokens.FirstAsync(fpt => fpt.UserId == _user.Id);
+        var token = await DbContext.ForgotPasswordTokens.FirstAsync(fpt => fpt.UserId == _user.Id);
         
         var request = new RequestChangePassword { Token = token.Token, NewPassword = PasswordBuilder.Build};
 
@@ -42,9 +39,9 @@ public class ChangePasswordTest : GigAuthFixture
         
         Assert.Equivalent(changeResult.StatusCode, HttpStatusCode.NoContent);
         
-        _context.ChangeTracker.Clear();
+        DbContext.ChangeTracker.Clear();
         
-        var user = await _context.Users.FirstAsync(u => u.Id.Equals(_user.Id));
+        var user = await DbContext.Users.FirstAsync(u => u.Id.Equals(_user.Id));
         
         Assert.NotEqual(previousPassword, user.PasswordHash);
     }
