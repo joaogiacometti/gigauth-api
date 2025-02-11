@@ -14,6 +14,14 @@ builder.Services.ConfigureDependencies(configuration);
 
 builder.AddJwtAuth();
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("dev", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -24,6 +32,8 @@ if (app.Environment.IsDevelopment())
         options.WithTheme(ScalarTheme.BluePlanet);
         options.WithHttpBearerAuthentication(bearer => { bearer.Token = "your-bearer-token"; });
     });
+
+    app.UseCors("dev");
 }
 
 if (!configuration.IsTestEnvironment())
