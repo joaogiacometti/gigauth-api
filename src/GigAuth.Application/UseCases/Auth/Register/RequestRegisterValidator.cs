@@ -19,5 +19,7 @@ public class RequestRegisterValidator : AbstractValidator<RequestRegister>
             .MaximumLength(256).WithMessage(ResourceErrorMessages.EMAIL_TOO_LONG);
         RuleFor(u => u.Password)
             .SetValidator(new PasswordValidator<RequestRegister>());
+        RuleFor(u => u.PasswordConfirmation)
+            .Equal(u => u.Password).WithMessage(ResourceErrorMessages.PASSWORD_CONFIRMATION_DOES_NOT_MATCH);
     }
 }

@@ -1,6 +1,7 @@
 using Bogus;
 using CommonTestsUtilities.InlineData;
 using CommonTestsUtilities.Requests.Auth;
+using CommonTestsUtilities.Requests.Common;
 using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Exception.Resources;
 
@@ -93,5 +94,17 @@ public class RequestRegisterValidatorTest
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.EMAIL_TOO_LONG);
+    }
+    
+    [Fact]
+    public void Error_PasswordConfirmation_Does_Not_Match()
+    {
+        var request = RequestRegisterBuilder.Build();
+        request.PasswordConfirmation = PasswordBuilder.Build;
+
+        var result = _validator.Validate(request);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.PASSWORD_CONFIRMATION_DOES_NOT_MATCH);
     }
 }

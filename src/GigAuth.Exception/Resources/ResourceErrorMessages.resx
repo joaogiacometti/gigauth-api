@@ -107,4 +107,7 @@
     <data name="PASSWORD_SAME" xml:space="preserve">
         <value>The new password must be different from your current password.</value>
     </data>
+    <data name="PASSWORD_CONFIRMATION_DOES_NOT_MATCH" xml:space="preserve">
+        <value>The password confirmation does not match the original password. Please ensure both fields are identical and try again.</value>
+    </data>
 </root>

@@ -212,5 +212,11 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("PASSWORD_SAME", resourceCulture);
             }
         }
+        
+        public static string PASSWORD_CONFIRMATION_DOES_NOT_MATCH {
+            get {
+                return ResourceManager.GetString("PASSWORD_CONFIRMATION_DOES_NOT_MATCH", resourceCulture);
+            }
+        }
     }
 }
