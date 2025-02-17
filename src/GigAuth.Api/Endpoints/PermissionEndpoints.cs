@@ -30,8 +30,8 @@ public static class PermissionEndpoints
                 })
             .Produces(StatusCodes.Status201Created)
             .Produces<ResponseError>(StatusCodes.Status400BadRequest)
-            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
-            .Produces<ResponseError>(StatusCodes.Status403Forbidden);
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden);
 
         group.MapPost("/get-filtered",
                 async ([FromServices] IGetFilteredPermissionsUseCase useCase,
@@ -44,15 +44,15 @@ public static class PermissionEndpoints
             .Produces<List<ResponsePermission>>()
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ResponseError>(StatusCodes.Status400BadRequest)
-            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
-            .Produces<ResponseError>(StatusCodes.Status403Forbidden);
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden);
 
         group.MapGet("/get/{id:guid}",
                 async ([FromServices] IGetPermissionUseCase useCase, [FromRoute] Guid id) =>
                 Results.Ok(await useCase.Execute(id)))
             .Produces<ResponsePermission>()
-            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
-            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces<ResponseError>(StatusCodes.Status404NotFound);
 
         group.MapPut("/update/{id:guid}",
@@ -65,8 +65,8 @@ public static class PermissionEndpoints
                 })
             .Produces(StatusCodes.Status204NoContent)
             .Produces<ResponseError>(StatusCodes.Status400BadRequest)
-            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
-            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces<ResponseError>(StatusCodes.Status404NotFound);
 
         group.MapDelete("/delete/{id:guid}",
@@ -77,8 +77,8 @@ public static class PermissionEndpoints
                     return Results.NoContent();
                 })
             .Produces(StatusCodes.Status204NoContent)
-            .Produces<ResponseError>(StatusCodes.Status401Unauthorized)
-            .Produces<ResponseError>(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces<ResponseError>(StatusCodes.Status404NotFound);
     }
 }
