@@ -110,4 +110,13 @@
     <data name="PASSWORD_CONFIRMATION_DOES_NOT_MATCH" xml:space="preserve">
         <value>The password confirmation does not match the original password. Please ensure both fields are identical and try again.</value>
     </data>
+    <data name="FILE_TOO_LARGE" xml:space="preserve">
+        <value>The file exceed the max size.</value>
+    </data>
+    <data name="IMAGE_FILE_NAME_EMPTY" xml:space="preserve">
+        <value>The image file name is empty.</value>
+    </data>
+    <data name="IMAGE_INVALID_EXTENSION" xml:space="preserve">
+        <value>Invalid image file extension.</value>
+    </data>
 </root>

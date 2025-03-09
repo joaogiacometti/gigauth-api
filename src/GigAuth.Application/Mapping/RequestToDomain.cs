@@ -5,13 +5,14 @@ namespace GigAuth.Application.Mapping;
 
 public static class RequestToDomain
 {
-    public static User ToUserDomain(this RequestRegister request)
+    public static User ToUserDomain(this RequestRegister request, string? avatarUrl = null)
     {
         return new User
         {
             Email = request.Email,
             UserName = request.UserName,
-            PasswordHash = request.Password
+            PasswordHash = request.Password,
+            Avatar = avatarUrl
         };
     }
 

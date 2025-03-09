@@ -107,4 +107,45 @@ public class RequestRegisterValidatorTest
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.PASSWORD_CONFIRMATION_DOES_NOT_MATCH);
     }
+    
+    [Theory]
+    [ClassData(typeof(InvalidImageExtensionInlineDataTest))]
+    public void Error_FileName_Invalid_Extension(string fileName)
+    {
+        var request = RequestRegisterBuilder.Build();
+        request.AvatarBase64 = _faker.Random.Bytes(100);
+        request.AvatarFileName = fileName;
+
+        var result = _validator.Validate(request);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.IMAGE_INVALID_EXTENSION);
+    }
+    
+    [Theory]
+    [ClassData(typeof(NullOrWhiteSpaceInlineDataTest))]
+    public void Error_FileName_Empty(string fileName)
+    {
+        var request = RequestRegisterBuilder.Build();
+        request.AvatarBase64 = _faker.Random.Bytes(100);
+        request.AvatarFileName = fileName;
+
+        var result = _validator.Validate(request);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.IMAGE_FILE_NAME_EMPTY);
+    }
+    
+    [Fact]
+    public void Error_File_Too_Large()
+    {
+        var request = RequestRegisterBuilder.Build();
+        request.AvatarBase64 = _faker.Random.Bytes(1024*1024*5 + 1);
+        request.AvatarFileName = "test.png";
+
+        var result = _validator.Validate(request);
+
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.ErrorMessage == ResourceErrorMessages.FILE_TOO_LARGE);
+    }
 }

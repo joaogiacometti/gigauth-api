@@ -1,7 +1,7 @@
-using GigAuth.Domain.Security.Cryptography;
+using GigAuth.Domain.Services.Security.Cryptography;
 using BC = BCrypt.Net.BCrypt;
 
-namespace GigAuth.Infrastructure.Security.Cryptography;
+namespace GigAuth.Infrastructure.Services.Security.Cryptography;
 
 public class Cryptography : ICryptography
 {

@@ -4,13 +4,15 @@ using GigAuth.Domain.Repositories.Permissions;
 using GigAuth.Domain.Repositories.RefreshTokens;
 using GigAuth.Domain.Repositories.Roles;
 using GigAuth.Domain.Repositories.Users;
-using GigAuth.Domain.Security.Cryptography;
-using GigAuth.Domain.Security.Tokens;
+using GigAuth.Domain.Services.Security.Cryptography;
+using GigAuth.Domain.Services.Security.Tokens;
+using GigAuth.Domain.Services.SupabaseProvider;
 using GigAuth.Infrastructure.DataAccess;
 using GigAuth.Infrastructure.DataAccess.Repositories;
 using GigAuth.Infrastructure.Extensions;
-using GigAuth.Infrastructure.Security.Cryptography;
-using GigAuth.Infrastructure.Security.Tokens;
+using GigAuth.Infrastructure.Services.Security.Cryptography;
+using GigAuth.Infrastructure.Services.Security.Tokens;
+using GigAuth.Infrastructure.Services.SupabaseProvider;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,10 +30,14 @@ public static class DependencyInjectionExtension
                 .AddDbContextCheck<GigAuthContext>();
         }
 
-        services.AddScoped<ICryptography, Cryptography>();
-        services.AddScoped<ITokenProvider, TokenProvider>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        AddRepositories(services);
+        AddServices(services);
+    }
 
+    private static void AddRepositories(IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
         services.AddScoped<IUserReadOnlyRepository, UserRepository>();
 
@@ -46,6 +52,14 @@ public static class DependencyInjectionExtension
 
         services.AddScoped<IRefreshTokenWriteOnlyRepository, RefreshTokenRepository>();
         services.AddScoped<IRefreshTokenReadOnlyRepository, RefreshTokenRepository>();
+    }
+    
+    private static void AddServices(IServiceCollection services)
+    {
+        services.AddSingleton<ICryptography, Cryptography>();
+        services.AddSingleton<ITokenProvider, TokenProvider>();
+        services.AddScoped<ISupabaseClientFactory, SupabaseClientFactory>();
+        services.AddScoped<IStorageService, StorageService>();
     }
 
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)

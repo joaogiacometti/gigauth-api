@@ -7,7 +7,9 @@ public sealed class User
     public required string PasswordHash { get; set; }
     public required string UserName { get; set; }
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+    public string? Avatar { get; set; }
+
+public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedDate { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; } = [];

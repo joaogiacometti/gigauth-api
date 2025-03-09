@@ -2,7 +2,8 @@ using CommonTestsUtilities.Entities;
 using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Auth;
-using CommonTestsUtilities.Security;
+using CommonTestsUtilities.Services.Security;
+using CommonTestsUtilities.Services.SupabaseProvider;
 using GigAuth.Application.UseCases.Auth.Register;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;
@@ -77,8 +78,9 @@ public class RegisterUseCaseTest
             .Build();
         var writeRepository = new UserWriteOnlyRepositoryBuilder().Build();
         var unitOfWork = new UnitOfWorkBuilder().Build();
+        var storageService =  new StorageServiceBuilder().Build();
         var cryptography = new CryptographyBuilder().Build();
 
-        return new RegisterUseCase(readRepository, writeRepository, unitOfWork, cryptography);
+        return new RegisterUseCase(readRepository, writeRepository, unitOfWork, storageService, cryptography);
     }
 }

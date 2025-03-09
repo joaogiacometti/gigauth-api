@@ -103,4 +103,13 @@
     <data name="PASSWORD_CONFIRMATION_DOES_NOT_MATCH" xml:space="preserve">
         <value>La confirmación de la contraseña no coincide con la contraseña original. Por favor, asegúrate de que ambos campos sean idénticos y vuelve a intentarlo.</value>
     </data>
+    <data name="FILE_TOO_LARGE" xml:space="preserve">
+        <value>El archivo excede el tamaño máximo.</value>
+    </data>
+    <data name="IMAGE_FILE_NAME_EMPTY" xml:space="preserve">
+        <value>El nombre del archivo de imagen está vacío.</value>
+    </data>
+    <data name="IMAGE_INVALID_EXTENSION" xml:space="preserve">
+        <value>Extensão do arquivo de imagem inválida.</value>
+    </data>
 </root>

@@ -1,6 +1,6 @@
 using GigAuth.Domain.Entities;
 
-namespace GigAuth.Domain.Security.Tokens;
+namespace GigAuth.Domain.Services.Security.Tokens;
 
 public interface ITokenProvider
 {

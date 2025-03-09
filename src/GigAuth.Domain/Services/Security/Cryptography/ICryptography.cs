@@ -1,4 +1,4 @@
-namespace GigAuth.Domain.Security.Cryptography;
+namespace GigAuth.Domain.Services.Security.Cryptography;
 
 public interface ICryptography
 {

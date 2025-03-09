@@ -4,7 +4,7 @@ using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.RefreshTokens;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Auth;
-using CommonTestsUtilities.Security;
+using CommonTestsUtilities.Services.Security;
 using GigAuth.Application.UseCases.Auth.RefreshToken;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;

@@ -1,8 +1,8 @@
 using GigAuth.Domain.Entities;
-using GigAuth.Domain.Security.Tokens;
+using GigAuth.Domain.Services.Security.Tokens;
 using Moq;
 
-namespace CommonTestsUtilities.Security;
+namespace CommonTestsUtilities.Services.Security;
 
 public class TokenProviderBuilder
 {
@@ -22,8 +22,5 @@ public class TokenProviderBuilder
         return this;
     }
 
-    public ITokenProvider Build()
-    {
-        return _tokenProvider.Object;
-    }
+    public ITokenProvider Build() => _tokenProvider.Object;
 }

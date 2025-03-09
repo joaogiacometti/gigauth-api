@@ -3,7 +3,7 @@ using GigAuth.Communication.Responses;
 using GigAuth.Domain.Repositories;
 using GigAuth.Domain.Repositories.RefreshTokens;
 using GigAuth.Domain.Repositories.Users;
-using GigAuth.Domain.Security.Tokens;
+using GigAuth.Domain.Services.Security.Tokens;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 

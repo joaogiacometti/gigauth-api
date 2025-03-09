@@ -2,7 +2,7 @@ using GigAuth.Communication.Requests;
 using GigAuth.Domain.Repositories;
 using GigAuth.Domain.Repositories.ForgotPasswordTokens;
 using GigAuth.Domain.Repositories.Users;
-using GigAuth.Domain.Security.Cryptography;
+using GigAuth.Domain.Services.Security.Cryptography;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 

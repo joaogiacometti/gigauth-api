@@ -218,5 +218,23 @@ namespace GigAuth.Exception.Resources {
                 return ResourceManager.GetString("PASSWORD_CONFIRMATION_DOES_NOT_MATCH", resourceCulture);
             }
         }
+        
+        public static string FILE_TOO_LARGE {
+            get {
+                return ResourceManager.GetString("FILE_TOO_LARGE", resourceCulture);
+            }
+        }
+        
+        public static string IMAGE_FILE_NAME_EMPTY {
+            get {
+                return ResourceManager.GetString("IMAGE_FILE_NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        public static string IMAGE_INVALID_EXTENSION {
+            get {
+                return ResourceManager.GetString("IMAGE_INVALID_EXTENSION", resourceCulture);
+            }
+        }
     }
 }

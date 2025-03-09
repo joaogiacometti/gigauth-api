@@ -1,7 +1,7 @@
-using GigAuth.Domain.Security.Cryptography;
+using GigAuth.Domain.Services.Security.Cryptography;
 using Moq;
 
-namespace CommonTestsUtilities.Security;
+namespace CommonTestsUtilities.Services.Security;
 
 public class CryptographyBuilder
 {
@@ -15,8 +15,5 @@ public class CryptographyBuilder
         return this;
     }
 
-    public ICryptography Build()
-    {
-        return _cryptography.Object;
-    }
+    public ICryptography Build() => _cryptography.Object;
 }

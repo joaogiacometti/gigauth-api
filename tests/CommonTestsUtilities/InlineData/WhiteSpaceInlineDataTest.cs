@@ -6,12 +6,9 @@ public class WhiteSpaceInlineDataTest : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
-        yield return new object[] { "" };
-        yield return new object[] { " " };
+        yield return [""];
+        yield return [" "];
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

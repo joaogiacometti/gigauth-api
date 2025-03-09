@@ -4,7 +4,8 @@ using GigAuth.Domain.Constants;
 using GigAuth.Domain.Entities;
 using GigAuth.Domain.Repositories;
 using GigAuth.Domain.Repositories.Users;
-using GigAuth.Domain.Security.Cryptography;
+using GigAuth.Domain.Services.Security.Cryptography;
+using GigAuth.Domain.Services.SupabaseProvider;
 using GigAuth.Exception.ExceptionBase;
 using GigAuth.Exception.Resources;
 
@@ -14,6 +15,7 @@ public class RegisterUseCase(
     IUserReadOnlyRepository readRepository,
     IUserWriteOnlyRepository writeRepository,
     IUnitOfWork unitOfWork,
+    IStorageService storageService,
     ICryptography cryptography) : IRegisterUseCase
 {
     public async Task Execute(RequestRegister request)
@@ -27,9 +29,14 @@ public class RegisterUseCase(
 
         if (emailAlreadyTaken) throw new ErrorOnValidationException([ResourceErrorMessages.EMAIL_INVALID]);
 
+        string? avatarUrl = null;
+        
+        if (request.AvatarBase64 is not null && !string.IsNullOrWhiteSpace(request.AvatarFileName))
+            avatarUrl = await storageService.UploadAvatar(request.AvatarBase64, request.AvatarFileName);
+        
         request.Password = cryptography.Encrypt(request.Password);
-
-        var user = request.ToUserDomain();
+        
+        var user = request.ToUserDomain(avatarUrl);
         user.UserRoles = new List<UserRole>
         {
             new()

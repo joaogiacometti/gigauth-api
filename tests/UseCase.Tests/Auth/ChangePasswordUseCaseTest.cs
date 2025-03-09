@@ -4,7 +4,7 @@ using CommonTestsUtilities.Repositories;
 using CommonTestsUtilities.Repositories.Auth;
 using CommonTestsUtilities.Repositories.Users;
 using CommonTestsUtilities.Requests.Auth;
-using CommonTestsUtilities.Security;
+using CommonTestsUtilities.Services.Security;
 using GigAuth.Application.UseCases.Auth.ChangePassword;
 using GigAuth.Domain.Entities;
 using GigAuth.Exception.ExceptionBase;

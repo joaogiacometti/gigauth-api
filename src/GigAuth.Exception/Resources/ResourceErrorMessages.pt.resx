@@ -102,4 +102,13 @@
     <data name="PASSWORD_CONFIRMATION_DOES_NOT_MATCH" xml:space="preserve">
         <value>A confirmação da senha não coincide com a senha original. Por favor, verifique se ambos os campos estão idênticos e tente novamente.</value>
     </data>
+    <data name="FILE_TOO_LARGE" xml:space="preserve">
+        <value>O arquivo excede o tamanho máximo.</value>
+    </data>
+    <data name="IMAGE_FILE_NAME_EMPTY" xml:space="preserve">
+        <value>O nome do arquivo de imagem está vazio.</value>
+    </data>
+    <data name="IMAGE_INVALID_EXTENSION" xml:space="preserve">
+        <value>Extensión de archivo de imagen inválida.</value>
+    </data>
 </root>

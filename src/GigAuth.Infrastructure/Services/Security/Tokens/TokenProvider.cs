@@ -2,13 +2,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using GigAuth.Domain.Entities;
-using GigAuth.Domain.Security.Tokens;
+using GigAuth.Domain.Services.Security.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace GigAuth.Infrastructure.Security.Tokens;
+namespace GigAuth.Infrastructure.Services.Security.Tokens;
 
 public class TokenProvider(IConfiguration configuration) : ITokenProvider
 {

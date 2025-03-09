@@ -1,8 +1,9 @@
 using CommonTestsUtilities.Entities;
+using GigAuth.Api;
 using GigAuth.Domain.Constants;
 using GigAuth.Domain.Entities;
-using GigAuth.Domain.Security.Cryptography;
-using GigAuth.Domain.Security.Tokens;
+using GigAuth.Domain.Services.Security.Cryptography;
+using GigAuth.Domain.Services.Security.Tokens;
 using GigAuth.Infrastructure.DataAccess;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;

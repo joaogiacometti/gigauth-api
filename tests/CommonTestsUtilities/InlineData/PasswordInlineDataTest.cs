@@ -6,19 +6,16 @@ public class PasswordInlineDataTest : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
-        yield return new object[] { "A1@" };
-        yield return new object[] { "password1@" };
-        yield return new object[] { "PASSWORD1@" };
-        yield return new object[] { "Password@@" };
-        yield return new object[] { "Password123" };
-        yield return new object[] { new string('A', 129) + "1@" };
-        yield return new object[] { "        " };
-        yield return new object[] { "Ab1@" };
-        yield return new object[] { "Password" };
+        yield return ["A1@"];
+        yield return ["password1@"];
+        yield return ["PASSWORD1@"];
+        yield return ["Password@@"];
+        yield return ["Password123"];
+        yield return [new string('A', 129) + "1@"];
+        yield return ["        "];
+        yield return ["Ab1@"];
+        yield return ["Password"];
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
